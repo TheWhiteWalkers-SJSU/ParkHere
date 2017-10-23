@@ -1,5 +1,6 @@
 package com.thewhitewalkers.parkhere;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         progressBar = new ProgressBar(this);
 
+        if(firebaseAuth.getCurrentUser() != null) {
+            // direct to homepage activity
+            finish();
+            startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+        }
+
         buttonRegister = findViewById(R.id.buttonRegister);
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
@@ -49,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         textViewSignIn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // send the user to the log in page
+                finish();
+                Intent intent = new Intent(v.getContext(), LoginActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -82,6 +92,13 @@ public class MainActivity extends AppCompatActivity {
                             // we will start profile activity here
                             // display a toast for now
                             Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+
+                            if(firebaseAuth.getCurrentUser() != null) {
+                                // direct to homepage activity
+                                finish();
+                                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+                            }
+
                         } else {
                             Toast.makeText(MainActivity.this, "Could not register successfully..please try again", Toast.LENGTH_SHORT).show();
                         }

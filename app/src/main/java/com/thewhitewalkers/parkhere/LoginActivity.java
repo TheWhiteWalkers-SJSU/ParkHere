@@ -36,6 +36,12 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         progressBar = new ProgressBar(this);
 
+        if(firebaseAuth.getCurrentUser() != null) {
+            // direct to homepage activity
+            finish();
+            startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+        }
+
         buttonCreateAccount = findViewById(R.id.buttonCreateAccount);
         buttonLogin = findViewById(R.id.buttonLogin);
         textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
@@ -84,11 +90,12 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(task.isSuccessful()) {
-                       //go to home activity
+                        //go to home activity
+                        Intent intent = new Intent(LoginActivity.this, HomepageActivity.class);
+                        startActivity(intent);
                    } else {
                        //login unsuccessful, display message
-                       Toast.makeText(LoginActivity.this,
-                               "Incorrect login information, please try again", Toast.LENGTH_SHORT).show();
+                       Toast.makeText(LoginActivity.this, "Incorrect login information, please try again", Toast.LENGTH_SHORT).show();
                     }
              }
          });
