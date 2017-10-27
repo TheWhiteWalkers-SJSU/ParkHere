@@ -43,6 +43,13 @@
                 android:layout_gravity="center_horizontal"
                 android:text="Create Listing" />
 
+            <Button
+                android:id="@+id/buttonSearchListing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Search Listing" />
+
         </LinearLayout>
 
     </FrameLayout>

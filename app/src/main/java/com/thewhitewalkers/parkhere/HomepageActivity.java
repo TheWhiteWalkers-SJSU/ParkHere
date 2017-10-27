@@ -22,6 +22,7 @@ public class HomepageActivity extends AppCompatActivity {
     private TextView userEmail;
     private Button buttonLogout;
     private Button buttonCreateListing;
+    private Button buttonSearchListing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,14 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), CreateListingActivity.class));
+            }
+        });
+
+        buttonSearchListing = findViewById(R.id.buttonSearchListing);
+        buttonSearchListing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), SearchListingActivity.class));
             }
         });
 

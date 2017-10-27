@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <Button
+        android:id="@+id/buttonSearch"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:text="Search"
+
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        />
+
+    <EditText
+        android:id="@+id/editTextSearch"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Enter search criteria"
+        android:layout_toLeftOf="@id/buttonSearch"
+
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        />
+
+    <TextView
+        android:id="@+id/textSort"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="Sort by"
+        android:textSize="16dp"
+        android:textColor="@color/colorBlack"
+
+        android:layout_margin="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/buttonSearch"
+        />
+
+    <Spinner
+        android:id="@+id/spinnerSort"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:prompt="@array/sort_array"
+
+        android:layout_margin="15dp"
+        android:layout_toRightOf="@id/textSort"
+        android:layout_below="@id/buttonSearch"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+
+        android:layout_below="@id/spinnerSort"
+        android:layout_margin="15dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
