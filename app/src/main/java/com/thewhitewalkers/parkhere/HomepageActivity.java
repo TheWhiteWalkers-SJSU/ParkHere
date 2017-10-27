@@ -21,6 +21,7 @@ public class HomepageActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private TextView userEmail;
     private Button buttonLogout;
+    private Button buttonCreateListing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,14 @@ public class HomepageActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.userEmail);
         userEmail.setText("Welcome to ParkHere "+user.getEmail());
 
+        buttonCreateListing = findViewById(R.id.buttonCreateListing);
+        buttonCreateListing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), CreateListingActivity.class));
+            }
+        });
+
         buttonLogout = findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,5 +51,6 @@ public class HomepageActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
+
     }
 }
