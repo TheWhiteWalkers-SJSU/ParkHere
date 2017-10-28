@@ -22,7 +22,11 @@
         <activity android:name=".HomepageActivity" />
         <activity android:name=".CreateListingActivity" />
         <activity android:name=".SearchListingActivity" />
+<<<<<<< HEAD
         <activity android:name=".RegistrationActivity"></activity>
+=======
+
+>>>>>>> 6073803555aa320e59fec4a9084475e8a8971d8d
     </application>
 
 </manifest>

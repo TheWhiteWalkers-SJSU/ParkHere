@@ -82,6 +82,13 @@
                 android:textAlignment="center"
                 tools:layout_editor_absoluteX="31dp" />
 
+            <Button
+                android:id="@+id/buttonSearchListing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Search Listing" />
+
         </LinearLayout>
 
         <Button

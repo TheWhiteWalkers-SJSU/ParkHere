@@ -58,6 +58,14 @@ public class HomepageActivity extends AppCompatActivity {
             }
         });
 
+        buttonSearchListing = findViewById(R.id.buttonSearchListing);
+        buttonSearchListing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), SearchListingActivity.class));
+            }
+        });
+
         buttonLogout = findViewById(R.id.buttonLogout);
         buttonLogout.setOnClickListener(new View.OnClickListener() {
             @Override
