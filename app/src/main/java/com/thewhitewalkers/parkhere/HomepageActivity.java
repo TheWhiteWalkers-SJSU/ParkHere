@@ -32,6 +32,7 @@ public class HomepageActivity extends AppCompatActivity {
     private TextView userEmail;
     private Button buttonLogout;
     private Button buttonCreateListing;
+    private Button buttonSearchListing;
     private ListView listViewListings;
     private List<Listing> listingList = new ArrayList<>();
     FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -64,6 +65,14 @@ public class HomepageActivity extends AppCompatActivity {
                 Toast.makeText(HomepageActivity.this, "logged out user", Toast.LENGTH_SHORT).show();
                 firebaseAuth.signOut();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        });
+
+        buttonSearchListing = findViewById(R.id.buttonSearchListing);
+        buttonSearchListing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), SearchListingActivity.class));
             }
         });
     }
