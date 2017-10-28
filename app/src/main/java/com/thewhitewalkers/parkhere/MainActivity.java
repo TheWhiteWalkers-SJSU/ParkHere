@@ -24,102 +24,27 @@ import com.google.firebase.database.DatabaseReference;
 public class MainActivity extends AppCompatActivity {
 
     private Button buttonRegister;
-    private EditText editTextEmail;
-    private EditText editTextPassword;
-    private EditText editTextFirstName;
-    private EditText editTextLastName;
-    private EditText editTextLocation;
-    private EditText editTextPhoneNumber;
-    private TextView textViewSignIn;
-
-    private FirebaseAuth firebaseAuth;
-    DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
+    private Button buttonLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser() != null) {
-            // direct to homepage activity if user is already logged in
-            finish();
-            startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-        }
-
         buttonRegister = findViewById(R.id.buttonRegister);
-        editTextEmail = findViewById(R.id.editTextEmail);
-        editTextPassword = findViewById(R.id.editTextPassword);
-        editTextFirstName = findViewById(R.id.editTextFirstName);
-        editTextLastName = findViewById(R.id.editTextLastName);
-        editTextLocation = findViewById(R.id.editTextLocation);
-        editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
-
-        textViewSignIn = findViewById(R.id.textViewSignin);
-
         buttonRegister.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                registerUser();
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
             }
         });
 
-        textViewSignIn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // send the user to the log in page
-                finish();
-                Intent intent = new Intent(v.getContext(), LoginActivity.class);
-                startActivity(intent);
+        buttonLogin = findViewById(R.id.buttonLogin);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
         });
-    }
-
-    private void registerUser() {
-        final String email = editTextEmail.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
-        final String firstName = editTextFirstName.getText().toString().trim();
-        final String lastName = editTextLastName.getText().toString().trim();
-        final String location = editTextLocation.getText().toString().trim();
-        final String phoneNumber = editTextPhoneNumber.getText().toString().trim();
-
-        if(TextUtils.isEmpty(email)) {
-            // email is empty
-            Toast.makeText(this, "Please enter email", Toast.LENGTH_SHORT).show();
-            // stopping the function execution
-            return;
-        }
-
-        if(TextUtils.isEmpty(password)) {
-            // password is empty
-            Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
-            // stopping the function execution
-            return;
-        }
-
-        try{
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()) {
-
-                                //make User and save to the firebase db
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                                String _id = user.getUid();
-                                User newUser = new User(_id, email, firstName, lastName, location, phoneNumber);
-                                userDatabase.child(_id).setValue(newUser);
-                                Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                                if(firebaseAuth.getCurrentUser() != null) {
-                                    finish();
-                                    startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-                                }
-                            } else {
-                                Toast.makeText(MainActivity.this, "Could not register successfully..please try again", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-        } catch (DatabaseException e){
-            Toast.makeText(MainActivity.this, "Could not register successfully..please try again", Toast.LENGTH_SHORT).show();
-        }
-
     }
 }
