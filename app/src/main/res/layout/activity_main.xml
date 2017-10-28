@@ -22,7 +22,7 @@
 
         <EditText
             android:id="@+id/editTextEmail"
-            android:layout_width="match_parent"
+            android:layout_width="337dp"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:hint="Enter your email"
@@ -36,10 +36,42 @@
             android:hint="Enter your password"
             android:inputType="textPassword" />
 
+        <EditText
+            android:id="@+id/editTextFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="First Name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Last Name"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Location"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp"
+            android:hint="Phone Number"
+            android:inputType="text" />
+
         <Button
             android:id="@+id/buttonRegister"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_margin="15dp"
             android:text="Register User" />
 
