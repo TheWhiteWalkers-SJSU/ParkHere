@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "795481365721-u5o0rm0i5uimck95rfj1666j7fis6a4d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thewhitewalkers.parkhere",
+            "certificate_hash": "866d8b9f5b2f56ed1a1dc2ded7e1e9050fadd497"
+          }
+        },
+        {
           "client_id": "795481365721-31v6iiakhk9rrj4754c6h5og3kh7ar5s.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795481365721-31v6iiakhk9rrj4754c6h5og3kh7ar5s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
