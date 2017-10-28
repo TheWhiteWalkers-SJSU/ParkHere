@@ -48,7 +48,7 @@ public class HomepageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(HomepageActivity.this, "logged out user", Toast.LENGTH_SHORT).show();
                 firebaseAuth.signOut();
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
