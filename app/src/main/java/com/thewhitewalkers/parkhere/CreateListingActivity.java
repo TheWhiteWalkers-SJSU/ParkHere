@@ -57,7 +57,7 @@ public class CreateListingActivity extends AppCompatActivity {
 
         if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingAddress) && !TextUtils.isEmpty(listingPrice)) {
             String _id = listingDatabase.push().getKey();
-            Listing newListing = new Listing(_id, listingName, listingAddress, listingDescription, listingPrice, user.getEmail(), "available");
+            Listing newListing = new Listing(_id, listingName, listingAddress, listingDescription, listingPrice, user.getUid(), "available");
             listingDatabase.child(_id).setValue(newListing);
 
             // need to add the listing Id onto the user object
