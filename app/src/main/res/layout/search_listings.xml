@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <TextView
+        android:id="@+id/textViewSearchListingName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+
+        android:layout_margin="15dp"
+        android:layout_alignParentRight="true"
+        />
+
+    <TextView
+        android:id="@+id/textViewSearchListingAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+
+        android:layout_marginRight="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/textViewSearchListingName"
+        />
+
+    <TextView
+        android:id="@+id/textViewSearchListingPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:textStyle="bold"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentLeft="true"
+        />
+</RelativeLayout>
