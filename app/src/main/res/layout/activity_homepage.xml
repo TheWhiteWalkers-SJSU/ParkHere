@@ -74,22 +74,15 @@
                 tools:layout_editor_absoluteY="16dp" />
 
             <Button
-                android:id="@+id/buttonFindBooking"
+                android:id="@+id/buttonSearchListing"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Find Booking"
+                android:text="Search Listings"
                 android:textAlignment="center"
                 tools:layout_editor_absoluteX="31dp" />
 
         </LinearLayout>
-
-        <Button
-            android:id="@+id/buttonSearchListing"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:text="Search listing"
-            />
 
         <TextView
             android:layout_width="match_parent"
