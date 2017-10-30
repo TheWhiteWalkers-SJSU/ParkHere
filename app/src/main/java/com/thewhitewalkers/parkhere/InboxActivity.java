@@ -11,10 +11,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Inbox extends AppCompatActivity {
+public class InboxActivity extends AppCompatActivity {
 
-    private Button requestButton;
     private TextView inboxTitle;
+    private Button buttonHomepage;
+    private Button requestButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,9 +23,15 @@ public class Inbox extends AppCompatActivity {
         setContentView(R.layout.activity_inbox);
 
         inboxTitle = findViewById(R.id.inboxTitle);
+        buttonHomepage = findViewById(R.id.buttonHomepage);
         requestButton = findViewById(R.id.inboxRequest);
 
-
+        buttonHomepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+            }
+        });
 
         String[] myStringArray = new String[6];
         myStringArray[0] = "Booking Success for: \n1 Washington Square\non 10/27 - 10/30\nfrom 1:30pm - 2:45 pm";
@@ -51,9 +58,9 @@ public class Inbox extends AppCompatActivity {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView parent, View v, int position, long id) {
-                Toast.makeText(Inbox.this,
+                Toast.makeText(getApplicationContext(),
                         "Opening message...", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(Inbox.this, ViewRequest.class));
+                startActivity(new Intent(getApplicationContext(), ViewRequestActivity.class));
             }
         });
 

@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ViewRequest extends AppCompatActivity {
+public class ViewRequestActivity extends AppCompatActivity {
 
     private Button backToInboxButton;
     private TextView subjectLine;
@@ -47,7 +47,7 @@ public class ViewRequest extends AppCompatActivity {
 
         }
         else{
-            Toast.makeText(ViewRequest.this,
+            Toast.makeText(getApplicationContext(),
                     "ERROR...", Toast.LENGTH_SHORT).show();
         }
 
@@ -58,7 +58,7 @@ public class ViewRequest extends AppCompatActivity {
         backToInboxButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //redirect back to inbox
-                startActivity(new Intent(ViewRequest.this, Inbox.class));
+                startActivity(new Intent(getApplicationContext(), InboxActivity.class));
             }
         });
 
@@ -70,7 +70,7 @@ public class ViewRequest extends AppCompatActivity {
         viewListingButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 //redirect to listing
-                Toast.makeText(ViewRequest.this,
+                Toast.makeText(getApplicationContext(),
                         "Redirect to Listing...", Toast.LENGTH_SHORT).show();
             }
         });
