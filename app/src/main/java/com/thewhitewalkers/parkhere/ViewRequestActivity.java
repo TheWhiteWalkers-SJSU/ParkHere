@@ -16,6 +16,10 @@ public class ViewRequestActivity extends AppCompatActivity {
     private TextView messageText;
     private Button viewListingButton;
 
+    //Owner Action
+    private Button acceptButton;
+    private Button rejectButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,13 +31,14 @@ public class ViewRequestActivity extends AppCompatActivity {
         messageText = findViewById(R.id.message);
         viewListingButton = findViewById(R.id.viewListing);
 
+        Message currentMessage = (Message) getIntent().getSerializableExtra("message");
         /*
             0 - Owner Action Required (from renter user)
             1 - Booking Pending (from system)
             2 - Booking Accepted (from system)
             3 - Booking Denied (from system)
          */
-        int requestType = 0; //get the request type
+        int requestType = currentMessage.getRequestType(); //get the request type
         if(requestType == 0){ //Owner needs to accept/ reject booking
 
         }
@@ -51,9 +56,9 @@ public class ViewRequestActivity extends AppCompatActivity {
                     "ERROR...", Toast.LENGTH_SHORT).show();
         }
 
-        String subject = "Booking Pending";
-        String sender = "From: Pearl";
-        String message = "Your booking request is still pending for 1 Washington Sq.";
+        String subject = currentMessage.getSubject();
+        String sender = "From: " + currentMessage.getSenderID() ;
+        String message = currentMessage.getMessage();
 
         backToInboxButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
