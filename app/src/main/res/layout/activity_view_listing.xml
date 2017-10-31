@@ -6,52 +6,87 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editText"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Listing Name"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Listing Address"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="77dp" />
+        <TextView
+            android:id="@+id/listingNameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="TextView"
+            android:textAppearance="?android:textAppearanceMedium" />
 
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Listing Features"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="146dp" />
+        <TextView
+            android:id="@+id/listingAddressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="TextView"
+            android:textAppearance="?android:textAppearanceMedium" />
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="355dp"
-        android:layout_height="209dp"
-        app:srcCompat="@drawable/cast_abc_scrubber_primary_mtrl_alpha"
-        tools:layout_editor_absoluteX="15dp"
-        tools:layout_editor_absoluteY="211dp" />
+        <TextView
+            android:id="@+id/listingDescriptionText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="TextView"
+            android:textAppearance="?android:textAppearanceMedium" />
 
-    <EditText
-        android:id="@+id/editText4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Message Owner"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="449dp" />
+    </LinearLayout>
+
+
+
+
+
+    <!--<EditText-->
+        <!--android:id="@+id/listingName"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:text="Listing Name"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="16dp" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/listingAddress"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:text="Listing Address"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="77dp" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/listingDescription"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:text="Listing Features"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="146dp" />-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/listingImages"-->
+        <!--android:layout_width="355dp"-->
+        <!--android:layout_height="209dp"-->
+        <!--app:srcCompat="@drawable/cast_abc_scrubber_primary_mtrl_alpha"-->
+        <!--tools:layout_editor_absoluteX="15dp"-->
+        <!--tools:layout_editor_absoluteY="211dp" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/listingOwner"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:ems="10"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:text="Message Owner"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="449dp" />-->
 
 </android.support.constraint.ConstraintLayout>
