@@ -31,6 +31,7 @@ public class HomepageActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private TextView userEmail;
     private Button buttonLogout;
+    private Button buttonInbox;
     private Button buttonCreateListing;
     private Button buttonSearchListing;
     private ListView listViewListings;
@@ -73,6 +74,14 @@ public class HomepageActivity extends AppCompatActivity {
                 Toast.makeText(HomepageActivity.this, "logged out user", Toast.LENGTH_SHORT).show();
                 firebaseAuth.signOut();
                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            }
+        });
+
+        buttonInbox = findViewById(R.id.buttonInbox);
+        buttonInbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), InboxActivity.class));
             }
         });
 

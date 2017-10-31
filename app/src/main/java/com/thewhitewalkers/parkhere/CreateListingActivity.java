@@ -53,7 +53,7 @@ public class CreateListingActivity extends AppCompatActivity {
         String listingAddress = editTextListingAddress.getText().toString().trim();
         String listingDescription = editTextListingDescription.getText().toString().trim();
         String listingPrice = editTextListingPrice.getText().toString().trim();
-        FirebaseUser user = firebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
 
         if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingAddress) && !TextUtils.isEmpty(listingPrice)) {
             String _id = listingDatabase.push().getKey();

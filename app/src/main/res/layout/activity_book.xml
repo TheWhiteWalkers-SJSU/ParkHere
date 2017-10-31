@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.thewhitewalkers.parkhere.BookActivity">
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="495dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="0dp">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical" android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <TimePicker
+        android:id="@+id/timePicker3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="36dp" />
+
+    <DatePicker
+        android:id="@+id/datePicker2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="451dp"
+        tools:layout_editor_absoluteX="106dp" />
+
+</android.support.constraint.ConstraintLayout>
