@@ -52,7 +52,6 @@ public class SearchListingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 progressBar.isShown();
-
                 //for now, no filtering possible
                 Toast.makeText(SearchListingActivity.this, "Cannot search with keywords currently", Toast.LENGTH_SHORT).show();
             }
@@ -62,10 +61,15 @@ public class SearchListingActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 // open the view listing layout for the selected search item
-                Intent viewMessageIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
+                Intent viewListingIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
                 Listing selectedListing = (Listing)adapterView.getItemAtPosition(position);
-                viewMessageIntent.putExtra("listing", selectedListing);
-                startActivity(viewMessageIntent);
+                viewListingIntent.putExtra("listing", selectedListing);
+                try {
+                    startActivity(viewListingIntent);
+                } catch (Exception e) {
+                    Toast.makeText(SearchListingActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }

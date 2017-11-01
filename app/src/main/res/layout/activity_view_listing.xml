@@ -20,6 +20,14 @@
             android:textAppearance="?android:textAppearanceMedium" />
 
         <TextView
+            android:id="@+id/listingOwnerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="TextView"
+            android:textAppearance="?android:textAppearanceMedium" />
+
+        <TextView
             android:id="@+id/listingAddressText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,9 +43,16 @@
             android:text="TextView"
             android:textAppearance="?android:textAppearanceMedium" />
 
+
+        <Button
+            android:id="@+id/requestButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Booking Request"
+            tools:layout_editor_absoluteX="48dp"
+            tools:layout_editor_absoluteY="151dp" />
+
     </LinearLayout>
-
-
 
 
 
@@ -85,7 +100,7 @@
         <!--android:layout_height="wrap_content"-->
         <!--android:ems="10"-->
         <!--android:inputType="textPersonName"-->
-        <!--android:text="Message Owner"-->
+        <!--android:teRequestsage Owner"-->
         <!--tools:layout_editor_absoluteX="16dp"-->
         <!--tools:layout_editor_absoluteY="449dp" />-->
 

@@ -2,9 +2,9 @@ package com.thewhitewalkers.parkhere;
 
 import java.io.Serializable;
 
-public class Message implements Serializable{
+public class Request implements Serializable{
 
-    private String messageID;
+    private String requestID;
     private String recipientID;
     private String senderID;
     private String listingID;
@@ -13,13 +13,10 @@ public class Message implements Serializable{
     private int requestType;
     private boolean hasBeenRead;
     private boolean isDefault;
-    public Message(String defaultMessage){
-        message = defaultMessage;
-        isDefault = true;
-    }
+
     /**
      *
-     * @param messageID is the message ID
+     * @param requestID is the message ID
      * @param to_ID is the recipient user ID
      * @param from_ID is the sender user ID
      * @param currentListingID is the currentListing ID
@@ -31,8 +28,18 @@ public class Message implements Serializable{
      *                            2 - Booking Accepted (from system)
      *                            3 - Booking Denied (from system)
      */
-    public Message(String messageID, String to_ID, String from_ID, String currentListingID, String subject_Line, String message_Line, int message_RequestType){
-        this.messageID = messageID;
+
+    public Request() {
+
+    }
+
+    public Request(String defaultMessage){
+        message = defaultMessage;
+        isDefault = true;
+    }
+
+    public Request(String requestID, String to_ID, String from_ID, String currentListingID, String subject_Line, String message_Line, int message_RequestType){
+        this.requestID = requestID;
         recipientID = to_ID;
         senderID = from_ID;
         listingID = currentListingID;
@@ -42,8 +49,8 @@ public class Message implements Serializable{
         hasBeenRead = false;
         isDefault = false;
     }
-    public String getMessageID(){
-        return messageID;
+    public String getrequestID(){
+        return requestID;
     }
     public String getRecipientID(){
         return recipientID;

@@ -25,7 +25,8 @@
         <activity android:name=".CreateListingActivity" />
         <activity android:name=".SearchListingActivity" />
         <activity android:name=".RegistrationActivity" />
-        <activity android:name=".ViewListingActivity"></activity>
+        <activity android:name=".ViewListingActivity" />
+        <activity android:name=".CreateRequestActivity"></activity>
     </application>
 
 </manifest>
