@@ -21,6 +21,29 @@
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="106dp">
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="2">
+
+
+                <TextView
+                    android:id="@+id/pageTitle"
+                    android:layout_width="161dp"
+                    android:layout_height="59dp"
+                    android:layout_weight="1"
+                    android:text="Create A Listing"
+                    android:textAlignment="center"
+                    android:textSize="25sp" />
+
+                <Button
+                    android:id="@+id/buttonHomepage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Back to Home" />
+            </TableRow>
+
             <EditText
                 android:id="@+id/editTextListingName"
                 android:layout_width="match_parent"
