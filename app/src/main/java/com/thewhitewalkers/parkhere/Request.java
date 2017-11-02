@@ -49,30 +49,83 @@ public class Request implements Serializable{
         hasBeenRead = false;
         isDefault = false;
     }
-    public String getrequestID(){
+
+    public String getRequestID() {
         return requestID;
     }
-    public String getRecipientID(){
+
+    public String getRecipientID() {
         return recipientID;
     }
-    public String getSenderID(){
+
+    public String getSenderID() {
         return senderID;
     }
-    public String getListingID(){
+
+    public String getListingID() {
         return listingID;
     }
-    public String getSubject(){
+
+    public String getSubject() {
         return subject;
     }
-    public String getMessage(){
+
+    public String getMessage() {
         return message;
     }
-    public int getRequestType(){
+
+    public int getRequestType() {
         return requestType;
     }
+
+    public void setRequestID(String requestID) {
+        this.requestID = requestID;
+    }
+
+    public void setRecipientID(String recipientID) {
+        this.recipientID = recipientID;
+    }
+
+    public void setSenderID(String senderID) {
+        this.senderID = senderID;
+    }
+
+    public void setListingID(String listingID) {
+        this.listingID = listingID;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setRequestType(int requestType) {
+        this.requestType = requestType;
+    }
+
+    public boolean isHasBeenRead() {
+        return hasBeenRead;
+    }
+
+    public void setHasBeenRead(boolean hasBeenRead) {
+        this.hasBeenRead = hasBeenRead;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+
+    public void setDefault(boolean aDefault) {
+        isDefault = aDefault;
+    }
+
     public boolean hasBeenRead(){
         return hasBeenRead;
     }
+
     public String toString(){
         if(isDefault){
             return message;

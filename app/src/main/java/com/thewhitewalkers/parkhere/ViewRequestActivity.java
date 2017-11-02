@@ -7,6 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Map;
+import java.util.HashMap;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class ViewRequestActivity extends AppCompatActivity {
 
@@ -14,11 +19,16 @@ public class ViewRequestActivity extends AppCompatActivity {
     private TextView subjectLine;
     private TextView senderLine;
     private TextView messageText;
+    private TextView listingAddress;
+    private TextView listingPrice;
     private Button viewListingButton;
+    private Button acceptRequestButton;
+    private Button denyRequestButton;
 
-    //Owner Action
-    private Button acceptButton;
-    private Button rejectButton;
+    private Request currentRequest;
+    private Listing currentListing;
+    final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
+    final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,55 +39,89 @@ public class ViewRequestActivity extends AppCompatActivity {
         subjectLine = findViewById(R.id.subjectLine);
         senderLine = findViewById(R.id.senderLine);
         messageText = findViewById(R.id.message);
+        listingAddress = findViewById(R.id.listingAddress);
+        listingPrice = findViewById(R.id.listingPrice);
         viewListingButton = findViewById(R.id.viewListing);
+        acceptRequestButton = findViewById(R.id.acceptRequest);
+        denyRequestButton = findViewById(R.id.denyRequest);
+        currentRequest = (Request) getIntent().getSerializableExtra("request");
+        currentListing = (Listing) getIntent().getSerializableExtra("listing");
 
-        Request currentMessage = (Request) getIntent().getSerializableExtra("message");
-        /*
-            0 - Owner Action Required (from renter user)
-            1 - Booking Pending (from system)
-            2 - Booking Accepted (from system)
-            3 - Booking Denied (from system)
-         */
-        int requestType = currentMessage.getRequestType(); //get the request type
-        if(requestType == 0){ //Owner needs to accept/ reject booking
+        subjectLine.setText(currentRequest.getSubject());
+        senderLine.setText("From: " + currentRequest.getSenderID());
+        messageText.setText(currentRequest.getMessage());
+        listingAddress.setText(currentListing.getListingAddress());
+        listingPrice.setText(currentListing.getListingPrice());
 
-        }
-        else if(requestType == 1){
-
-        }
-        else if(requestType == 2){
-
-        }
-        else if(requestType == 3){
-
-        }
-        else{
-            Toast.makeText(getApplicationContext(),
-                    "ERROR...", Toast.LENGTH_SHORT).show();
-        }
-
-        String subject = currentMessage.getSubject();
-        String sender = "From: " + currentMessage.getSenderID() ;
-        String message = currentMessage.getMessage();
-
-        backToInboxButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //redirect back to inbox
-                startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+        acceptRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                acceptRequest();
             }
         });
 
-        subjectLine.setText(subject);
-        senderLine.setText(sender);
-        messageText.setText(message);
-
+        denyRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                denyRequest();
+            }
+        });
 
         viewListingButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //redirect to listing
-                Toast.makeText(getApplicationContext(),
-                        "Redirect to Listing...", Toast.LENGTH_SHORT).show();
+                viewListing();
             }
         });
+
+        backToInboxButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+            }
+        });
+    }
+
+    /**
+        0 - Owner Action Required (from renter user)
+        1 - Booking Pending (from system)
+        2 - Booking Accepted (from system)
+        3 - Booking Denied (from system)
+     **/
+
+    private void acceptRequest(){
+
+        /** when a listing is booked:
+         *  - set the requestType to 2
+         *  - set the listing status to booked
+         *  - be removed from the search page
+         *  - have a booked marker on the owners myListings page
+         *  - show up in the renters myBookings list
+         **/
+
+        Map<String, Object> requestUpdate = new HashMap<>();
+        requestUpdate.put("requestType", 2);
+        RequestDatabase.child(currentRequest.getRequestID()).updateChildren(requestUpdate);
+
+        Map<String, Object> listingUpdate = new HashMap<>();
+        listingUpdate.put("listingStatus", "booked");
+        ListingDatabase.child(currentListing.getListingId()).updateChildren(listingUpdate);
+    }
+
+    private void denyRequest(){
+        Map<String, Object> requestUpdate = new HashMap<>();
+        requestUpdate.put("requestType", 3);
+        RequestDatabase.child(currentRequest.getRequestID()).updateChildren(requestUpdate);
+    }
+
+    private void viewListing(){
+        //redirect to listing
+        Toast.makeText(getApplicationContext(),
+                "Redirect to Listing...", Toast.LENGTH_SHORT).show();
+        Intent viewListingIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
+        viewListingIntent.putExtra("listing", currentListing);
+        try {
+            startActivity(viewListingIntent);
+        } catch (Exception e) {
+            Toast.makeText(ViewRequestActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+        }
     }
 }

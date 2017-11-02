@@ -83,7 +83,9 @@ public class SearchListingActivity extends AppCompatActivity {
                 searchList.clear();
                 for(DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
                     Listing listing = listingSnapshot.getValue(Listing.class);
-                    searchList.add(listing);
+                    if(listing.getListingStatus().equals("available")) {
+                        searchList.add(listing);
+                    }
                 }
                 SearchList adapter = new SearchList(SearchListingActivity.this, searchList);
                 listSearchListings.setAdapter(adapter);

@@ -18,25 +18,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:text="TextView"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />
 
         <TextView
-            android:id="@+id/textViewRequestedListing"
+            android:id="@+id/textViewRequestedMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:text="TextView"
-            android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle" />
-
-        <TextView
-            android:id="@+id/textViewRequestSender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:text="TextView"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle" />
 
     </LinearLayout>
