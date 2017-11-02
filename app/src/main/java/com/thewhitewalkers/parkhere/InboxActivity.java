@@ -87,7 +87,8 @@ public class InboxActivity extends AppCompatActivity {
                 requestsList.clear();
                 for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
                     Request request = requestSnapshot.getValue(Request.class);
-                    if(request.getRecipientID().equals(user.getEmail())){
+                    // TODO: need to change to match only email, accepting uuid because of old entries in DB
+                    if(request.getRecipientID().equals(user.getEmail()) || request.getRecipientID().equals(user.getUid())){
                         requestsList.add(request);
                     }
                 }

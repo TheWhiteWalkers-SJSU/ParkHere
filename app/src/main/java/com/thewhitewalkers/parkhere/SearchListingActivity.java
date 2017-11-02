@@ -14,6 +14,7 @@ import android.widget.Toast;
 import android.content.Intent;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,15 +34,15 @@ public class SearchListingActivity extends AppCompatActivity {
     private ListView listSearchListings;
     private List<Listing> searchList = new ArrayList<>();
 
-    private FirebaseAuth firebaseAuth;
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser user = firebaseAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_listing);
 
-        firebaseAuth = firebaseAuth.getInstance();
         progressBar = new ProgressBar(this);
 
         addItemsOnSpinner();
@@ -49,7 +50,6 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonSearch = findViewById(R.id.buttonSearch);
         buttonHomepage = findViewById(R.id.buttonHomepage);
         listSearchListings = findViewById(R.id.listSearchListings);
-
 
         buttonHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +93,7 @@ public class SearchListingActivity extends AppCompatActivity {
                 searchList.clear();
                 for(DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
                     Listing listing = listingSnapshot.getValue(Listing.class);
-                    if(listing.getListingStatus().equals("available")) {
+                    if(listing.getListingStatus().equals("available") && (!listing.getOwnerId().equals(user.getEmail()) && !listing.getOwnerId().equals(user.getUid()))) {
                         searchList.add(listing);
                     }
                 }

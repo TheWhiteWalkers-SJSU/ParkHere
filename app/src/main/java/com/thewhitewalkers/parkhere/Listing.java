@@ -18,6 +18,7 @@ public class Listing implements Serializable{
     String ownerId;
     String ownerEmail;
     String listingStatus;
+    String renterId;
     String listingRating;
 
     public Listing() {
@@ -105,5 +106,9 @@ public class Listing implements Serializable{
     public void setListingRating(String listingRating) {
         this.listingRating = listingRating;
     }
+
+    public String getRenterId() { return renterId; }
+
+    public void setRenterId(String renterId) { this.renterId = renterId; }
 
 }
