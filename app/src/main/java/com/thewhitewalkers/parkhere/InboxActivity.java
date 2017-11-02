@@ -11,6 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +30,9 @@ public class InboxActivity extends AppCompatActivity {
     private ListView inboxList;
     private List<Request> requestsList = new ArrayList<>();
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
-
+    final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser user = firebaseAuth.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +52,28 @@ public class InboxActivity extends AppCompatActivity {
         });
 
         inboxList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View v, int position, long id) {
-                Toast.makeText(getApplicationContext(),
-                        "Opening message...", Toast.LENGTH_SHORT).show();
-                Intent viewMessageIntent = new Intent(getApplicationContext(), ViewRequestActivity.class);
-                Request clickedMessage = (Request)parent.getItemAtPosition(position);
-                viewMessageIntent.putExtra("message", clickedMessage);
-                startActivity(viewMessageIntent);
+            public void onItemClick(final AdapterView parent, View v, final int position, long id) {
+                final Request clickedRequest = (Request)parent.getItemAtPosition(position);
+                // Attach a listener to read the data at our posts reference
+                ListingDatabase.addValueEventListener(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Toast.makeText(getApplicationContext(), "Opening message...", Toast.LENGTH_SHORT).show();
+                        Intent viewMessageIntent = new Intent(getApplicationContext(), ViewRequestActivity.class);
+
+                        Listing listing = dataSnapshot.child(clickedRequest.getListingID()).getValue(Listing.class);
+
+                        viewMessageIntent.putExtra("listing", listing);
+                        viewMessageIntent.putExtra("request", clickedRequest);
+                        startActivity(viewMessageIntent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
             }
         });
     }
@@ -68,7 +87,9 @@ public class InboxActivity extends AppCompatActivity {
                 requestsList.clear();
                 for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
                     Request request = requestSnapshot.getValue(Request.class);
-                    requestsList.add(request);
+                    if(request.getRecipientID().equals(user.getEmail())){
+                        requestsList.add(request);
+                    }
                 }
                 RequestList adapter = new RequestList(InboxActivity.this, requestsList);
                 inboxList.setAdapter(adapter);

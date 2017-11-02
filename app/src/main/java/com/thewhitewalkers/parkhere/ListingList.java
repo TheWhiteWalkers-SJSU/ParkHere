@@ -34,11 +34,13 @@ public class ListingList extends ArrayAdapter<Listing> {
 
         TextView textViewName = listViewItem.findViewById(R.id.textViewListingName);
         TextView textViewAddress = listViewItem.findViewById(R.id.textViewListingAddress);
+        TextView textViewListingStatus = listViewItem.findViewById(R.id.textViewListingStatus);
 
         Listing listing = listingList.get(position);
 
         textViewName.setText(listing.getListingName());
         textViewAddress.setText(listing.getListingAddress());
+        textViewListingStatus.setText(listing.getListingStatus());
 
         return listViewItem;
     }

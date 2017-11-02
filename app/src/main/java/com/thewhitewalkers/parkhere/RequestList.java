@@ -33,15 +33,14 @@ public class RequestList extends ArrayAdapter<Request> {
         View listViewItem = inflater.inflate(R.layout.inbox_item, null, true);
 
         TextView textViewName = listViewItem.findViewById(R.id.textViewRequestSubject);
-        TextView textViewRequestedListing= listViewItem.findViewById(R.id.textViewRequestedListing);
-        TextView textViewRequestSender = listViewItem.findViewById(R.id.textViewRequestSender);
+        TextView textViewRequestedMessage= listViewItem.findViewById(R.id.textViewRequestedMessage);
+
 
         Request request = requestList.get(position);
 
         //TODO: Currently the request view is being populated w/ the ListingID and Sender's UUID, this needs to be changed to the listing address and sender's email
         textViewName.setText(request.getSubject());
-        textViewRequestedListing.setText(request.getListingID());
-        textViewRequestSender.setText(request.getSenderID());
+        textViewRequestedMessage.setText(request.getMessage());
 
         return listViewItem;
     }

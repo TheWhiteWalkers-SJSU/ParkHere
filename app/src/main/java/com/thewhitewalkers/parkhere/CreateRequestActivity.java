@@ -66,7 +66,7 @@ public class CreateRequestActivity extends AppCompatActivity {
 
         if(!TextUtils.isEmpty(requestSubject) && !TextUtils.isEmpty(requestMessage)) {
             String _id = requestDatabase.push().getKey();
-            Request newRequest = new Request(_id, listingOwner, user.getUid(), listingId, requestSubject, requestMessage, 0);
+            Request newRequest = new Request(_id, listingOwner, user.getEmail(), listingId, requestSubject, requestMessage, 0);
             requestDatabase.child(_id).setValue(newRequest);
 
             Toast.makeText(CreateRequestActivity.this, "Sent Request", Toast.LENGTH_SHORT).show();

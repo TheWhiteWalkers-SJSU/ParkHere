@@ -16,6 +16,7 @@ public class Listing implements Serializable{
     String listingDescription;
     String listingPrice;
     String ownerId;
+    String ownerEmail;
     String listingStatus;
     String listingRating;
 
@@ -23,13 +24,14 @@ public class Listing implements Serializable{
 
     }
 
-    public Listing(String listingId, String listingName, String listingAddress, String listingDescription, String listingPrice, String ownerId, String listingStatus) {
+    public Listing(String listingId, String listingName, String listingAddress, String listingDescription, String listingPrice, String ownerId, String ownerEmail, String listingStatus) {
         this.listingId = listingId;
         this.listingName = listingName;
         this.listingAddress = listingAddress;
         this.listingDescription = listingDescription;
         this.listingPrice = listingPrice;
         this.ownerId = ownerId;
+        this.ownerEmail = ownerEmail;
         this.listingStatus = listingStatus;
     }
 
@@ -81,6 +83,12 @@ public class Listing implements Serializable{
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
     }
+
+    public String getOwnerEmail() {
+        return ownerEmail;
+    }
+
+    public void setOwnerEmail(String ownerEmail) { this.ownerEmail = ownerEmail; }
 
     public String getListingStatus() {
         return listingStatus;
