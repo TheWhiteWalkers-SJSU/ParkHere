@@ -35,7 +35,9 @@ public class HomepageActivity extends AppCompatActivity {
     private Button buttonCreateListing;
     private Button buttonSearchListing;
     private ListView listViewListings;
+    private ListView listViewBookings;
     private List<Listing> listingList = new ArrayList<>();
+    private List<Listing> bookingList = new ArrayList<>();
     FirebaseUser user = firebaseAuth.getCurrentUser();
 
     final DatabaseReference UserDatabase = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
@@ -50,6 +52,7 @@ public class HomepageActivity extends AppCompatActivity {
         userEmail.setText("Welcome to ParkHere "+user.getEmail());
 
         listViewListings = findViewById(R.id.listViewListings);
+        listViewBookings = findViewById(R.id.listViewBookings);
 
         buttonCreateListing = findViewById(R.id.buttonCreateListing);
         buttonCreateListing.setOnClickListener(new View.OnClickListener() {
@@ -104,13 +107,20 @@ public class HomepageActivity extends AppCompatActivity {
                 listingList.clear();
                 for(DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
                     Listing listing = listingSnapshot.getValue(Listing.class);
-                    // TODO: need to change to martch only uuid, accepting email because of old entries in DB
-                    if(listing.getOwnerId().equals(user.getEmail()) || listing.getOwnerId().equals(user.getUid())) {
-                        listingList.add(listing);
+                    // TODO: need to change to match only email, accepting uuid because of old entries in DB
+                    if(listing != null) {
+                        if(listing.getOwnerId().equals(user.getEmail()) || listing.getOwnerId().equals(user.getUid())) {
+                            listingList.add(listing);
+                        } else if (listing.getRenterId() != null) {
+                            if(listing.getRenterId().equals(user.getEmail()))
+                            bookingList.add(listing);
+                        }
                     }
                 }
-                ListingList adapter = new ListingList(HomepageActivity.this, listingList);
-                listViewListings.setAdapter(adapter);
+                ListingList listingsAdapter = new ListingList(HomepageActivity.this, listingList);
+                ListingList bookingsAdapter = new ListingList(HomepageActivity.this, bookingList);
+                listViewListings.setAdapter(listingsAdapter);
+                listViewBookings.setAdapter(bookingsAdapter);
             }
 
             @Override

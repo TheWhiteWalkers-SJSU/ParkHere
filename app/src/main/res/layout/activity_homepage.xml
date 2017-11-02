@@ -77,7 +77,19 @@
         <ListView
             android:id="@+id/listViewListings"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/mr_dialog_fixed_width_major"
+            android:layout_height="160dp"
+            tools:layout_editor_absoluteX="20dp"
+            tools:layout_editor_absoluteY="180dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="My Bookings:" />
+
+        <ListView
+            android:id="@+id/listViewBookings"
+            android:layout_width="match_parent"
+            android:layout_height="190dp"
             tools:layout_editor_absoluteX="20dp"
             tools:layout_editor_absoluteY="180dp" />
 
