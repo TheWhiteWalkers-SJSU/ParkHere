@@ -31,7 +31,7 @@ public class ViewRequestActivity extends AppCompatActivity {
         messageText = findViewById(R.id.message);
         viewListingButton = findViewById(R.id.viewListing);
 
-        Message currentMessage = (Message) getIntent().getSerializableExtra("message");
+        Request currentMessage = (Request) getIntent().getSerializableExtra("message");
         /*
             0 - Owner Action Required (from renter user)
             1 - Booking Pending (from system)

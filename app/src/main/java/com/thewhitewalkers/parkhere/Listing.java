@@ -1,10 +1,14 @@
 package com.thewhitewalkers.parkhere;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * Created by Rohit on 10/27/17.
  */
 
-public class Listing {
+public class Listing implements Serializable{
 
     String listingId;
     String listingName;

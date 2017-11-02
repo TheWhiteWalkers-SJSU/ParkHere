@@ -27,6 +27,7 @@ public class CreateListingActivity extends AppCompatActivity {
     private EditText editTextListingDescription;
     private EditText editTextListingPrice;
     private Button buttonCreateListing;
+    private Button buttonHomepage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +38,19 @@ public class CreateListingActivity extends AppCompatActivity {
         editTextListingAddress = findViewById(R.id.editTextListingAddress);
         editTextListingDescription = findViewById(R.id.editTextListingDescription);
         editTextListingPrice = findViewById(R.id.editTextListingPrice);
-        buttonCreateListing = findViewById(R.id.buttonCreateListing);
 
+        buttonCreateListing = findViewById(R.id.buttonCreateListing);
         buttonCreateListing.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 createListing();
+            }
+        });
+
+        buttonHomepage = findViewById(R.id.buttonHomepage);
+        buttonHomepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
             }
         });
 

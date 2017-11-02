@@ -23,8 +23,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="30sp"
-                android:text="Inbox" />
+                android:text="Inbox"
+                android:textAlignment="center"
+                android:textSize="30sp" />
 
             <Button
                 android:id="@+id/buttonHomepage"

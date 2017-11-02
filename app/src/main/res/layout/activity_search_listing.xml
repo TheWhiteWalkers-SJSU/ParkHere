@@ -4,26 +4,52 @@
     android:layout_height="match_parent"
     >
 
+    <TableRow
+        android:id="@+id/pageHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="15dp"
+        android:weightSum="2">
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Search Listings"
+            android:textAlignment="center"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/buttonHomepage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Back to Home" />
+    </TableRow>
+
     <Button
         android:id="@+id/buttonSearch"
         android:layout_width="80dp"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:text="Search"
 
         android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:layout_alignParentRight="true"
+        android:layout_below="@id/pageHeader"
         />
 
     <EditText
         android:id="@+id/editTextSearch"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="45dp"
         android:hint="Enter search criteria"
         android:layout_toLeftOf="@id/buttonSearch"
 
         android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
+        android:layout_below="@id/pageHeader"
         />
 
     <TextView
