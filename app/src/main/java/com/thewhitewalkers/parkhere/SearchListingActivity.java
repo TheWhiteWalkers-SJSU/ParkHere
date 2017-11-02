@@ -29,6 +29,7 @@ public class SearchListingActivity extends AppCompatActivity {
     private Spinner spinnerSort;
     private EditText editTextSearch;
     private Button buttonSearch;
+    private Button buttonHomepage;
     private ListView listSearchListings;
     private List<Listing> searchList = new ArrayList<>();
 
@@ -46,7 +47,16 @@ public class SearchListingActivity extends AppCompatActivity {
         addItemsOnSpinner();
         editTextSearch = findViewById(R.id.editTextSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
+        buttonHomepage = findViewById(R.id.buttonHomepage);
         listSearchListings = findViewById(R.id.listSearchListings);
+
+
+        buttonHomepage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+            }
+        });
 
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
