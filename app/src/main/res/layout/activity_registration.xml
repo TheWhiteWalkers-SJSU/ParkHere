@@ -8,12 +8,12 @@
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="495dp"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="0dp">
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="8dp">
 
         <LinearLayout
-            android:layout_width="368dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
@@ -78,10 +78,10 @@
 
             <TextView
                 android:id="@+id/textViewSignin"
-                android:textAlignment="center"
-                android:text="Already Registered? Sign in Here"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="Already Registered? Sign in Here"
+                android:textAlignment="center" />
 
         </LinearLayout>
 
