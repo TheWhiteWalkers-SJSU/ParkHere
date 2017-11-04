@@ -67,7 +67,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="15dp"
                 android:hint="Phone Number"
-                android:inputType="text" />
+                android:inputType="phone" />
 
             <Button
                 android:id="@+id/buttonRegister"

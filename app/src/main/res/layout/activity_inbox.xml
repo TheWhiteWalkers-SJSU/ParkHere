@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Back to Home"
-                android:textSize="15dp"
+                android:textSize="15sp"
                 android:layout_marginLeft="5dp"/>
         </TableRow>
 

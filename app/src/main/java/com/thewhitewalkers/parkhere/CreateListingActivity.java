@@ -26,6 +26,10 @@ public class CreateListingActivity extends AppCompatActivity {
     private EditText editTextListingAddress;
     private EditText editTextListingDescription;
     private EditText editTextListingPrice;
+    private EditText editTextListingDateStarting;
+    private EditText editTextListingDateEnding;
+    private EditText editTextListingTimeStarting;
+    private EditText editTextListingTimeEnding;
     private Button buttonCreateListing;
     private Button buttonHomepage;
 
@@ -38,6 +42,10 @@ public class CreateListingActivity extends AppCompatActivity {
         editTextListingAddress = findViewById(R.id.editTextListingAddress);
         editTextListingDescription = findViewById(R.id.editTextListingDescription);
         editTextListingPrice = findViewById(R.id.editTextListingPrice);
+        editTextListingDateStarting = findViewById(R.id.editTextListingStartDate);
+        editTextListingDateEnding = findViewById(R.id.editTextListingEndDate);
+        editTextListingTimeStarting = findViewById(R.id.editTextListingStartTime);
+        editTextListingTimeEnding = findViewById(R.id.editTextListingEndTime);
 
         buttonCreateListing = findViewById(R.id.buttonCreateListing);
         buttonCreateListing.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +70,11 @@ public class CreateListingActivity extends AppCompatActivity {
         String listingAddress = editTextListingAddress.getText().toString().trim();
         String listingDescription = editTextListingDescription.getText().toString().trim();
         String listingPrice = editTextListingPrice.getText().toString().trim();
+        String listingDateStarting = editTextListingDateStarting.getText().toString();
+        String listingDateEnding = editTextListingDateEnding.getText().toString();
+        String listingTimeStarting = editTextListingTimeStarting.getText().toString();
+        String listingTimeEnding = editTextListingTimeEnding.getText().toString();
+        
         FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
 
         if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingAddress) && !TextUtils.isEmpty(listingPrice)) {
