@@ -7,8 +7,8 @@
     tools:context="com.thewhitewalkers.parkhere.ViewRequestActivity">
 
     <TableLayout
-        android:layout_width="395dp"
-        android:layout_height="587dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:layout_editor_absoluteY="8dp"
         tools:layout_editor_absoluteX="8dp">
 
@@ -18,10 +18,11 @@
 
             <Button
                 android:id="@+id/backToInbox"
-                style="@style/Widget.AppCompat.Button.Colored"
+                style="@style/ButtonTheme"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_margin="10dp"
                 android:text="Back to Inbox" />
 
         </TableRow>
@@ -110,38 +111,41 @@
 
             <Button
                 android:id="@+id/viewListing"
+                style="@style/ButtonThemeOrange"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:scrollHorizontally="false"
+                android:layout_margin="10dp"
                 android:text="View Listing" />
 
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/acceptRequest"
-                android:layout_width="match_parent"
+                style="@style/ButtonThemeGreen"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:scrollHorizontally="false"
+                android:layout_margin="10dp"
                 android:text="Accept Request" />
 
         </TableRow>
 
         <TableRow
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/denyRequest"
-                android:layout_width="match_parent"
+                style="@style/ButtonThemeRed"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:scrollHorizontally="false"
+                android:layout_margin="10dp"
                 android:text="Deny Request" />
 
         </TableRow>

@@ -22,6 +22,7 @@ public class ViewListingActivity extends AppCompatActivity {
     private TextView listingAddressText;
     private TextView listingDescriptionText;
     private TextView listingOwnerText;
+    private Button homeButton;
     private Button requestButton;
 
 

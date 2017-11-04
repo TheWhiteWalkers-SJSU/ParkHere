@@ -7,15 +7,17 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="20dp">
 
         <TextView
             android:id="@+id/listingNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+
             android:text="TextView"
             android:textAppearance="?android:textAppearanceMedium" />
 
@@ -46,11 +48,13 @@
 
         <Button
             android:id="@+id/requestButton"
+            style="@style/ButtonThemeOrange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:text="Send Booking Request"
-            tools:layout_editor_absoluteX="48dp"
-            tools:layout_editor_absoluteY="151dp" />
+            android:layout_margin="20dp"
+             />
 
     </LinearLayout>
 
