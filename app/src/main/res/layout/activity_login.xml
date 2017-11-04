@@ -11,9 +11,12 @@
         android:text="ParkHere"
         android:textSize="40sp"
         android:textColor="@color/colorBlack"
-
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
+
+
         />
 
     <Button

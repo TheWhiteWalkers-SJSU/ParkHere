@@ -33,11 +33,13 @@
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
-                android:text="ParkHere"
+                android:fontFamily="sans-serif-condensed"
 
+                android:text="ParkHere"
                 android:textAlignment="center"
                 android:textColor="@color/colorBlack"
-                android:textSize="40sp" />
+                android:textSize="40sp"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/buttonLogin"

@@ -38,6 +38,7 @@
                 android:layout_weight="2"
                 android:text="subjectLine"
                 android:textSize="30sp"
+                android:textStyle="bold"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
         </TableRow>
@@ -51,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="From: System"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 tools:layout_editor_absoluteX="0dp"
                 tools:layout_editor_absoluteY="0dp" />
 
@@ -78,7 +79,8 @@
                 android:id="@+id/listingAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Address"/>
+                android:text="Address"
+                android:textSize="20sp" />
         </TableRow>
 
         <TableRow
@@ -89,7 +91,8 @@
                 android:id="@+id/listingPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Price"/>
+                android:text="Price"
+                android:textSize="20sp" />
 
         </TableRow>
 
