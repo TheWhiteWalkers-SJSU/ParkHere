@@ -159,6 +159,7 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listingList.clear();
+                bookingList.clear();
                 for(DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
                     Listing listing = listingSnapshot.getValue(Listing.class);
                     // TODO: need to change to match only email, accepting uuid because of old entries in DB
@@ -166,7 +167,7 @@ public class HomepageActivity extends AppCompatActivity {
                         if(listing.getOwnerId().equals(user.getEmail()) || listing.getOwnerId().equals(user.getUid())) {
                             listingList.add(listing);
                         } else if (listing.getRenterId() != null) {
-                            if(listing.getRenterId().equals(user.getEmail()))
+                            if(listing.getRenterId().equals(user.getEmail()) || listing.getRenterId().equals(user.getUid()))
                             bookingList.add(listing);
                         }
                     }
