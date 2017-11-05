@@ -156,7 +156,6 @@
                             android:textOn="AM"/>
                     </TableRow>
                 </TableLayout>
-
                 <Switch
                     android:id="@+id/generateSwitch"
                     android:layout_width="match_parent"
@@ -170,11 +169,10 @@
 
                 <TextView
                     android:id="@+id/textViewPricing"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="Total Price: $0.00"
-                    android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold" />

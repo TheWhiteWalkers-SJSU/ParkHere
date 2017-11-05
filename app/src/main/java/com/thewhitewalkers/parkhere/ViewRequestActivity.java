@@ -41,8 +41,6 @@ public class ViewRequestActivity extends AppCompatActivity {
         currentRequest = (Request) getIntent().getSerializableExtra("request");
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
 
-        int requestType = currentRequest.getRequestType();
-
         backToInboxButton = findViewById(R.id.backToInbox);
         subjectLine = findViewById(R.id.subjectLine);
         senderLine = findViewById(R.id.senderLine);

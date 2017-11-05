@@ -17,7 +17,7 @@ public class Listing implements Serializable{
     String listingPrice;
     String ownerId;
     String ownerEmail;
-    TimeDetails timeDetails;
+    private TimeDetails timeDetails;
     String listingStatus;
     String renterId;
     String listingRating;

@@ -141,9 +141,16 @@ public class CreateRequestActivity extends AppCompatActivity {
         String requestSubject = editTextRequestSubjectLine.getText().toString().trim();
         String requestMessage = editTextRequestMessage.getText().toString().trim();
 
+        String dateStarting = editTextDateStarting.getText().toString();
+        String dateEnding = editTextDateEnding.getText().toString();
+        String timeStarting = editTextTimeStarting.getText().toString();
+        String timeEnding = editTextTimeEnding.getText().toString();
+
+        boolean isStartingAM = toggleStartingAM.isChecked();
+        boolean isEndingAM = toggleEndingAM.isChecked();
         FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
 
-        if(!TextUtils.isEmpty(requestSubject) && !TextUtils.isEmpty(requestMessage) && switchGeneratePricing.isChecked()) {
+        if(!TextUtils.isEmpty(requestSubject) && !TextUtils.isEmpty(requestMessage) && updatedPrice()) {
             String _id = requestDatabase.push().getKey();
             Request newRequest = new Request(_id, listingOwner, user.getUid(), user.getEmail(), listingId, requestSubject, requestMessage, timeDetails, 0);
             requestDatabase.child(_id).setValue(newRequest);

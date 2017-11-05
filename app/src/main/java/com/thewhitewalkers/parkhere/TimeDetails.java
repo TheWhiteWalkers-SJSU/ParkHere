@@ -80,6 +80,7 @@ public class TimeDetails {
 
         return false;
     }
+    /*
     public boolean withinSlot(TimeDetails bookingToCheck){
         return withinDate(bookingToCheck) && withinTime(bookingToCheck);
     }
@@ -89,6 +90,7 @@ public class TimeDetails {
     public boolean withinTime(TimeDetails bookingToCheck){
         return true;
     }
+    */
     public String[] dateSplit(String date){
         String[] split = date.split("[.-/]");
         return split;
