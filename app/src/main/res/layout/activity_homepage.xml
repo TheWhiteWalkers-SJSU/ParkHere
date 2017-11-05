@@ -84,6 +84,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBlack"
+            android:textColor="@color/wallet_holo_blue_light"
+            android:textAlignment="center"
             android:text="My Listings:" />
 
         <ListView
@@ -96,6 +99,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBlack"
+            android:textColor="@color/wallet_holo_blue_light"
+            android:textAlignment="center"
             android:text="My Bookings:" />
 
         <ListView
