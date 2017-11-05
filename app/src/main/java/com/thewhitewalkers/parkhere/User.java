@@ -25,7 +25,9 @@ public class User {
         this.location = location;
         this.phoneNumber = phoneNumber;
     }
-
+    public String getUserId(){
+        return userId;
+    }
     public String getEmail() {
         return email;
     }

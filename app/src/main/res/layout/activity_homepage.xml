@@ -7,9 +7,10 @@
     tools:context="com.thewhitewalkers.parkhere.HomepageActivity">
 
     <LinearLayout
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="495dp"
         android:orientation="vertical"
+        android:layout_margin="10dp"
         tools:layout_editor_absoluteY="8dp"
         tools:layout_editor_absoluteX="8dp">
 
@@ -24,54 +25,72 @@
             tools:layout_editor_absoluteY="115dp" />
 
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/buttonCreateListing"
+                style="@style/ButtonThemeOrange"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
                 android:layout_gravity="center_horizontal"
                 android:text="Create Listing"
-                tools:layout_editor_absoluteX="31dp" />
+             />
 
 
             <Button
                 android:id="@+id/buttonLogout"
+                style="@style/ButtonThemeRed"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
                 android:layout_gravity="center_horizontal"
                 android:text="Logout"
                 android:textAlignment="center"
-                tools:layout_editor_absoluteX="280dp"
-                tools:layout_editor_absoluteY="16dp" />
+                 />
 
             <Button
                 android:id="@+id/buttonSearchListing"
+                style="@style/ButtonThemeOrange"
+                android:textSize="14sp"
                 android:layout_width="wrap_content"
-                android:layout_height="36dp"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
                 android:layout_gravity="center_horizontal"
                 android:text="Search Listings"
                 android:textAlignment="center"
-                tools:layout_editor_absoluteX="31dp" />
+                />
 
         </LinearLayout>
 
 
         <Button
             android:id="@+id/buttonInbox"
+            style="@style/ButtonTheme"
+            android:textSize="16sp"
+            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="40dp"
             android:text="Inbox"
             android:textAlignment="center" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBlack"
+            android:textColor="@color/wallet_holo_blue_light"
+            android:textAlignment="center"
             android:text="My Listings:" />
 
         <ListView
@@ -83,7 +102,14 @@
 
         <TextView
             android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorBlack"
+            android:textColor="@color/wallet_holo_blue_light"
+            android:textAlignment="center"
             android:text="My Bookings:" />
 
         <ListView

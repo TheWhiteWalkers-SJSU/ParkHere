@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Rohit on 10/27/17.
  */
 
-public class Listing implements Serializable{
+public class Listing implements Serializable {
 
     String listingId;
     String listingName;
@@ -17,6 +17,7 @@ public class Listing implements Serializable{
     String listingPrice;
     String ownerId;
     String ownerEmail;
+    private TimeDetails timeDetails;
     String listingStatus;
     String renterId;
     String listingRating;
@@ -25,7 +26,7 @@ public class Listing implements Serializable{
 
     }
 
-    public Listing(String listingId, String listingName, String listingAddress, String listingDescription, String listingPrice, String ownerId, String ownerEmail, String listingStatus) {
+    public Listing(String listingId, String listingName, String listingAddress, String listingDescription, String listingPrice, String ownerId, String ownerEmail, TimeDetails timeDetails, String listingStatus) {
         this.listingId = listingId;
         this.listingName = listingName;
         this.listingAddress = listingAddress;
@@ -33,6 +34,7 @@ public class Listing implements Serializable{
         this.listingPrice = listingPrice;
         this.ownerId = ownerId;
         this.ownerEmail = ownerEmail;
+        this.timeDetails = timeDetails;
         this.listingStatus = listingStatus;
     }
 
@@ -110,5 +112,29 @@ public class Listing implements Serializable{
     public String getRenterId() { return renterId; }
 
     public void setRenterId(String renterId) { this.renterId = renterId; }
+
+    public TimeDetails getTimeDetails() {
+        return timeDetails;
+    }
+
+    public void setTimeDetails(TimeDetails timeDetails) {
+        this.timeDetails = timeDetails;
+    }
+
+    public String getStartTime() {
+        if(this.getTimeDetails() != null) {
+            String starting = this.getTimeDetails().getStartingDate() +" @ "+ this.timeDetails.getStartingTime();
+            return starting;
+        }
+        return "N/A";
+    }
+
+    public String getEndTime() {
+        if(this.getTimeDetails() != null) {
+            String ending = this.getTimeDetails().getStartingDate() +" @ "+ this.timeDetails.getEndingTime();
+            return ending;
+        }
+        return "N/A";
+    }
 
 }

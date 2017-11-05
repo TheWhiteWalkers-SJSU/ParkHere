@@ -22,6 +22,9 @@ public class ViewListingActivity extends AppCompatActivity {
     private TextView listingAddressText;
     private TextView listingDescriptionText;
     private TextView listingOwnerText;
+    private TextView listingStartText;
+    private TextView listingEndText;
+    private Button homeButton;
     private Button requestButton;
 
 
@@ -30,6 +33,9 @@ public class ViewListingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_listing);
 
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
         Intent listingIntent = getIntent();
         final Listing thisListing = (Listing) listingIntent.getSerializableExtra("listing");
 
@@ -37,18 +43,37 @@ public class ViewListingActivity extends AppCompatActivity {
         String listingOwner = thisListing.getOwnerId();
         String listingAddress = thisListing.getListingAddress();
         String listingDescription = thisListing.getListingDescription();
+        String listingStart = thisListing.getStartTime();
+        String listingEnd = thisListing.getEndTime();
 
         listingNameText = findViewById(R.id.listingNameText);
         listingOwnerText = findViewById(R.id.listingOwnerText);
         listingAddressText = findViewById(R.id.listingAddressText);
         listingDescriptionText = findViewById(R.id.listingDescriptionText);
+        listingStartText = findViewById(R.id.listingStart);
+        listingEndText = findViewById(R.id.listingEnd);
 
         listingNameText.setText(listingName);
         listingOwnerText.setText(listingOwner);
         listingAddressText.setText(listingAddress);
         listingDescriptionText.setText(listingDescription);
+        listingStartText.setText("Start Time: "+listingStart);
+        listingEndText.setText("End Time: "+listingEnd);
 
         requestButton = findViewById(R.id.requestButton);
+
+        if(thisListing.getOwnerId() != null) {
+            if(thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
+                requestButton.setVisibility(View.GONE);
+            }
+        }
+
+        if(thisListing.getRenterId() != null) {
+            if(thisListing.getRenterId().equals(user.getEmail()) || thisListing.getRenterId().equals(user.getUid())) {
+                requestButton.setVisibility(View.GONE);
+            }
+        }
+
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

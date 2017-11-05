@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,6 +30,8 @@ import java.util.List;
 public class HomepageActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser user = firebaseAuth.getCurrentUser();
+
     private TextView userEmail;
     private Button buttonLogout;
     private Button buttonInbox;
@@ -38,7 +41,6 @@ public class HomepageActivity extends AppCompatActivity {
     private ListView listViewBookings;
     private List<Listing> listingList = new ArrayList<>();
     private List<Listing> bookingList = new ArrayList<>();
-    FirebaseUser user = firebaseAuth.getCurrentUser();
 
     final DatabaseReference UserDatabase = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
@@ -95,6 +97,58 @@ public class HomepageActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SearchListingActivity.class));
             }
         });
+
+        listViewListings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(final AdapterView parent, View v, final int position, long id) {
+                final Listing clickedListing = (Listing)parent.getItemAtPosition(position);
+                // Attach a listener to read the data at our posts reference
+                ListingDatabase.addValueEventListener(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Toast.makeText(getApplicationContext(), "Opening listing...", Toast.LENGTH_SHORT).show();
+                        Intent viewMessageIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
+
+                        Listing listing = dataSnapshot.child(clickedListing.getListingId()).getValue(Listing.class);
+
+                        viewMessageIntent.putExtra("listing", listing);
+                        startActivity(viewMessageIntent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+            }
+        });
+
+
+        listViewBookings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(final AdapterView parent, View v, final int position, long id) {
+                final Listing clickedListing = (Listing)parent.getItemAtPosition(position);
+                // Attach a listener to read the data at our posts reference
+                ListingDatabase.addValueEventListener(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Toast.makeText(getApplicationContext(), "Opening booking...", Toast.LENGTH_SHORT).show();
+                        Intent viewMessageIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
+
+                        Listing listing = dataSnapshot.child(clickedListing.getListingId()).getValue(Listing.class);
+
+                        viewMessageIntent.putExtra("listing", listing);
+                        startActivity(viewMessageIntent);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+            }
+        });
+
     }
 
     @Override

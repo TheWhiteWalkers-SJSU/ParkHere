@@ -7,44 +7,39 @@ public class Request implements Serializable{
     private String requestID;
     private String recipientID;
     private String senderID;
+    private String senderEmail;
     private String listingID;
     private String subject;
     private String message;
+    private TimeDetails timeDetails;
     private int requestType;
     private boolean hasBeenRead;
     private boolean isDefault;
+
+    public Request() {
+    }
 
     /**
      *
      * @param requestID is the message ID
      * @param to_ID is the recipient user ID
      * @param from_ID is the sender user ID
+     * @param from_email is the sender email
      * @param currentListingID is the currentListing ID
      * @param subject_Line is the subject line of the message
      * @param message_Line is the message body
-     * @param message_RequestType is the request type of the message where:
-     *                            0 - Owner Action Required (from renter user)
-     *                            1- Booking Pending (from system)
-     *                            2 - Booking Accepted (from system)
-     *                            3 - Booking Denied (from system)
+     * @param tD is the time details
+     * @param message_RequestType
      */
-
-    public Request() {
-
-    }
-
-    public Request(String defaultMessage){
-        message = defaultMessage;
-        isDefault = true;
-    }
-
-    public Request(String requestID, String to_ID, String from_ID, String currentListingID, String subject_Line, String message_Line, int message_RequestType){
+    public Request(String requestID, String to_ID, String from_ID, String from_email, String currentListingID, String subject_Line, String message_Line, TimeDetails tD,  int message_RequestType){
         this.requestID = requestID;
         recipientID = to_ID;
         senderID = from_ID;
+        senderEmail = from_email;
         listingID = currentListingID;
         subject = subject_Line;
         message = message_Line;
+        timeDetails = tD;
         requestType = message_RequestType;
         hasBeenRead = false;
         isDefault = false;
@@ -62,6 +57,8 @@ public class Request implements Serializable{
         return senderID;
     }
 
+    public String getSenderEmail(){ return senderEmail; }
+
     public String getListingID() {
         return listingID;
     }
@@ -73,6 +70,7 @@ public class Request implements Serializable{
     public String getMessage() {
         return message;
     }
+
 
     public int getRequestType() {
         return requestType;

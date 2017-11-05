@@ -11,13 +11,17 @@
         android:text="ParkHere"
         android:textSize="40sp"
         android:textColor="@color/colorBlack"
-
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-condensed"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
+
+
         />
 
     <Button
         android:id="@+id/buttonCreateAccount"
+        style="@style/ButtonThemeOrange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Create an account"
@@ -31,12 +35,14 @@
 
     <Button
         android:id="@+id/buttonLogin"
+        style="@style/ButtonTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
 
         android:layout_margin="15dp"
         android:layout_above="@id/buttonCreateAccount"
+
         />
 
     <TextView
