@@ -22,6 +22,8 @@ public class ViewListingActivity extends AppCompatActivity {
     private TextView listingAddressText;
     private TextView listingDescriptionText;
     private TextView listingOwnerText;
+    private TextView listingStartText;
+    private TextView listingEndText;
     private Button homeButton;
     private Button requestButton;
 
@@ -38,16 +40,22 @@ public class ViewListingActivity extends AppCompatActivity {
         String listingOwner = thisListing.getOwnerId();
         String listingAddress = thisListing.getListingAddress();
         String listingDescription = thisListing.getListingDescription();
+        String listingStart = thisListing.getStartTime();
+        String listingEnd = thisListing.getEndTime();
 
         listingNameText = findViewById(R.id.listingNameText);
         listingOwnerText = findViewById(R.id.listingOwnerText);
         listingAddressText = findViewById(R.id.listingAddressText);
         listingDescriptionText = findViewById(R.id.listingDescriptionText);
+        listingStartText = findViewById(R.id.listingStart);
+        listingEndText = findViewById(R.id.listingEnd);
 
         listingNameText.setText(listingName);
         listingOwnerText.setText(listingOwner);
         listingAddressText.setText(listingAddress);
         listingDescriptionText.setText(listingDescription);
+        listingStartText.setText("Start Time: "+listingStart);
+        listingEndText.setText("End Time: "+listingEnd);
 
         requestButton = findViewById(R.id.requestButton);
         requestButton.setOnClickListener(new View.OnClickListener() {

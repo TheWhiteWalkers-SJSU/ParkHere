@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Rohit on 10/27/17.
  */
 
-public class Listing implements Serializable{
+public class Listing implements Serializable {
 
     String listingId;
     String listingName;
@@ -112,5 +112,29 @@ public class Listing implements Serializable{
     public String getRenterId() { return renterId; }
 
     public void setRenterId(String renterId) { this.renterId = renterId; }
+
+    public TimeDetails getTimeDetails() {
+        return timeDetails;
+    }
+
+    public void setTimeDetails(TimeDetails timeDetails) {
+        this.timeDetails = timeDetails;
+    }
+
+    public String getStartTime() {
+        if(this.getTimeDetails() != null) {
+            String starting = this.getTimeDetails().getStartingDate() +" @ "+ this.timeDetails.getStartingTime();
+            return starting;
+        }
+        return "N/A";
+    }
+
+    public String getEndTime() {
+        if(this.getTimeDetails() != null) {
+            String ending = this.getTimeDetails().getStartingDate() +" @ "+ this.timeDetails.getEndingTime();
+            return ending;
+        }
+        return "N/A";
+    }
 
 }

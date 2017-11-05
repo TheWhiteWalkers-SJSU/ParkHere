@@ -1,8 +1,9 @@
 package com.thewhitewalkers.parkhere;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class TimeDetails {
+public class TimeDetails  implements Serializable {
     private String startingDate;
     private String endingDate;
     private String startingTime;

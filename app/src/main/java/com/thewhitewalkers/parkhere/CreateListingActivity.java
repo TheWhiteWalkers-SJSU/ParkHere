@@ -99,6 +99,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 timeDetails = new TimeDetails(listingDateStarting, listingDateEnding, listingTimeStarting, isStartingAM, listingTimeEnding, isEndingAM);
                 Listing newListing = new Listing(_id, listingName, listingAddress, listingDescription, listingPrice, user.getUid(), user.getEmail(), timeDetails, "available");
                 listingDatabase.child(_id).setValue(newListing);
+                listingDatabase.child(_id).child("timeDetails").setValue(timeDetails);
 
                 // need to add the listing Id onto the user object
                 DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
@@ -114,6 +115,7 @@ public class CreateListingActivity extends AppCompatActivity {
             Toast.makeText(CreateListingActivity.this, "need to enter name, address, price, dates, and times", Toast.LENGTH_SHORT).show();
         }
     }
+
     public boolean checkBookingDate(String dateStarting, String dateEnding){
         if(!timeDetails.checkDateFormat(dateStarting) || !timeDetails.checkDateFormat(dateEnding) ){
             Toast.makeText(CreateListingActivity.this, "dates must be in MM/DD/YYYY format!", Toast.LENGTH_SHORT).show();
@@ -126,6 +128,7 @@ public class CreateListingActivity extends AppCompatActivity {
         }
         return false;
     }
+
     public boolean checkBookingTime(String timeStarting, String timeEnding){
         if(!timeDetails.checkTimeFormat(timeStarting) || !timeDetails.checkTimeFormat(timeEnding)){
             Toast.makeText(CreateListingActivity.this, "times must be in HH:MM format!", Toast.LENGTH_SHORT).show();
