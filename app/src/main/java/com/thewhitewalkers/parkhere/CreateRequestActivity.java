@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -36,6 +37,7 @@ public class CreateRequestActivity extends AppCompatActivity {
     private EditText editTextTimeEnding;
     private ToggleButton toggleStartingAM;
     private ToggleButton toggleEndingAM;
+    private Switch switchGeneratePricing;
     private Button buttonCreateListing;
 
     private TimeDetails timeDetails;
@@ -59,6 +61,8 @@ public class CreateRequestActivity extends AppCompatActivity {
         listingOwner = thisListing.getOwnerId();
         listingRate = thisListing.getListingPrice();
 
+        timeDetails = new TimeDetails();
+
         textViewListingName = findViewById(R.id.textViewListingName);
         textViewPricing  = findViewById(R.id.textViewPricing);
         editTextRequestSubjectLine = findViewById(R.id.editTextRequestSubjectLine);
@@ -71,89 +75,57 @@ public class CreateRequestActivity extends AppCompatActivity {
         toggleStartingAM = findViewById(R.id.startingAMButton);
         toggleEndingAM = findViewById(R.id.endingAMButton);
 
+        switchGeneratePricing = findViewById(R.id.generateSwitch);
+
         buttonCreateListing = findViewById(R.id.buttonCreateRequest);
 
         textViewListingName.setText(listingName);
 
-        editTextDateStarting.addTextChangedListener(new TextWatcher() {
-
+        TextWatcher textWatcher = new TextWatcher() {
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                if(s.length() != 0)
-                    updatedPrice();
-            }
-        });
-
-        editTextDateEnding.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(switchGeneratePricing.isChecked()){
+                    switchGeneratePricing.setChecked(false);
+                }
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                if(s.length() != 0)
-                    updatedPrice();
+            public void afterTextChanged(Editable s) {
+
             }
-        });
+        };
 
-        editTextTimeStarting.addTextChangedListener(new TextWatcher() {
+        editTextDateStarting.addTextChangedListener(textWatcher);
+        editTextDateEnding.addTextChangedListener(textWatcher);
+        editTextTimeStarting.addTextChangedListener(textWatcher);
+        editTextTimeEnding.addTextChangedListener(textWatcher);
 
-            @Override
-            public void afterTextChanged(Editable s) {}
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                if(s.length() != 0)
-                    updatedPrice();
-            }
-        });
-
-        editTextTimeEnding.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {}
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
-                if(s.length() != 0)
-                    updatedPrice();
-            }
-        });
         toggleStartingAM.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                updatedPrice();
+                if(switchGeneratePricing.isChecked()){
+                    switchGeneratePricing.setChecked(false);
+                }
             }
         });
+
         toggleEndingAM.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                updatedPrice();
+                if(switchGeneratePricing.isChecked()){
+                    switchGeneratePricing.setChecked(false);
+                }
+            }
+        });
+
+        switchGeneratePricing.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(!updatedPrice()){
+                    switchGeneratePricing.setChecked(false);
+                }
             }
         });
 
@@ -171,14 +143,18 @@ public class CreateRequestActivity extends AppCompatActivity {
 
         FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
 
-        if(!TextUtils.isEmpty(requestSubject) && !TextUtils.isEmpty(requestMessage) && updatedPrice()) {
+        if(!TextUtils.isEmpty(requestSubject) && !TextUtils.isEmpty(requestMessage) && switchGeneratePricing.isChecked()) {
             String _id = requestDatabase.push().getKey();
             Request newRequest = new Request(_id, listingOwner, user.getUid(), user.getEmail(), listingId, requestSubject, requestMessage, timeDetails, 0);
             requestDatabase.child(_id).setValue(newRequest);
 
             Toast.makeText(CreateRequestActivity.this, "Sent Request", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-        } else {
+        }
+        else if(!switchGeneratePricing.isChecked()){
+            Toast.makeText(CreateRequestActivity.this, "click on switch to generate pricing", Toast.LENGTH_SHORT).show();
+        }
+        else {
             Toast.makeText(CreateRequestActivity.this, "need to enter name, address, dates, and times", Toast.LENGTH_SHORT).show();
         }
     }
@@ -193,8 +169,37 @@ public class CreateRequestActivity extends AppCompatActivity {
         boolean isEndingAM = toggleEndingAM.isChecked();
 
         if(!TextUtils.isEmpty(dateStarting) && !TextUtils.isEmpty(dateEnding) && !TextUtils.isEmpty(dateStarting) && !TextUtils.isEmpty(timeEnding)){
-            timeDetails = new TimeDetails(dateStarting, dateEnding, timeStarting, isStartingAM, timeEnding, isEndingAM);
-            textViewPricing.setText(PRICING + timeDetails.setPrice(listingRate));
+            //check if time and dates are in right format
+            if(!timeDetails.checkDateFormat(dateStarting) || !timeDetails.checkDateFormat(dateEnding) ){
+                Toast.makeText(CreateRequestActivity.this, "dates must be in MM/DD/YYYY format!", Toast.LENGTH_SHORT).show();
+                if(!textViewPricing.getText().equals(PRICING + "$0.00")){
+                    textViewPricing.setText(PRICING + "$0.00");
+                }
+
+            }
+            else if(!timeDetails.checkDateValid(dateStarting, dateEnding)){
+                Toast.makeText(CreateRequestActivity.this, "starting date should be before ending date!", Toast.LENGTH_SHORT).show();
+                if(!textViewPricing.getText().equals(PRICING + "$0.00")){
+                    textViewPricing.setText(PRICING + "$0.00");
+                }
+            }
+            else if(!timeDetails.checkTimeFormat(timeStarting) || !timeDetails.checkTimeFormat(timeEnding)){
+                Toast.makeText(CreateRequestActivity.this, "times must be in HH:MM format!", Toast.LENGTH_SHORT).show();
+                if(!textViewPricing.getText().equals(PRICING + "$0.00")){
+                    textViewPricing.setText(PRICING + "$0.00");
+                }
+            }
+            else if(timeStarting.equals(timeEnding) && (toggleStartingAM.isChecked() == toggleEndingAM.isChecked()) ){
+                Toast.makeText(CreateRequestActivity.this, "times can't be the same!", Toast.LENGTH_SHORT).show();
+                if(!textViewPricing.getText().equals(PRICING + "$0.00")){
+                    textViewPricing.setText(PRICING + "$0.00");
+                }
+            }
+            else{
+                timeDetails = new TimeDetails(dateStarting, dateEnding, timeStarting, isStartingAM, timeEnding, isEndingAM);
+                textViewPricing.setText(PRICING + timeDetails.setPrice(listingRate));
+                return true;
+            }
         }
         return false;
     }

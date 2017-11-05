@@ -116,7 +116,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:hint="Starting Time"
-                            android:inputType="date" />
+                            android:inputType="time" />
 
                         <ToggleButton
                             android:id="@+id/startingAMButton"
@@ -145,7 +145,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:hint="Ending Time"
-                            android:inputType="date" />
+                            android:inputType="time" />
 
                         <ToggleButton
                             android:id="@+id/endingAMButton"
@@ -157,15 +157,29 @@
                     </TableRow>
                 </TableLayout>
 
+                <Switch
+                    android:id="@+id/generateSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:checked="false"
+                    android:text="Generate Pricing:"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="20sp"
+                    tools:checked="false" />
+
                 <TextView
                     android:id="@+id/textViewPricing"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:text="Total Price: $0.00"
+                    android:textAlignment="center"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+
 
                 <Button
                     android:id="@+id/buttonCreateRequest"

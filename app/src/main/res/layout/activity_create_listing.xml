@@ -156,7 +156,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:hint="Starting Time"
-                            android:inputType="date" />
+                            android:inputType="time" />
 
                         <ToggleButton
                             android:id="@+id/startingAMButton"
@@ -185,7 +185,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:hint="Ending Time"
-                            android:inputType="date" />
+                            android:inputType="time" />
 
                         <ToggleButton
                             android:id="@+id/endingAMButton"

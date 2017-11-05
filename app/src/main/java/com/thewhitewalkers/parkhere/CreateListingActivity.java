@@ -3,13 +3,16 @@ package com.thewhitewalkers.parkhere;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.sql.Time;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -37,10 +40,14 @@ public class CreateListingActivity extends AppCompatActivity {
     private Button buttonCreateListing;
     private Button buttonHomepage;
 
+    private TimeDetails timeDetails;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_listing);
+
+        timeDetails = new TimeDetails();
 
         editTextListingName = findViewById(R.id.editTextListingName);
         editTextListingAddress = findViewById(R.id.editTextListingAddress);
@@ -86,21 +93,49 @@ public class CreateListingActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
 
         if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingAddress) && !TextUtils.isEmpty(listingPrice) && !TextUtils.isEmpty(listingDateStarting) && !TextUtils.isEmpty(listingDateEnding) && !TextUtils.isEmpty(listingTimeStarting) && !TextUtils.isEmpty(listingTimeEnding)) {
-            String _id = listingDatabase.push().getKey();
-            TimeDetails timeDetails = new TimeDetails(listingDateStarting, listingDateEnding, listingTimeStarting, isStartingAM, listingTimeEnding, isEndingAM);
-            Listing newListing = new Listing(_id, listingName, listingAddress, listingDescription, listingPrice, user.getUid(), user.getEmail(), timeDetails, "available");
-            listingDatabase.child(_id).setValue(newListing);
+            if(checkBookingDate(listingDateStarting, listingDateEnding) && checkBookingTime(listingTimeStarting, listingTimeEnding))
+            {
+                String _id = listingDatabase.push().getKey();
+                timeDetails = new TimeDetails(listingDateStarting, listingDateEnding, listingTimeStarting, isStartingAM, listingTimeEnding, isEndingAM);
+                Listing newListing = new Listing(_id, listingName, listingAddress, listingDescription, listingPrice, user.getUid(), user.getEmail(), timeDetails, "available");
+                listingDatabase.child(_id).setValue(newListing);
 
-            // need to add the listing Id onto the user object
-            DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
-            HashMap<String, String> listingStatus = new HashMap<>();
-            listingStatus.put("status", "available");
-            userDatabase.child(user.getUid()).child("listings").child(_id).setValue(listingStatus);
+                // need to add the listing Id onto the user object
+                DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
+                HashMap<String, String> listingStatus = new HashMap<>();
+                listingStatus.put("status", "available");
+                userDatabase.child(user.getUid()).child("listings").child(_id).setValue(listingStatus);
 
-            Toast.makeText(CreateListingActivity.this, "Created Listing", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+                Toast.makeText(CreateListingActivity.this, "Created Listing", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+            }
+
         } else {
             Toast.makeText(CreateListingActivity.this, "need to enter name, address, price, dates, and times", Toast.LENGTH_SHORT).show();
         }
+    }
+    public boolean checkBookingDate(String dateStarting, String dateEnding){
+        if(!timeDetails.checkDateFormat(dateStarting) || !timeDetails.checkDateFormat(dateEnding) ){
+            Toast.makeText(CreateListingActivity.this, "dates must be in MM/DD/YYYY format!", Toast.LENGTH_SHORT).show();
+        }
+        else if(!timeDetails.checkDateValid(dateStarting, dateEnding)){
+            Toast.makeText(CreateListingActivity.this, "starting date should be before ending date!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            return true;
+        }
+        return false;
+    }
+    public boolean checkBookingTime(String timeStarting, String timeEnding){
+        if(!timeDetails.checkTimeFormat(timeStarting) || !timeDetails.checkTimeFormat(timeEnding)){
+            Toast.makeText(CreateListingActivity.this, "times must be in HH:MM format!", Toast.LENGTH_SHORT).show();
+        }
+        else if(timeStarting.equals(timeEnding) && (toggleStartingAM.isChecked() == toggleEndingAM.isChecked()) ){
+            Toast.makeText(CreateListingActivity.this, "times can't be the same!", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            return true;
+        }
+        return false;
     }
 }
