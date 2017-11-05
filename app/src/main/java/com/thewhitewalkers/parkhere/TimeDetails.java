@@ -7,6 +7,7 @@ public class TimeDetails {
     private String endingTime;
     private boolean startingIsAM;
     private boolean endingIsAM;
+    private double price;
 
     public TimeDetails(String s_Date, String e_Date, String s_Time, boolean s_IsAM, String e_Time, boolean e_IsAM){
         startingDate = s_Date;
@@ -15,6 +16,12 @@ public class TimeDetails {
         endingTime = e_Time;
         startingIsAM = s_IsAM;
         endingIsAM = e_IsAM;
+    }
+
+    public String setPrice(String rate){
+        double hourly_rate = Double.parseDouble(rate);
+        price = hourly_rate+1; // *hours
+        return "$" + price;
     }
     public boolean hasConflict(){
         //MM/DD/YYYY

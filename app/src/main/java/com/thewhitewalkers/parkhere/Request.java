@@ -11,6 +11,7 @@ public class Request implements Serializable{
     private String listingID;
     private String subject;
     private String message;
+    private TimeDetails timeDetails;
     private int requestType;
     private boolean hasBeenRead;
     private boolean isDefault;
@@ -23,6 +24,7 @@ public class Request implements Serializable{
         listingID = "";
         subject = "Pending Request";
         message = "Your Request Pending";
+        timeDetails = null;
         requestType = 1;
         hasBeenRead = false;
         isDefault = true;
@@ -37,9 +39,10 @@ public class Request implements Serializable{
      * @param currentListingID is the currentListing ID
      * @param subject_Line is the subject line of the message
      * @param message_Line is the message body
+     * @param timeDetails is the time details
      * @param message_RequestType
      */
-    public Request(String requestID, String to_ID, String from_ID, String from_email, String currentListingID, String subject_Line, String message_Line, int message_RequestType){
+    public Request(String requestID, String to_ID, String from_ID, String from_email, String currentListingID, String subject_Line, String message_Line, TimeDetails timeDetails, int message_RequestType){
         this.requestID = requestID;
         recipientID = to_ID;
         senderID = from_ID;
@@ -47,6 +50,7 @@ public class Request implements Serializable{
         listingID = currentListingID;
         subject = subject_Line;
         message = message_Line;
+        this.timeDetails = timeDetails;
         requestType = message_RequestType;
         hasBeenRead = false;
         isDefault = false;
@@ -76,6 +80,10 @@ public class Request implements Serializable{
 
     public String getMessage() {
         return message;
+    }
+
+    public TimeDetails getTimeDetails(){
+        return timeDetails;
     }
 
     public int getRequestType() {

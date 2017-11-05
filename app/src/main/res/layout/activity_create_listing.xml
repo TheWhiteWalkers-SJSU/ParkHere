@@ -86,7 +86,7 @@
                     android:id="@+id/editTextListingPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Listing Price"
+                    android:hint="Hourly Rate"
                     android:inputType="numberDecimal"
 
                     android:layout_margin="15dp"
