@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import java.util.Map;
 import java.util.HashMap;
 
@@ -30,6 +32,8 @@ public class CreateListingActivity extends AppCompatActivity {
     private EditText editTextListingDateEnding;
     private EditText editTextListingTimeStarting;
     private EditText editTextListingTimeEnding;
+    private ToggleButton toggleStartingAM;
+    private ToggleButton toggleEndingAM;
     private Button buttonCreateListing;
     private Button buttonHomepage;
 
@@ -46,6 +50,8 @@ public class CreateListingActivity extends AppCompatActivity {
         editTextListingDateEnding = findViewById(R.id.editTextListingEndDate);
         editTextListingTimeStarting = findViewById(R.id.editTextListingStartTime);
         editTextListingTimeEnding = findViewById(R.id.editTextListingEndTime);
+        toggleStartingAM = findViewById(R.id.startingAMButton);
+        toggleEndingAM = findViewById(R.id.endingAMButton);
 
         buttonCreateListing = findViewById(R.id.buttonCreateListing);
         buttonCreateListing.setOnClickListener(new View.OnClickListener() {
@@ -74,12 +80,15 @@ public class CreateListingActivity extends AppCompatActivity {
         String listingDateEnding = editTextListingDateEnding.getText().toString();
         String listingTimeStarting = editTextListingTimeStarting.getText().toString();
         String listingTimeEnding = editTextListingTimeEnding.getText().toString();
-        
+        boolean isStartingAM = toggleStartingAM.isChecked();
+        boolean isEndingAM = toggleEndingAM.isChecked();
+
         FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
 
-        if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingAddress) && !TextUtils.isEmpty(listingPrice)) {
+        if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingAddress) && !TextUtils.isEmpty(listingPrice) && !TextUtils.isEmpty(listingDateStarting) && !TextUtils.isEmpty(listingDateEnding) && !TextUtils.isEmpty(listingTimeStarting) && !TextUtils.isEmpty(listingTimeEnding)) {
             String _id = listingDatabase.push().getKey();
-            Listing newListing = new Listing(_id, listingName, listingAddress, listingDescription, listingPrice, user.getUid(), user.getEmail(), "available");
+            TimeDetails timeDetails = new TimeDetails(listingDateStarting, listingDateEnding, listingTimeStarting, isStartingAM, listingTimeEnding, isEndingAM);
+            Listing newListing = new Listing(_id, listingName, listingAddress, listingDescription, listingPrice, user.getUid(), user.getEmail(), timeDetails, "available");
             listingDatabase.child(_id).setValue(newListing);
 
             // need to add the listing Id onto the user object
@@ -91,7 +100,7 @@ public class CreateListingActivity extends AppCompatActivity {
             Toast.makeText(CreateListingActivity.this, "Created Listing", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
         } else {
-            Toast.makeText(CreateListingActivity.this, "need to enter name, address, and price", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreateListingActivity.this, "need to enter name, address, price, dates, and times", Toast.LENGTH_SHORT).show();
         }
     }
 }

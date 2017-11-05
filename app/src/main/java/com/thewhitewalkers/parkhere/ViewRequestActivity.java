@@ -38,6 +38,11 @@ public class ViewRequestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_request);
 
+        currentRequest = (Request) getIntent().getSerializableExtra("request");
+        currentListing = (Listing) getIntent().getSerializableExtra("listing");
+
+        int requestType = currentRequest.getRequestType();
+
         backToInboxButton = findViewById(R.id.backToInbox);
         subjectLine = findViewById(R.id.subjectLine);
         senderLine = findViewById(R.id.senderLine);
@@ -45,30 +50,32 @@ public class ViewRequestActivity extends AppCompatActivity {
         listingAddress = findViewById(R.id.listingAddress);
         listingPrice = findViewById(R.id.listingPrice);
         viewListingButton = findViewById(R.id.viewListing);
-        acceptRequestButton = findViewById(R.id.acceptRequest);
-        denyRequestButton = findViewById(R.id.denyRequest);
-        currentRequest = (Request) getIntent().getSerializableExtra("request");
-        currentListing = (Listing) getIntent().getSerializableExtra("listing");
 
         subjectLine.setText(currentRequest.getSubject());
-        senderLine.setText("From: " + currentRequest.getSenderID());
+        senderLine.setText("From: " + currentRequest.getSenderEmail());
         messageText.setText(currentRequest.getMessage());
         listingAddress.setText(currentListing.getListingAddress());
         listingPrice.setText(currentListing.getListingPrice());
 
-        acceptRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                acceptRequest();
-            }
-        });
 
-        denyRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                denyRequest();
-            }
-        });
+            acceptRequestButton = findViewById(R.id.acceptRequest);
+            denyRequestButton = findViewById(R.id.denyRequest);
+
+            acceptRequestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    acceptRequest();
+                }
+            });
+
+            denyRequestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    denyRequest();
+                }
+            });
+
+
 
         viewListingButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
