@@ -159,6 +159,7 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 listingList.clear();
+                bookingList.clear();
                 for(DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
                     Listing listing = listingSnapshot.getValue(Listing.class);
                     // TODO: need to change to match only email, accepting uuid because of old entries in DB
