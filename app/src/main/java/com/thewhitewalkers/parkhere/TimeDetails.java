@@ -1,10 +1,14 @@
 package com.thewhitewalkers.parkhere;
 
+import java.util.Date;
+
 public class TimeDetails {
     private String startingDate;
     private String endingDate;
     private String startingTime;
     private String endingTime;
+    private Date starting;
+    private Date ending;
     private boolean startingIsAM;
     private boolean endingIsAM;
     private double price;
@@ -16,12 +20,36 @@ public class TimeDetails {
         endingTime = e_Time;
         startingIsAM = s_IsAM;
         endingIsAM = e_IsAM;
+
+        String[] starting_Date = dateSplit(startingDate);
+        int d_s = Integer.parseInt(starting_Date[1]);
+        int m_s = Integer.parseInt(starting_Date[0]);
+        int y_s = Integer.parseInt(starting_Date[2]);
+        starting = new Date(y_s, m_s, d_s);
+        String[] ending_Date = dateSplit(endingDate);
+        int d_e = Integer.parseInt(ending_Date[1]);
+        int m_e = Integer.parseInt(ending_Date[0]);
+        int y_e = Integer.parseInt(ending_Date[2]);
+        ending = new Date(y_e, m_e, d_e);
     }
 
     public String setPrice(String rate){
         double hourly_rate = Double.parseDouble(rate);
-        price = hourly_rate+1; // *hours
+        price = hourly_rate * getTotalHours();
         return "$" + price;
+    }
+    public double getTotalHours(){
+        return getHours() * getDays();
+    }
+    public double getHours(){
+        String[] starting = timeSplit(this.getStartingTime());
+        String[] ending = timeSplit(this.getEndingTime());
+
+        return 1;
+    }
+    public double getDays(){
+        long days = ((ending.getTime()-starting.getTime())/1000)/60/60/24;
+        return days;
     }
     public boolean hasConflict(){
         //MM/DD/YYYY
