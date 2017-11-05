@@ -40,7 +40,9 @@ public class ViewListingActivity extends AppCompatActivity {
         final Listing thisListing = (Listing) listingIntent.getSerializableExtra("listing");
 
         String listingName = thisListing.getListingName();
-        String listingOwner = thisListing.getOwnerId();
+        String listingOwner = thisListing.getOwnerEmail();
+        //listingOwner should show email, but listings made early on did not fill in email field
+        if(listingOwner == null) listingOwner = thisListing.getOwnerId();
         String listingAddress = thisListing.getListingAddress();
         String listingDescription = thisListing.getListingDescription();
         String listingStart = thisListing.getStartTime();
