@@ -117,7 +117,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:hint="Starting Date"
-                            android:inputType="date" />
+                            android:inputType="text" />
                     </TableRow>
 
                     <TableRow
@@ -137,7 +137,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:hint="Ending Date"
-                            android:inputType="date" />
+                            android:inputType="text" />
                     </TableRow>
 
                     <TableRow
@@ -156,7 +156,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:hint="Starting Time"
-                            android:inputType="time" />
+                            android:inputType="text" />
 
                         <ToggleButton
                             android:id="@+id/startingAMButton"
@@ -185,7 +185,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="15dp"
                             android:hint="Ending Time"
-                            android:inputType="time" />
+                            android:inputType="text" />
 
                         <ToggleButton
                             android:id="@+id/endingAMButton"
