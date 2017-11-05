@@ -30,6 +30,8 @@ import java.util.List;
 public class HomepageActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+    FirebaseUser user = firebaseAuth.getCurrentUser();
+
     private TextView userEmail;
     private Button buttonLogout;
     private Button buttonInbox;
@@ -39,7 +41,6 @@ public class HomepageActivity extends AppCompatActivity {
     private ListView listViewBookings;
     private List<Listing> listingList = new ArrayList<>();
     private List<Listing> bookingList = new ArrayList<>();
-    FirebaseUser user = firebaseAuth.getCurrentUser();
 
     final DatabaseReference UserDatabase = FirebaseDatabase.getInstance().getReference("users").child(user.getUid());
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");

@@ -33,6 +33,9 @@ public class ViewListingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_listing);
 
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+
         Intent listingIntent = getIntent();
         final Listing thisListing = (Listing) listingIntent.getSerializableExtra("listing");
 
@@ -58,6 +61,19 @@ public class ViewListingActivity extends AppCompatActivity {
         listingEndText.setText("End Time: "+listingEnd);
 
         requestButton = findViewById(R.id.requestButton);
+
+        if(thisListing.getOwnerId() != null) {
+            if(thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
+                requestButton.setVisibility(View.GONE);
+            }
+        }
+
+        if(thisListing.getRenterId() != null) {
+            if(thisListing.getRenterId().equals(user.getEmail()) || thisListing.getRenterId().equals(user.getUid())) {
+                requestButton.setVisibility(View.GONE);
+            }
+        }
+
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
