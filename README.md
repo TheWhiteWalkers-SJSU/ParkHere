@@ -1,5 +1,6 @@
 # ParkHere
 ParkHere
+
 ParkHere is a Peer-to-Peer Resource Sharing Platform (PRSP) developed for the Android operating system. Owners of parking spaces are able to create listings of their parking spots in the ParkHere application. The owner is able to post pictures of the parking space, specify dates of availability, and specify costly rates. Renters are able to search for and discover parking spaces that meet their demands. ParkHere is equipped with all of the tools necessary to establish contact between the two parties and to execute transactions. 
 
 Getting Started
