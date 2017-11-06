@@ -23,13 +23,17 @@ ParkHere is written mostly in Java as well as some XML using Android development
 ### Authors
 
 ●	Romsin Khoshabian - 008570978
+
 ●	Michelle Lai - 009769721
+
 ●	Rohit Mathew - 012539657
+
 ●	Pearl Or - 010401911
 
 ### Acknowledgments
 
 ●	San Jose State University
+
 ●	Dr. Ramin Moazeni
 
 ### GitHub URL
