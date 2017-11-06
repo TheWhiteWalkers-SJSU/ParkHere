@@ -131,7 +131,7 @@ public class Listing implements Serializable {
 
     public String getEndTime() {
         if(this.getTimeDetails() != null) {
-            String ending = this.getTimeDetails().getStartingDate() +" @ "+ this.timeDetails.getEndingTime();
+            String ending = this.getTimeDetails().getEndingDate() +" @ "+ this.timeDetails.getEndingTime();
             return ending;
         }
         return "N/A";
