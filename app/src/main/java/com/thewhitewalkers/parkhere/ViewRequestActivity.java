@@ -66,12 +66,8 @@ public class ViewRequestActivity extends AppCompatActivity {
             acceptRequestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (hasRequestsConflict()) {
-                        Toast.makeText(ViewRequestActivity.this, "Time/date unavailble for listing", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        acceptRequest();
-                    }
+                    hasRequestsConflict();
+                    //acceptRequest();
                 }
             });
 
@@ -97,7 +93,7 @@ public class ViewRequestActivity extends AppCompatActivity {
         });
     }
 
-    private boolean hasRequestsConflict(){
+    private void hasRequestsConflict(){
         requestsConflict = false;
         RequestDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -105,9 +101,16 @@ public class ViewRequestActivity extends AppCompatActivity {
                 for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
                     Request request = requestSnapshot.getValue(Request.class);
                     if(request.getListingID().equals(currentRequest.getListingID())){
-                        requestsConflict = request.getTimeDetails().hasConflict(currentRequest.getTimeDetails());
+                        //for now just check that request type is not 0
+                        if(request.getRequestType() != 0 || request.getRequestType() == 2) {
+                            requestsConflict = request.getTimeDetails().hasConflict(currentRequest.getTimeDetails());
+                        }
                     }
                 }
+                if (requestsConflict)
+                    Toast.makeText(ViewRequestActivity.this, "Time/date unavailble for listing", Toast.LENGTH_SHORT).show();
+                else
+                    acceptRequest();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -115,7 +118,6 @@ public class ViewRequestActivity extends AppCompatActivity {
             }
         });
 
-        return requestsConflict;
     }
 
     /**

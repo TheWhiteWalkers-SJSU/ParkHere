@@ -7,6 +7,6 @@
     <color name="colorButton">#3bd8e1</color>
     <color name="colorButton1">#2fa8f4</color>
     <color name="colorButtonOutline">#15e99f</color>
-    <color name="colorAcceptButton"></color>
+    <!-- <color name="colorAcceptButton"></color> -->
     <color name="colorButtonText">#ffffff</color>
 </resources>

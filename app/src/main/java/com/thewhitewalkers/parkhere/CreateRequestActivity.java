@@ -137,35 +137,33 @@ public class CreateRequestActivity extends AppCompatActivity {
 
         buttonCreateListing.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (hasRequestsConflict()) {
-                    Toast.makeText(CreateRequestActivity.this, "Time/date unavailble for listing", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    createRequest();
-                }
+                //hasRequestsConflict();
+                createRequest();
             }
         });
     }
 
-    private boolean hasRequestsConflict(){
+    private void hasRequestsConflict(){
         requestsConflict = false;
         requestDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
                     Request request = requestSnapshot.getValue(Request.class);
-                    if(request.getListingID().equals(listingId)){
+                    if(request.getRequestType()==2 && request.getListingID().equals(listingId)){
                         requestsConflict = request.getTimeDetails().hasConflict(timeDetails);
                     }
                 }
+                if (requestsConflict)
+                    Toast.makeText(CreateRequestActivity.this, "Time/date unavailble for listing", Toast.LENGTH_SHORT).show();
+                else
+                    createRequest();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
-
-        return requestsConflict;
     }
 
     private void createRequest(){
