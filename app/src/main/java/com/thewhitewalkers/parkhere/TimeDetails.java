@@ -13,6 +13,10 @@ public class TimeDetails  implements Serializable {
     private boolean startingIsAM;
     private boolean endingIsAM;
     private double price;
+    private int startingHour;
+    private int startingMinute;
+    int endingHour;
+    int endingMinute;
 
     public TimeDetails(){
 
@@ -40,6 +44,12 @@ public class TimeDetails  implements Serializable {
             ending = new Date(y_e, m_e, d_e);
         }
 
+        String[] startingSplit = timeSplit(startingTime);
+        String[] endingSplit = timeSplit(endingTime);
+        startingHour = cleanTime(startingSplit[0]);
+        startingMinute = cleanTime(startingSplit[1]);
+        endingHour = cleanTime(endingSplit[0]);
+        endingMinute = cleanTime(endingSplit[1]);
     }
 
     public String setPrice(String rate){
@@ -75,23 +85,99 @@ public class TimeDetails  implements Serializable {
         long days = ((ending.getTime()-starting.getTime())/1000)/60/60/24;
         return days+1;
     }
-    public boolean hasConflict(){
-        //MM/DD/YYYY
-        //HH:MM:AM
+    public boolean hasConflict(TimeDetails bookingToCheck){
+        //looking at two TimeDetails to see if they have a date or time conflict
+        Date currentStarting = this.getStarting();
+        Date currentEnding = this.getEnding();
+        Date checkStarting = bookingToCheck.getStarting();
+        Date checkEnding = bookingToCheck.getEnding();
 
-        return false;
+        //if the current TimeDetails happens before or after the booking we are checking then we don't need to check time conflict
+        if((currentStarting.before(checkStarting) && currentEnding.before(checkEnding)) ||(currentStarting.after(checkStarting) && currentEnding.after(checkEnding))){
+            return false; //there is no conflict
+        }
+        else{ //booking happens within the current TimeDetails, so we need to check for TimeConflicts
+            return !withinTime(bookingToCheck); //returns true if does fall into the slot
+        }
     }
-    /*
-    public boolean withinSlot(TimeDetails bookingToCheck){
+
+    public boolean withinTimeSlot(TimeDetails bookingToCheck){
         return withinDate(bookingToCheck) && withinTime(bookingToCheck);
     }
     public boolean withinDate(TimeDetails bookingToCheck){
         return this.getStarting().before(bookingToCheck.getStarting()) && this.getEnding().after(bookingToCheck.getEnding());
     }
     public boolean withinTime(TimeDetails bookingToCheck){
+
+        int currentStartingHour = this.getStartingHour();
+        int currentStartingMin = this.getStartingMinute();
+        int currentEndingHour = this.getEndingHour();
+        int currentEndingMin = this.getEndingMinute();
+        boolean currentStartingAM = this.getStartingIsAm();
+        boolean currentEndingAM = this.getEmdingIsAm();
+
+        int checkStartingHour = bookingToCheck.getStartingHour();
+        int checkStartingMin = bookingToCheck.getStartingMinute();
+        int checkEndingHour = bookingToCheck.getEndingHour();
+        int checkEndingMin = bookingToCheck.getEndingMinute();
+        boolean checkStartingAM = bookingToCheck.getStartingIsAm();
+        boolean checkEndingAM = bookingToCheck.getEmdingIsAm();
+
+        //startingHour is 12 then we treat it as 0
+        if(checkStartingHour == 12){
+            checkStartingHour = 0;
+        }
+        if(currentStartingHour == 12){
+            currentStartingHour = 0;
+        }
+        if(currentStartingAM == currentEndingAM){ //current TimeDetails has the same am/pm e.g. 4:00pm - 6:00pm or 4:00am - 6:00am
+            if(currentStartingAM == checkStartingAM){
+                //ignore case of 12 and when the ending time is smaller than the starting time 7pm - p\6pm
+                //hours do not overlapp
+
+                if((currentStartingHour < checkStartingHour && currentEndingHour < checkStartingHour) || (currentStartingHour > checkEndingHour)){
+                    return false;
+                }
+                else if( (currentEndingHour == checkStartingHour && currentEndingMin < checkStartingMin)|| (currentStartingHour == checkEndingHour && currentStartingMin > checkEndingMin)){
+                    return false;
+                }
+
+            }
+            else{ //not conflicting
+                return false;
+            }
+        }
+        else{
+            // (currentChecking)
+            if((currentStartingAM == checkEndingAM) ){
+                if(currentStartingHour >= checkEndingHour ){
+                    if(currentStartingHour == checkEndingHour){
+                        if(currentStartingMin > checkEndingMin){
+                            return false;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+            else if(currentEndingAM == checkStartingAM){
+                if(currentEndingHour >= checkStartingHour ){
+                    if(currentEndingHour == checkStartingHour ){
+                        if(currentEndingMin < checkStartingMin){
+                            return false;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         return true;
     }
-    */
+
     public String[] dateSplit(String date){
         String[] split = date.split("[.-/]");
         return split;
@@ -180,5 +266,25 @@ public class TimeDetails  implements Serializable {
 
     public String getEndingTime(){
         return endingTime;
+    }
+
+    public boolean getStartingIsAm(){
+        return startingIsAM;
+    }
+    public boolean getEmdingIsAm(){
+        return endingIsAM;
+    }
+
+    public int getStartingHour(){
+        return startingHour;
+    }
+    public int getStartingMinute(){
+        return startingMinute;
+    }
+    public int getEndingHour(){
+        return endingHour;
+    }
+    public int getEndingMinute(){
+        return endingMinute;
     }
 }

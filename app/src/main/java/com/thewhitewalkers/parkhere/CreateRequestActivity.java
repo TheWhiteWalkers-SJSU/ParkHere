@@ -151,6 +151,8 @@ public class CreateRequestActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
 
         if(!TextUtils.isEmpty(requestSubject) && !TextUtils.isEmpty(requestMessage) && updatedPrice()) {
+            //check if there's a time conflict!!!
+
             String _id = requestDatabase.push().getKey();
             Request newRequest = new Request(_id, listingOwner, user.getUid(), user.getEmail(), listingId, requestSubject, requestMessage, timeDetails, 0);
             requestDatabase.child(_id).setValue(newRequest);
