@@ -13,8 +13,11 @@ import java.util.HashMap;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ViewRequestActivity extends AppCompatActivity {
 
@@ -28,6 +31,7 @@ public class ViewRequestActivity extends AppCompatActivity {
     private Button acceptRequestButton;
     private Button denyRequestButton;
 
+    boolean requestsConflict;
     private Request currentRequest;
     private Listing currentListing;
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
@@ -62,7 +66,12 @@ public class ViewRequestActivity extends AppCompatActivity {
             acceptRequestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    acceptRequest();
+                    if (hasRequestsConflict()) {
+                        Toast.makeText(ViewRequestActivity.this, "Time/date unavailble for listing", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        acceptRequest();
+                    }
                 }
             });
 
@@ -86,6 +95,27 @@ public class ViewRequestActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), InboxActivity.class));
             }
         });
+    }
+
+    private boolean hasRequestsConflict(){
+        requestsConflict = false;
+        RequestDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
+                    Request request = requestSnapshot.getValue(Request.class);
+                    if(request.getListingID().equals(currentRequest.getListingID())){
+                        requestsConflict = request.getTimeDetails().hasConflict(currentRequest.getTimeDetails());
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return requestsConflict;
     }
 
     /**

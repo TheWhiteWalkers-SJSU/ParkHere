@@ -92,13 +92,20 @@ public class TimeDetails  implements Serializable {
         Date checkStarting = bookingToCheck.getStarting();
         Date checkEnding = bookingToCheck.getEnding();
 
+        if(!currentEnding.before(checkStarting) && !currentStarting.after(checkEnding)) {
+            return true; //there is a date conflict
+        }
+        else {
+            return withinTime(bookingToCheck);
+        }
+
         //if the current TimeDetails happens before or after the booking we are checking then we don't need to check time conflict
-        if((currentStarting.before(checkStarting) && currentEnding.before(checkEnding)) ||(currentStarting.after(checkStarting) && currentEnding.after(checkEnding))){
-            return false; //there is no conflict
-        }
-        else{ //booking happens within the current TimeDetails, so we need to check for TimeConflicts
-            return !withinTime(bookingToCheck); //returns true if does fall into the slot
-        }
+        //if((currentStarting.before(checkStarting) && currentEnding.before(checkEnding)) ||(currentStarting.after(checkStarting) && currentEnding.after(checkEnding))){
+        //    return false; //there is no conflict
+        //}
+        //else{ //booking happens within the current TimeDetails, so we need to check for TimeConflicts
+        //    return !withinTime(bookingToCheck); //returns true if does fall into the slot
+        //}
     }
 
     public boolean withinTimeSlot(TimeDetails bookingToCheck){

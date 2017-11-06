@@ -71,6 +71,8 @@ public class Request implements Serializable{
         return message;
     }
 
+    public TimeDetails getTimeDetails() { return timeDetails; }
+
 
     public int getRequestType() {
         return requestType;

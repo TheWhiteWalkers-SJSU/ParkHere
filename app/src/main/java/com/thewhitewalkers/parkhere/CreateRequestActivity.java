@@ -16,10 +16,15 @@ import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CreateRequestActivity extends AppCompatActivity {
 
@@ -42,6 +47,7 @@ public class CreateRequestActivity extends AppCompatActivity {
 
     private TimeDetails timeDetails;
 
+    boolean requestsConflict;
     String listingName;
     String listingId;
     String listingOwner;
@@ -131,9 +137,35 @@ public class CreateRequestActivity extends AppCompatActivity {
 
         buttonCreateListing.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                createRequest();
+                if (hasRequestsConflict()) {
+                    Toast.makeText(CreateRequestActivity.this, "Time/date unavailble for listing", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    createRequest();
+                }
             }
         });
+    }
+
+    private boolean hasRequestsConflict(){
+        requestsConflict = false;
+        requestDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
+                    Request request = requestSnapshot.getValue(Request.class);
+                    if(request.getListingID().equals(listingId)){
+                        requestsConflict = request.getTimeDetails().hasConflict(timeDetails);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        return requestsConflict;
     }
 
     private void createRequest(){
