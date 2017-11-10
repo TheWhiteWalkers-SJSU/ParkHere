@@ -21,18 +21,26 @@ public class TimeDetailsNonNumericStringFormatTest extends TestCase{
     }
     @Test
     public void testCheckDateFormat() throws Exception{
-        //Expected 3.5 hours * 4 days = 14.0
-        double expectedTotalNumOfHours = 14.0;
-        double actualTotalNumOfHours = timeDetails1.getTotalHours();
-        assertEquals(expectedTotalNumOfHours, actualTotalNumOfHours, delta);
+        String d1 = "01/02/2017";
+        String d2 = "0e/0d/20f7";
+        String d3 = "0e012r07";
+
+        assertTrue(timeDetails1.checkDateFormat(d1));
+        assertFalse(timeDetails1.checkDateFormat(d2));
+        assertFalse(timeDetails1.checkDateFormat(d3));
     }
 
     @Test
     public void testCheckTimeFormat() throws Exception{
-        //Expected 3.5 hours * 4 days = 14.0
-        double expectedTotalNumOfHours = 14.0;
-        double actualTotalNumOfHours = timeDetails1.getTotalHours();
-        assertEquals(expectedTotalNumOfHours, actualTotalNumOfHours, delta);
+        String t1 = "01:01";
+        String t2 = "e1:e1";
+        String t3 = "01:01f";
+        String t4 = "f1:01";
+
+        assertTrue(timeDetails1.checkTimeFormat(t1));
+        assertFalse(timeDetails1.checkTimeFormat(t2));
+        assertFalse(timeDetails1.checkTimeFormat(t3));
+        assertFalse(timeDetails1.checkTimeFormat(t4));
     }
 
 }

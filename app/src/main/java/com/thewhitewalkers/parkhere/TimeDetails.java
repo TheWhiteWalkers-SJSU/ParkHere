@@ -1,6 +1,7 @@
 package com.thewhitewalkers.parkhere;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class TimeDetails  implements Serializable {
@@ -45,6 +46,8 @@ public class TimeDetails  implements Serializable {
     public String setPrice(String rate){
         double hourly_rate = Double.parseDouble(rate);
         price = hourly_rate * getTotalHours();
+        DecimalFormat df = new DecimalFormat("#.##");
+        price = Double.valueOf(df.format(price));
         return "$" + price;
     }
     public double getTotalHours(){
@@ -62,13 +65,36 @@ public class TimeDetails  implements Serializable {
         if((startingIsAM && !endingIsAM) || (!startingIsAM && endingIsAM)){
             // 9am to 1pm (4) //9pm to 1am (4)
             // 9am to 10pm (13)
-            total_hours = (12 - s_h) + e_h;
+
+            if(s_h != 12 && e_h == 12){
+                total_hours = e_h - s_h;
+            }
+            else{
+                total_hours = (12 - s_h) + e_h;
+            }
+
         }
         else{
-            total_hours = e_h - s_h;
+            if(s_h > e_h){
+                if(s_h == 12){
+                    total_hours = e_h;
+                }
+                else {
+                    // 10AM to 1AM = 15.5 hours
+                    total_hours = (12 - s_h) + 12 + e_h;
+                }
+            }
+            else if(s_h != 12 && e_h == 12){
+                total_hours = (12 - s_h)  + e_h;
+            }
+            else{
+                total_hours = e_h - s_h;
+            }
+
         }
-
-
+        if(s_m > e_m){
+            return total_hours - (total_minutes/60);
+        }
         return total_hours + (total_minutes/60);
     }
     public double getDays(){
@@ -121,7 +147,9 @@ public class TimeDetails  implements Serializable {
         if(split.length == 3 && split[0].length() < 3 && split[1].length() < 3 && split[2].length() == 4){
             int m = cleanDate(split[0]);
             int d = cleanDate(split[1]);
-
+            if(m == -1 || d == -1){
+                return false;
+            }
             if(m > 0 && m <= 12 && d >= 1 && d <= 31){
                 return true;
             }
@@ -130,6 +158,9 @@ public class TimeDetails  implements Serializable {
     }
     public int cleanDate(String toClean){
         int cleaned = 0;
+        if(!toClean.matches("[0-9]+")){
+            return -1;
+        }
         if(toClean.length() == 2 && toClean.startsWith("0")){ //if HH starts with 0
             cleaned = Integer.parseInt(toClean.substring(1));
         }
@@ -152,6 +183,9 @@ public class TimeDetails  implements Serializable {
     }
     public int cleanTime(String toClean){
         int cleaned = 0;
+        if(!toClean.matches("[0-9]+")){
+            return -1;
+        }
         if(toClean.length() == 2 && toClean.startsWith("0")){ //if HH starts with 0
             cleaned = Integer.parseInt(toClean.substring(1));
         }

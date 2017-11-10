@@ -6,37 +6,30 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class TimeDetailsTest extends TestCase {
-    public TimeDetailsTest(){} //default constructor
+public class TimeDetailsMinutesTest extends TestCase {
+    public TimeDetailsMinutesTest(){} //default constructor
     TimeDetails timeDetails1;
     TimeDetails timeDetails2;
-    TimeDetails timeDetails3;
-    TimeDetails timeDetails4;
     double delta = 0.01;
     @Before
     protected void setUp(){
         String startingDate  = "11/8/2017";
         String endingDate = "11/11/2017";
-        String startingTime = "10:00";
-        String endingTime = "1:30";
+        String startingTime1 = "1:30";
+        String endingTime1 = "3:10";
+
         boolean isAm = true;
-        // 10:00 AM to 1:30 PM
-        timeDetails1 = new TimeDetails(startingDate, endingDate, startingTime, isAm, endingTime, !isAm);
+        // 1:30 AM to 3:10 AM
+        timeDetails1 = new TimeDetails(startingDate, endingDate, startingTime1, isAm, endingTime1, isAm);
 
-        // 10:00 PM to 1:30 AM
-        timeDetails2 = new TimeDetails(startingDate, endingDate, startingTime, !isAm, endingTime, isAm);
-
-        // Invalid Date 11/11/2017 to 11/8/2017 10:00 AM to 1:30 PM
-        timeDetails3 = new TimeDetails(endingDate, startingDate, startingTime, isAm, endingTime, !isAm);
-        
-        // Invalid Date 11/11/2017 to 11/8/2017 10:00 PM to 1:30 AM
-        timeDetails4 = new TimeDetails(endingDate, startingDate, startingTime, !isAm, endingTime, isAm);
+        // 1:30 PM to 3:10 PM
+        timeDetails2 = new TimeDetails(startingDate, endingDate, startingTime1, !isAm, endingTime1, !isAm);
     }
 
     @Test
     public void testGetHours() throws Exception{
-        //Expected 3.5 hours
-        double expectedNumOfHours = 3.5;
+        //Expected 15.5 hours
+        double expectedNumOfHours = 1.67;
         double actualNumOfHours1 = timeDetails1.getHours();
         assertEquals(expectedNumOfHours, actualNumOfHours1, delta);
 
@@ -57,8 +50,8 @@ public class TimeDetailsTest extends TestCase {
 
     @Test
     public void testGetTotalHours() throws Exception{
-        //Expected 3.5 hours * 4 days = 14.0 hours
-        double expectedTotalNumOfHours = 14.0;
+        //Expected 1.67 hours * 4 days = 6.67 hours
+        double expectedTotalNumOfHours = 6.67;
         double actualTotalNumOfHours1 = timeDetails1.getTotalHours();
         assertEquals(expectedTotalNumOfHours, actualTotalNumOfHours1, delta);
 
@@ -69,12 +62,12 @@ public class TimeDetailsTest extends TestCase {
     @Test
     public void testSetPrice() throws Exception{
 
-        String pricePerHour1 = "1.50"; //Expected 14.0 hours * 1.50 = 21
-        String pricePerHour2 = "10.23"; //Expected 14.0 hours * 10.23 = 143.22
-        String pricePerHour3 = "17"; //Expected 14.0 hours * 17 = 238
-        String expectedPrice1 = "$21.0";
-        String expectedPrice2 = "$143.22";
-        String expectedPrice3 = "$238.0";
+        String pricePerHour1 = "1.50"; //Expected 6.67 hours * 1.50 = $14.0
+        String pricePerHour2 = "10.23"; //Expected 6.67 hours * 10.23 = 68.2
+        String pricePerHour3 = "17"; //Expected 6.67 hours * 17 = 113.33
+        String expectedPrice1 = "$10.0";
+        String expectedPrice2 = "$68.2";
+        String expectedPrice3 = "$113.33";
 
         String actual1 = timeDetails1.setPrice(pricePerHour1);
         assertEquals(expectedPrice1, actual1);
@@ -86,7 +79,6 @@ public class TimeDetailsTest extends TestCase {
         assertEquals(expectedPrice3, actual3);
 
         //test the other TimeDetails
-
         actual1 = timeDetails2.setPrice(pricePerHour1);
         assertEquals(expectedPrice1, actual1);
 
@@ -101,7 +93,5 @@ public class TimeDetailsTest extends TestCase {
     public void testCheckDateValid() throws Exception{
         assertTrue(timeDetails1.checkDateValid(timeDetails1.getStartingDate(), timeDetails1.getEndingDate()));
         assertTrue(timeDetails2.checkDateValid(timeDetails2.getStartingDate(), timeDetails2.getEndingDate()));
-        assertFalse(timeDetails3.checkDateValid(timeDetails3.getStartingDate(), timeDetails3.getEndingDate()));
-        assertFalse(timeDetails4.checkDateValid(timeDetails4.getStartingDate(), timeDetails4.getEndingDate()));
     }
 }
