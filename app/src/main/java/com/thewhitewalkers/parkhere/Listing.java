@@ -38,13 +38,13 @@ public class Listing implements Serializable {
         this.listingStatus = listingStatus;
     }
 
-
     public String getListingId() {
         return listingId;
     }
 
     public void setListingId(String listingId) {
-        this.listingId = listingId;
+        if(listingId != null && !listingId.equals(""))
+            this.listingId = listingId;
     }
 
     public String getListingName() {
@@ -52,7 +52,8 @@ public class Listing implements Serializable {
     }
 
     public void setListingName(String listingName) {
-        this.listingName = listingName;
+        if(listingName != null && !listingName.equals(""))
+            this.listingName = listingName;
     }
 
     public String getListingAddress() {
@@ -60,7 +61,8 @@ public class Listing implements Serializable {
     }
 
     public void setListingAddress(String listingAddress) {
-        this.listingAddress = listingAddress;
+        if(listingAddress != null && !listingAddress.equals(""))
+            this.listingAddress = listingAddress;
     }
 
     public String getListingDescription() {
@@ -76,7 +78,14 @@ public class Listing implements Serializable {
     }
 
     public void setListingPrice(String listingPrice) {
-        this.listingPrice = listingPrice;
+        if (listingPrice != null && !listingPrice.equals("")) {
+            String checkNum = listingPrice;
+            try {
+                Double.parseDouble(checkNum);
+            } catch (NumberFormatException e) {
+            }
+            this.listingPrice = listingPrice;
+        }
     }
 
     public String getOwnerId() {
@@ -84,21 +93,27 @@ public class Listing implements Serializable {
     }
 
     public void setOwnerId(String ownerId) {
-        this.ownerId = ownerId;
+        if(ownerId != null && !ownerId.equals(""))
+            this.ownerId = ownerId;
     }
 
     public String getOwnerEmail() {
         return ownerEmail;
     }
 
-    public void setOwnerEmail(String ownerEmail) { this.ownerEmail = ownerEmail; }
+    public void setOwnerEmail(String ownerEmail) {
+        this.ownerEmail = ownerEmail;
+    }
 
     public String getListingStatus() {
         return listingStatus;
     }
 
     public void setListingStatus(String listingStatus) {
-        this.listingStatus = listingStatus;
+        if(listingStatus != null && !listingStatus.equals("")) {
+            if (listingStatus.equals("available") || listingStatus.equals("booked"))
+                this.listingStatus = listingStatus;
+        }
     }
 
     public String getListingRating() {
@@ -109,16 +124,22 @@ public class Listing implements Serializable {
         this.listingRating = listingRating;
     }
 
-    public String getRenterId() { return renterId; }
+    public String getRenterId() {
+        return renterId;
+    }
 
-    public void setRenterId(String renterId) { this.renterId = renterId; }
+    public void setRenterId(String renterId) {
+        if(renterId != null && !renterId.equals(""))
+            this.renterId = renterId;
+    }
 
     public TimeDetails getTimeDetails() {
         return timeDetails;
     }
 
     public void setTimeDetails(TimeDetails timeDetails) {
-        this.timeDetails = timeDetails;
+        if(timeDetails != null)
+            this.timeDetails = timeDetails;
     }
 
     public String getStartTime() {
