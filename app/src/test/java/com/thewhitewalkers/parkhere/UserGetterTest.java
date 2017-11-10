@@ -1,5 +1,7 @@
 package com.thewhitewalkers.parkhere;
 
+import junit.framework.TestCase;
+
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.After;
@@ -8,10 +10,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by Rohit on 11/9/17.
- */
-public class UserTest {
+public class UserGetterTest extends TestCase{
 
     User testUser = null;
 
@@ -25,37 +24,37 @@ public class UserTest {
     }
 
     @Test
-    public void getUserId() throws Exception {
+    public void testGetUserId() throws Exception {
         String returnedUserId = testUser.getUserId();
         assertThat(returnedUserId, is("testUserId"));
     }
 
     @Test
-    public void getEmail() throws Exception {
+    public void testGetEmail() throws Exception {
         String returnedEmail = testUser.getEmail();
         assertThat(returnedEmail, is("test@parkhere.com"));
     }
 
     @Test
-    public void getFirstName() throws Exception {
+    public void testGetFirstName() throws Exception {
         String returnedFirstName = testUser.getFirstName();
         assertThat(returnedFirstName, is("Park"));
     }
 
     @Test
-    public void getLastName() throws Exception {
+    public void testGetLastName() throws Exception {
         String returnedLastName = testUser.getLastName();
         assertThat(returnedLastName, is("Tester"));
     }
 
     @Test
-    public void getPhoneNumber() throws Exception {
+    public void testGetPhoneNumber() throws Exception {
         String returnedPhoneNumber = testUser.getPhoneNumber();
         assertThat(returnedPhoneNumber, is("555-555-5555"));
     }
 
     @Test
-    public void getLocation() throws Exception {
+    public void testGetLocation() throws Exception {
         String returnedLocation = testUser.getLocation();
         assertThat(returnedLocation, is("testingLocation"));
     }
