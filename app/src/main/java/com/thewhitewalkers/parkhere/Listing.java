@@ -83,6 +83,7 @@ public class Listing implements Serializable {
             try {
                 Double.parseDouble(checkNum);
             } catch (NumberFormatException e) {
+                return;
             }
             this.listingPrice = listingPrice;
         }
