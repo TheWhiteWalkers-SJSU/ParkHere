@@ -27,6 +27,7 @@ public class ViewRequestActivity extends AppCompatActivity {
     private Button viewListingButton;
     private Button acceptRequestButton;
     private Button denyRequestButton;
+    private Button cancelRequestButton;
 
     private Request currentRequest;
     private Listing currentListing;
@@ -56,23 +57,28 @@ public class ViewRequestActivity extends AppCompatActivity {
         listingPrice.setText(currentListing.getListingPrice());
 
 
-            acceptRequestButton = findViewById(R.id.acceptRequest);
-            denyRequestButton = findViewById(R.id.denyRequest);
+        acceptRequestButton = findViewById(R.id.acceptRequest);
+        denyRequestButton = findViewById(R.id.denyRequest);
+        cancelRequestButton = findViewById(R.id.cancelRequest);
 
-            acceptRequestButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    acceptRequest();
-                }
-            });
-
-            denyRequestButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    denyRequest();
-                }
-            });
-
+        acceptRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                acceptRequest();
+            }
+        });
+        denyRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                denyRequest();
+            }
+        });
+        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelRequest();
+            }
+        });
 
 
         viewListingButton.setOnClickListener(new View.OnClickListener() {
@@ -144,5 +150,15 @@ public class ViewRequestActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(ViewRequestActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void cancelRequest() {
+        RequestDatabase.child(currentRequest.getRequestID()).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                    }
+                });
     }
 }

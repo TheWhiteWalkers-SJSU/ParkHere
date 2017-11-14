@@ -32,9 +32,9 @@ ParkHere is written mostly in Java as well as some XML using Android development
 
 ### Acknowledgments
 
-●	San Jose State University
-
 ●	Dr. Ramin Moazeni
+
+●	San Jose State University
 
 ### GitHub URL
 

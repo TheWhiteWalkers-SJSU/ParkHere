@@ -9,8 +9,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="20dp"
         android:orientation="vertical"
-        android:layout_margin="20dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="115dp">
+
+        <Button
+            android:id="@+id/buttonGoHome"
+            style="@style/ButtonTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="Back to Home"
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/listingNameText"
@@ -23,9 +34,19 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <RatingBar
+            android:id="@+id/ratingBarListing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true" />
+
+        <Button
+            android:id="@+id/buttonViewRatings"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Ratings"
+            android:textColor="@color/wallet_holo_blue_light" />
 
         <TextView
             android:id="@+id/listingOwnerText"
@@ -77,70 +98,47 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Send Booking Request"
             android:layout_margin="20dp"
-             />
+            android:text="Send Booking Request" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <TableRow>
+
+                <Button
+                    android:id="@+id/updateButton"
+                    style="@style/ButtonThemeGreen"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="20dp"
+                    android:text="Update Listing" />
+
+                <Button
+                    android:id="@+id/deleteButton"
+                    style="@style/ButtonThemeRed"
+                    android:layout_width="130dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="20dp"
+                    android:text="Delete Listing" />
+            </TableRow>
+
+        </TableLayout>
 
         <Button
-            android:id="@+id/updateButton"
-            style="@style/ButtonThemeGreen"
+            android:id="@+id/ratingButton"
+            style="@style/ButtonThemeOrange"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Update Listing"
             android:layout_margin="20dp"
-            />
+            android:text="Give a Rating" />
+
 
     </LinearLayout>
-
-
-
-    <!--<EditText-->
-        <!--android:id="@+id/listingName"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:ems="10"-->
-        <!--android:inputType="textPersonName"-->
-        <!--android:text="Listing Name"-->
-        <!--tools:layout_editor_absoluteX="16dp"-->
-        <!--tools:layout_editor_absoluteY="16dp" />-->
-
-    <!--<EditText-->
-        <!--android:id="@+id/listingAddress"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:ems="10"-->
-        <!--android:inputType="textPersonName"-->
-        <!--android:text="Listing Address"-->
-        <!--tools:layout_editor_absoluteX="16dp"-->
-        <!--tools:layout_editor_absoluteY="77dp" />-->
-
-    <!--<EditText-->
-        <!--android:id="@+id/listingDescription"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:ems="10"-->
-        <!--android:inputType="textPersonName"-->
-        <!--android:text="Listing Features"-->
-        <!--tools:layout_editor_absoluteX="16dp"-->
-        <!--tools:layout_editor_absoluteY="146dp" />-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/listingImages"-->
-        <!--android:layout_width="355dp"-->
-        <!--android:layout_height="209dp"-->
-        <!--app:srcCompat="@drawable/cast_abc_scrubber_primary_mtrl_alpha"-->
-        <!--tools:layout_editor_absoluteX="15dp"-->
-        <!--tools:layout_editor_absoluteY="211dp" />-->
-
-    <!--<EditText-->
-        <!--android:id="@+id/listingOwner"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:ems="10"-->
-        <!--android:inputType="textPersonName"-->
-        <!--android:teRequestsage Owner"-->
-        <!--tools:layout_editor_absoluteX="16dp"-->
-        <!--tools:layout_editor_absoluteY="449dp" />-->
 
 </android.support.constraint.ConstraintLayout>

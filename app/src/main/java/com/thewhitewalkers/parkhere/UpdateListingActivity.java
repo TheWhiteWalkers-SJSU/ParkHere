@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,6 +28,7 @@ public class UpdateListingActivity extends AppCompatActivity {
     private EditText editTextListingStartTime;
     private EditText editTextListingEndTime;
     private Button buttonUpdateListing;
+    private Button buttonBackToListing;
 
 
     private Listing currentListing;
@@ -54,6 +56,17 @@ public class UpdateListingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 updateListingFields();
+            }
+        });
+
+
+        buttonBackToListing= findViewById(R.id.buttonBackToListing);
+        buttonBackToListing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent viewListingIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
+                viewListingIntent.putExtra("listing", currentListing);
+                startActivity(viewListingIntent);
             }
         });
 
@@ -103,7 +116,8 @@ public class UpdateListingActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                        Toast.makeText(UpdateListingActivity.this, "Updated listing...", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
                     }
                 });
     }

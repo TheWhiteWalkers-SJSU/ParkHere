@@ -27,7 +27,9 @@
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".ViewListingActivity" />
         <activity android:name=".CreateRequestActivity" />
-        <activity android:name=".UpdateListingActivity"></activity>
+        <activity android:name=".UpdateListingActivity" />
+        <activity android:name=".RatingActivity" />
+        <activity android:name=".ViewRatingsActivity" />
     </application>
 
 </manifest>
