@@ -24,8 +24,8 @@ public class ViewListingActivity extends AppCompatActivity {
     private TextView listingOwnerText;
     private TextView listingStartText;
     private TextView listingEndText;
-    private Button homeButton;
     private Button requestButton;
+    private Button ratingButton;
 
 
     @Override
@@ -63,6 +63,7 @@ public class ViewListingActivity extends AppCompatActivity {
         listingEndText.setText("End Time: "+listingEnd);
 
         requestButton = findViewById(R.id.requestButton);
+        ratingButton = findViewById(R.id.ratingButton);
 
         if(thisListing.getOwnerId() != null) {
             if(thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
@@ -82,6 +83,15 @@ public class ViewListingActivity extends AppCompatActivity {
                 Intent createRequestIntent = new Intent(getApplicationContext(), CreateRequestActivity.class);
                 createRequestIntent.putExtra("listing", thisListing);
                 startActivity(createRequestIntent);
+            }
+        });
+
+        ratingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent createRatingIntent = new Intent(getApplicationContext(), RatingActivity.class);
+                createRatingIntent.putExtra("listing", thisListing);
+                startActivity(createRatingIntent);
             }
         });
 

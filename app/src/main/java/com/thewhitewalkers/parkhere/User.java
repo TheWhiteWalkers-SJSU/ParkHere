@@ -1,5 +1,7 @@
 package com.thewhitewalkers.parkhere;
 
+import java.util.ArrayList;
+
 /**
  * Created by Rohit on 10/27/17.
  */
@@ -12,6 +14,9 @@ public class User {
     String lastName;
     String location;
     String phoneNumber;
+    double sumOfRatings;
+    int numOfRatings;
+    double avgRating;
 
     public User() {
 
@@ -24,6 +29,9 @@ public class User {
         this.lastName = lastName;
         this.location = location;
         this.phoneNumber = phoneNumber;
+        sumOfRatings = 0;
+        numOfRatings = 0;
+        avgRating = 0;
     }
     public String getUserId(){
         return userId;
@@ -69,4 +77,13 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public double getAvgRating(){
+        return avgRating;
+    }
+
+    public void setAvgRating(double newRating){
+        sumOfRatings += newRating;
+        numOfRatings++;
+        avgRating = sumOfRatings / numOfRatings;
+    }
 }
