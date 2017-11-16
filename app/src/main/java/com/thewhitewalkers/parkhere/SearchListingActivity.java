@@ -1,6 +1,7 @@
 package com.thewhitewalkers.parkhere;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -38,12 +40,16 @@ public class SearchListingActivity extends AppCompatActivity {
     private Button buttonHomepage;
     private ListView listSearchListings;
     private List<Listing> searchList = new ArrayList<>();
+    private TextView searchRangeSet;
+    private String textRangeSetFalse;
+    private String textRangeSetTrue;
 
     private TimeDetails searchTime;
     private boolean isStartingAM;
     private boolean isEndingAM;
 
     private String searchKeyword;
+    private boolean isRangeSet;
 
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -56,6 +62,11 @@ public class SearchListingActivity extends AppCompatActivity {
     private EditText editTextEndTime;
     private ToggleButton toggleStartingAM;
     private ToggleButton toggleEndingAM;
+
+    private String startDate;
+    private String endDate;
+    private String startTime;
+    private String endTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +82,11 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonRange = findViewById(R.id.buttonSearchRange);
         buttonHomepage = findViewById(R.id.buttonHomepage);
         listSearchListings = findViewById(R.id.listSearchListings);
+        searchRangeSet = findViewById(R.id.searchRangeSet);
+
+        textRangeSetFalse = "No range set";
+        textRangeSetTrue = "";
+        isRangeSet = false;
 
         buttonHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +100,7 @@ public class SearchListingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 searchKeyword = editTextSearch.getText().toString().trim();
                 updateSearch();
-                //for now, no filtering possible
-                //Toast.makeText(SearchListingActivity.this, "Cannot search with keywords currently", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SearchListingActivity.this, "Searching", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -128,6 +143,7 @@ public class SearchListingActivity extends AppCompatActivity {
                     Listing listing = listingSnapshot.getValue(Listing.class);
                     if(listing.getListingStatus().equals("available") && (!listing.getOwnerId().equals(user.getEmail()) && !listing.getOwnerId().equals(user.getUid()))) {
                         if(listing.getListingName().contains(searchKeyword) || listing.getListingAddress().contains(searchKeyword) || listing.getListingDescription().contains(searchKeyword)) {
+                            //TODO: if(isRangeSet) then only get listings that within the time details range
                             searchList.add(listing);
                         }
                     }
@@ -143,55 +159,58 @@ public class SearchListingActivity extends AppCompatActivity {
         });
     }
 
-    private void addItemsOnSpinner() {
-        spinnerSort = findViewById(R.id.spinnerSort);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerSort.setAdapter(sortAdapter);
-    }
-
     public void showTimeDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.search_filter, null);
 
-        //get views
-        editTextStartDate = findViewById(R.id.editTextSearchStartDate);
-        editTextEndDate = findViewById(R.id.editTextSearchEndDate);
-        editTextStartTime = findViewById(R.id.editTextSearchStartTime);
-        editTextEndTime = findViewById(R.id.editTextSearchEndTime);
-        toggleStartingAM = findViewById(R.id.searchStartAM);
-        toggleEndingAM = findViewById(R.id.searchEndAM);
-
-        builder.setView(inflater.inflate(R.layout.search_filter, null))
-                .setTitle("Set time and date range")
+        builder.setView(view)
+                .setTitle("Set date/time range")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-//                        //get text from the views
-//                        String startDate = editTextStartDate.getText().toString().trim();
-//                        String endDate = editTextEndDate.getText().toString().trim();
-//                        String startTime = editTextStartTime.getText().toString().trim();
-//                        String endTime = editTextEndTime.getText().toString().trim();
+                        Dialog d = (Dialog) dialog;
+
+                        //get views
+                        editTextStartDate = d.findViewById(R.id.editTextSearchStartDate);
+                        editTextEndDate = d.findViewById(R.id.editTextSearchEndDate);
+                        editTextStartTime = d.findViewById(R.id.editTextSearchStartTime);
+                        editTextEndTime = d.findViewById(R.id.editTextSearchEndTime);
+                        toggleStartingAM = d.findViewById(R.id.searchStartAM);
+                        toggleEndingAM = d.findViewById(R.id.searchEndAM);
+
+                        //get text from the views
+                        startDate = editTextStartDate.getText().toString();
+                        endDate = editTextEndDate.getText().toString().trim();
+                        startTime = editTextStartTime.getText().toString().trim();
+                        endTime = editTextEndTime.getText().toString().trim();
 
                         //set the toggle AM variables
-//                        setToggleAM(toggleStartingAM.getText().equals("AM"), toggleEndingAM.getText().equals("AM"));
+                        setToggleAM(toggleStartingAM.getText().equals("AM"), toggleEndingAM.getText().equals("AM"));
 
                         //check date and time have correct format and are valid
-//                        String checkDateResult = checkBookingDate(startDate, endDate);
-//                        String checkTimeResult = checkBookingTime(startTime, endTime);
-//                        if(!checkDateResult.equals(""))
-//                            //date invalid/wrong format
-//                            Toast.makeText(SearchListingActivity.this, checkDateResult, Toast.LENGTH_SHORT).show();
-//                        else if (!checkTimeResult.equals(""))
-//                            //time invalid/wrong format
-//                            Toast.makeText(SearchListingActivity.this, checkTimeResult, Toast.LENGTH_SHORT).show();
-//
-//                        else {
-//                            //valid/correct format, put time info into TimeDetails
-//                            searchTime = new TimeDetails(startDate, endDate, startTime, isStartingAM, endTime, isEndingAM);
-//                        }
+                        String checkDateResult = checkBookingDate(startDate, endDate);
+                        String checkTimeResult = checkBookingTime(startTime, endTime);
+                        if(!checkDateResult.equals("")) {
+                            //date invalid/wrong format
+                            Toast.makeText(SearchListingActivity.this, checkDateResult, Toast.LENGTH_SHORT).show();
+                            searchRangeSet.setText(textRangeSetFalse);
+                            isRangeSet = false;
+                        }
+                        else if (!checkTimeResult.equals("")) {
+                            //time invalid/wrong format
+                            Toast.makeText(SearchListingActivity.this, checkTimeResult, Toast.LENGTH_SHORT).show();
+                            searchRangeSet.setText(textRangeSetFalse);
+                            isRangeSet = false;
+                        }
+                        else {
+                            //valid/correct format, put time info into TimeDetails
+                            searchTime = new TimeDetails(startDate, endDate, startTime, isStartingAM, endTime, isEndingAM);
+                            Toast.makeText(SearchListingActivity.this, "Updating search", Toast.LENGTH_SHORT).show();
+                            searchRangeSet.setText(textRangeSetTrue + startDate + " @ " + startTime + " to " + endDate + " @ " + endTime);
+                            isRangeSet = true;
+                            //TODO : call update search
+                        }
                         dialog.dismiss();
                     }
                 })
@@ -206,20 +225,20 @@ public class SearchListingActivity extends AppCompatActivity {
 
     public String checkBookingDate(String dateStarting, String dateEnding){
         if(!searchTime.checkDateFormat(dateStarting) || !searchTime.checkDateFormat(dateEnding) ){
-            return "dates must be in MM/DD/YYYY format!";
+            return "Invalid range: dates must be in MM/DD/YYYY format!";
         }
         else if(!searchTime.checkDateValid(dateStarting, dateEnding)){
-            return "starting date should be before ending date!";
+            return "Invalid range: starting date should be before ending date!";
         }
         return "";
     }
 
     public String checkBookingTime(String timeStarting, String timeEnding){
         if(!searchTime.checkTimeFormat(timeStarting) || !searchTime.checkTimeFormat(timeEnding)){
-            return "times must be in HH:MM format!";
+            return "Invalid range: times must be in HH:MM format!";
         }
         else if(timeStarting.equals(timeEnding) && (isStartingAM == isEndingAM) ){
-            return "times can't be the same!";
+            return "Invalid range: times can't be the same!";
         }
         return "";
     }
@@ -227,5 +246,14 @@ public class SearchListingActivity extends AppCompatActivity {
     public void setToggleAM(boolean start, boolean end) {
         isStartingAM = start;
         isEndingAM = end;
+    }
+
+    private void addItemsOnSpinner() {
+        spinnerSort = findViewById(R.id.spinnerSort);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSort.setAdapter(sortAdapter);
     }
 }

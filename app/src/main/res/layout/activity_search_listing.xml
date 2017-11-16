@@ -60,7 +60,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonSearch"
-        android:layout_margin="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
         >
         <Button
             android:id="@+id/buttonSearchRange"
@@ -89,11 +91,24 @@
             />
     </TableRow>
 
+    <TextView
+        android:id="@+id/searchRangeSet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No range set"
+        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@id/searchFilter"
+        />
+
     <ListView
         android:id="@+id/listSearchListings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_below="@id/searchFilter"
+        android:layout_below="@id/searchRangeSet"
         />
 </RelativeLayout>
