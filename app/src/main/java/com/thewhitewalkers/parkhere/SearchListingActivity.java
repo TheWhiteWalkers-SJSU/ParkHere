@@ -44,7 +44,7 @@ public class SearchListingActivity extends AppCompatActivity {
     private String textRangeSetFalse;
     private String textRangeSetTrue;
 
-    private TimeDetails searchTime;
+    private TimeDetails searchRange;
     private boolean isStartingAM;
     private boolean isEndingAM;
 
@@ -73,7 +73,7 @@ public class SearchListingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_listing);
 
-        searchTime = new TimeDetails();
+        searchRange = new TimeDetails();
         searchKeyword = "";
 
         addItemsOnSpinner();
@@ -141,10 +141,19 @@ public class SearchListingActivity extends AppCompatActivity {
                 searchList.clear();
                 for(DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
                     Listing listing = listingSnapshot.getValue(Listing.class);
+                    //get available listings, not own listings, not own booked listings
                     if(listing.getListingStatus().equals("available") && (!listing.getOwnerId().equals(user.getEmail()) && !listing.getOwnerId().equals(user.getUid()))) {
+                        //get listings that contain keywords in name, address, description
                         if(listing.getListingName().contains(searchKeyword) || listing.getListingAddress().contains(searchKeyword) || listing.getListingDescription().contains(searchKeyword)) {
-                            //TODO: if(isRangeSet) then only get listings that within the time details range
-                            searchList.add(listing);
+                            //get listings within the time/date range
+                            if(isRangeSet) {
+                                TimeDetails checkWithinRange = listing.getTimeDetails();
+                                if(searchRange.withinRange(checkWithinRange)) {
+                                    searchList.add(listing);
+                                }
+                            }
+                            else searchList.add(listing);
+                            //TODO: sort the searchList array by the specified value? (method)
                         }
                     }
                 }
@@ -196,20 +205,22 @@ public class SearchListingActivity extends AppCompatActivity {
                             Toast.makeText(SearchListingActivity.this, checkDateResult, Toast.LENGTH_SHORT).show();
                             searchRangeSet.setText(textRangeSetFalse);
                             isRangeSet = false;
+                            updateSearch();
                         }
                         else if (!checkTimeResult.equals("")) {
                             //time invalid/wrong format
                             Toast.makeText(SearchListingActivity.this, checkTimeResult, Toast.LENGTH_SHORT).show();
                             searchRangeSet.setText(textRangeSetFalse);
                             isRangeSet = false;
+                            updateSearch();
                         }
                         else {
                             //valid/correct format, put time info into TimeDetails
-                            searchTime = new TimeDetails(startDate, endDate, startTime, isStartingAM, endTime, isEndingAM);
+                            searchRange = new TimeDetails(startDate, endDate, startTime, isStartingAM, endTime, isEndingAM);
                             Toast.makeText(SearchListingActivity.this, "Updating search", Toast.LENGTH_SHORT).show();
                             searchRangeSet.setText(textRangeSetTrue + startDate + " @ " + startTime + " to " + endDate + " @ " + endTime);
                             isRangeSet = true;
-                            //TODO : call update search
+                            updateSearch();
                         }
                         dialog.dismiss();
                     }
@@ -224,17 +235,17 @@ public class SearchListingActivity extends AppCompatActivity {
     }
 
     public String checkBookingDate(String dateStarting, String dateEnding){
-        if(!searchTime.checkDateFormat(dateStarting) || !searchTime.checkDateFormat(dateEnding) ){
+        if(!searchRange.checkDateFormat(dateStarting) || !searchRange.checkDateFormat(dateEnding) ){
             return "Invalid range: dates must be in MM/DD/YYYY format!";
         }
-        else if(!searchTime.checkDateValid(dateStarting, dateEnding)){
+        else if(!searchRange.checkDateValid(dateStarting, dateEnding)){
             return "Invalid range: starting date should be before ending date!";
         }
         return "";
     }
 
     public String checkBookingTime(String timeStarting, String timeEnding){
-        if(!searchTime.checkTimeFormat(timeStarting) || !searchTime.checkTimeFormat(timeEnding)){
+        if(!searchRange.checkTimeFormat(timeStarting) || !searchRange.checkTimeFormat(timeEnding)){
             return "Invalid range: times must be in HH:MM format!";
         }
         else if(timeStarting.equals(timeEnding) && (isStartingAM == isEndingAM) ){

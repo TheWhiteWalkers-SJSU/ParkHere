@@ -107,6 +107,43 @@ public class TimeDetails  implements Serializable {
 
         return false;
     }
+
+    public boolean withinRange(TimeDetails check) {
+        //where current/this TimeDetails is the range
+        if(check == null) {
+            return false;
+        }
+        Date rangeStart = this.getStarting();
+        Date rangeEnd = this.getEnding();
+        Date checkStart = check.getStarting();
+        Date checkEnd = check.getEnding();
+        if(rangeStart.before(checkStart) && rangeEnd.after(checkEnd)) {
+            //within date range
+            return true;
+        }
+        else if(rangeStart.equals(checkStart) && rangeEnd.equals(checkEnd)) {
+            //has same starting dates and ending dates
+            if(this.getTotalHours() >= check.getTotalHours()) {
+                //has less/equal total hours, thus time within or same
+                return true;
+            }
+        }
+        else if(rangeStart.equals(checkStart) && rangeEnd.after(checkEnd)) {
+            //has same starting date, before range ending date
+            if(this.getStartingTime().compareTo(check.getStartingTime()) <= 0) {
+                //range start time before/equal check start time
+                return true;
+            }
+        }
+        else if(rangeEnd.equals(checkEnd) && rangeStart.before(checkStart)) {
+            //has same ending date, after range starting date
+            if(this.getEndingTime().compareTo(check.getEndingTime()) >= 0) {
+                //range end time after/equal check end time
+                return true;
+            }
+        }
+        return false;
+    }
     /*
     public boolean withinSlot(TimeDetails bookingToCheck){
         return withinDate(bookingToCheck) && withinTime(bookingToCheck);
