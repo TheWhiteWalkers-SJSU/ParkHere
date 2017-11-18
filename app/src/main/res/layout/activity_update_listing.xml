@@ -214,14 +214,14 @@
                     android:text="Update Listing" />
 
                 <Button
-                    android:id="@+id/buttonMakeUnavailable"
+                    android:id="@+id/buttonMarkUnavailable"
                     style="@style/ButtonThemeGreen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/buttonMakeUnavailable"
+                    android:layout_above="@id/buttonMarkUnavailable"
 
                     android:layout_margin="15dp"
-                    android:text="Make Unavailable" />
+                    android:text="Mark Unavailable" />
 
                 <Button
                     android:id="@+id/buttonDeleteListing"
