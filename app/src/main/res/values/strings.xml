@@ -3,8 +3,9 @@
 
     <string-array name="sort_array">
         <item>Newest</item>
-        <item>Price: low to high</item>
-        <item>Price: high to low</item>
-        <item>Highest rating</item>
+        <item>Oldest</item>
+        <item>Lowest Price</item>
+        <item>Highest Price</item>
+        <item>Highest Rating</item>
     </string-array>
 </resources>

@@ -29,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchListingActivity extends AppCompatActivity {
@@ -73,20 +74,32 @@ public class SearchListingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_listing);
 
-        searchRange = new TimeDetails();
-        searchKeyword = "";
-
-        addItemsOnSpinner();
         editTextSearch = findViewById(R.id.editTextSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
         buttonRange = findViewById(R.id.buttonSearchRange);
         buttonHomepage = findViewById(R.id.buttonHomepage);
         listSearchListings = findViewById(R.id.listSearchListings);
         searchRangeSet = findViewById(R.id.searchRangeSet);
+        spinnerSort = findViewById(R.id.spinnerSort);
 
+        addItemsOnSpinner();
+        searchRange = new TimeDetails();
+        searchKeyword = "";
         textRangeSetFalse = "No range set";
         textRangeSetTrue = "";
         isRangeSet = false;
+
+        spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                updateSearch();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         buttonHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,10 +166,12 @@ public class SearchListingActivity extends AppCompatActivity {
                                 }
                             }
                             else searchList.add(listing);
-                            //TODO: sort the searchList array by the specified value? (method)
                         }
                     }
                 }
+                //call function to sort listings to display by the value specified in the spinner
+                searchList = sortBySpinner(searchList, spinnerSort.getSelectedItem().toString());
+
                 SearchList adapter = new SearchList(SearchListingActivity.this, searchList);
                 listSearchListings.setAdapter(adapter);
             }
@@ -260,11 +275,35 @@ public class SearchListingActivity extends AppCompatActivity {
     }
 
     private void addItemsOnSpinner() {
-        spinnerSort = findViewById(R.id.spinnerSort);
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource(this, R.array.sort_array, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         sortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSort.setAdapter(sortAdapter);
+    }
+
+    public List<Listing> sortBySpinner(List<Listing> list, String sortBy) {
+        List<Listing> result = list;
+        String column = "";
+        String[] sortValues = getResources().getStringArray(R.array.sort_array);
+
+        if(sortBy.equals(sortValues[0])) { //sort by newest
+            Collections.reverse(result);
+        }
+        else if(sortBy.equals(sortValues[1])) { //sort by oldest
+            //do nothing, default already sorted by oldest
+        }
+        else if(sortBy.equals(sortValues[2]) || sortBy.equals(sortValues[3])) { //sort by lowest/highest price
+            Collections.sort(result, new Listing.PriceListingComparator());
+            if(sortBy.equals(sortValues[3])) //sort by highest price
+                Collections.reverse(result);
+        }
+        //TODO : Uncomment when rating is implemented, currently ratings set to null
+        else if(sortBy.equals(sortValues[4])) { //sort by highest rating
+//            Collections.sort(result, new Listing.RatingListingComparator());
+//            Collections.reverse(result);
+            Toast.makeText(SearchListingActivity.this, "Cannot sort by rating currently", Toast.LENGTH_SHORT).show();
+        }
+        return result;
     }
 }
