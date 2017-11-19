@@ -3,6 +3,7 @@ package com.thewhitewalkers.parkhere;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 /**
  * Created by Rohit on 10/27/17.
@@ -157,6 +158,21 @@ public class Listing implements Serializable {
             return ending;
         }
         return "N/A";
+    }
+
+
+    //comparator to sort the searched listings by price
+    public static class PriceListingComparator implements Comparator<Listing> {
+        public int compare(Listing list1, Listing list2) {
+            return list1.getListingPrice().compareTo(list2.getListingPrice());
+        }
+    }
+
+    //comparator to sort the searched listings by rating
+    public static class RatingListingComparator implements Comparator<Listing> {
+        public int compare(Listing list1, Listing list2) {
+            return list1.getListingRating().compareTo(list2.getListingRating());
+        }
     }
 
 }
