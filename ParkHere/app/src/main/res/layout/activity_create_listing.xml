@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.thewhitewalkers.parkhere.CreateListingActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="106dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="2">
+
+
+                    <TextView
+                        android:id="@+id/pageTitle"
+                        android:layout_width="161dp"
+                        android:layout_height="59dp"
+                        android:layout_weight="1"
+                        android:text="Create A Listing"
+                        android:textAlignment="center"
+                        android:textSize="25sp" />
+
+                    <Button
+                        android:id="@+id/buttonHomepage"
+                        style="@style/ButtonTheme"
+                        android:textSize="15sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Back to Home" />
+                </TableRow>
+
+                <EditText
+                    android:id="@+id/editTextListingName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Listing Name"
+                    android:inputType="text"
+
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_above="@id/editTextListingName"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextListingAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Listing Address"
+                    android:inputType="textPostalAddress"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/editTextListingAddress"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextListingDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Listing Description"
+                    android:inputType="textMultiLine"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/editTextListingDescription"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextListingPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hourly Rate"
+                    android:inputType="numberDecimal"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/editTextListingPrice"
+                    />
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    >
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/fromDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="From"
+                            android:textSize="16sp"/>
+
+                        <EditText
+                            android:id="@+id/editTextListingStartDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:hint="Starting Date"
+                            android:inputType="text" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/toDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="to"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/editTextListingEndDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:hint="Ending Date"
+                            android:inputType="text" />
+                    </TableRow>
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:id="@+id/fromTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="From"
+                            android:textSize="16sp"/>
+                        <EditText
+                            android:id="@+id/editTextListingStartTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:hint="Starting Time"
+                            android:inputType="text" />
+
+                        <ToggleButton
+                            android:id="@+id/startingAMButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:textOff="PM"
+                            android:textOn="AM"/>
+
+                    </TableRow>
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/toTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="15dp"
+                            android:text="to"
+                            android:textSize="16sp"/>
+
+                        <EditText
+                            android:id="@+id/editTextListingEndTime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:hint="Ending Time"
+                            android:inputType="text" />
+
+                        <ToggleButton
+                            android:id="@+id/endingAMButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="15dp"
+                            android:textOff="PM"
+                            android:textOn="AM"/>
+                    </TableRow>
+                </TableLayout>
+
+                <Button
+                    android:id="@+id/buttonCreateListing"
+                    style="@style/ButtonThemeOrange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Create Listing"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/buttonCreateListing"
+                    />
+
+                <!--<EditText-->
+                    <!--android:id="@+id/editTextListingStartingDateAvailable"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:hint="Email"-->
+                    <!--android:inputType="textEmailAddress"-->
+
+                    <!--android:layout_margin="15dp"-->
+                    <!--android:layout_above="@id/editTextLoginPassword"-->
+                    <!--/>-->
+
+
+             </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

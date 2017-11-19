@@ -1,0 +1,36 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+    <style name="ButtonTheme" >
+        <item name="android:textColor">@color/colorButtonText</item>
+        <item name="android:textSize">19dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/defaultbuttonshadow</item>
+    </style>
+    <style name="ButtonThemeOrange">
+        <item name="android:textColor">@color/colorButtonText</item>
+        <item name="android:textSize">19dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/orangebuttonshadow</item>
+    </style>
+    <style name="ButtonThemeGreen">
+        <item name="android:textColor">@color/colorButtonText</item>
+        <item name="android:textSize">19dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/greenbuttonshadow</item>
+    </style>
+    <style name="ButtonThemeRed">
+        <item name="android:textColor">@color/colorButtonText</item>
+        <item name="android:textSize">19dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/redbuttonshadow</item>
+    </style>
+
+</resources>
