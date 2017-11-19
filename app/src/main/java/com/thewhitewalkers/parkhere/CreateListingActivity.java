@@ -12,8 +12,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-import java.sql.Time;
-import java.util.Map;
 import java.util.HashMap;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -120,7 +118,7 @@ public class CreateListingActivity extends AppCompatActivity {
                 userDatabase.child(user.getUid()).child("listings").child(_id).setValue(listingStatus);
 
                 Toast.makeText(CreateListingActivity.this, "Created Listing", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+                startActivity(new Intent(CreateListingActivity.this, HomepageActivity.class));
             }
 
         } else {

@@ -6,48 +6,60 @@
     android:layout_height="match_parent"
     tools:context="com.thewhitewalkers.parkhere.RatingActivity">
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/buttonBackToListing"
+    <ScrollView
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        tools:layout_editor_absoluteY="8dp"
+        tools:layout_editor_absoluteX="8dp">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Back to Listing" />
+            android:orientation="vertical"
+            android:layout_margin="10dp">
 
-        <TextView
-            android:id="@+id/description1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Out of five stars, how well was your experience with this listing?" />
+            <Button
+                android:layout_margin="10dp"
+                android:id="@+id/buttonBackToListing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Back to Listing"
+                style="@style/ButtonTheme"/>
 
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/description1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:text="Out of five stars, how well was your experience with this listing?" />
 
-        <TextView
-            android:id="@+id/description2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Share your experience." />
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-        <EditText
-            android:id="@+id/editTextComment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="Talk about your experience on renting this space. Any suggestions for improvement?"
-            android:inputType="textMultiLine" />
+            <TextView
+                android:id="@+id/description2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:text="Share your experience." />
 
-        <Button
-            android:id="@+id/buttonSubmitRating"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Submit" />
-    </LinearLayout>
+            <EditText
+                android:id="@+id/editTextComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Talk about your experience on renting this space. Any suggestions for improvement?"
+                android:inputType="textMultiLine"
+                />
 
+            <Button
+                android:layout_margin="20dp"
+                android:id="@+id/buttonSubmitRating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/ButtonThemeOrange"
+                android:text="Submit" />
+        </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

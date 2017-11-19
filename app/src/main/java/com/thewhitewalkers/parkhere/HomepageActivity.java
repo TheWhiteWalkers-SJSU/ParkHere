@@ -50,8 +50,12 @@ public class HomepageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
+        //firebaseAuth.getCurrentUser().delete();
+        //ListingDatabase.removeValue();
+
+
         userEmail = findViewById(R.id.userEmail);
-        userEmail.setText("Welcome to ParkHere "+user.getEmail());
+        userEmail.setText("Welcome to ParkHere "+ user.getEmail());
 
         listViewListings = findViewById(R.id.listViewListings);
         listViewBookings = findViewById(R.id.listViewBookings);

@@ -28,7 +28,7 @@
         <activity android:name=".ViewListingActivity" />
         <activity android:name=".CreateRequestActivity" />
         <activity android:name=".RatingActivity" />
-        <activity android:name=".viewRatings"></activity>
+        <activity android:name=".ViewRatingsActivity"></activity>
     </application>
 
 </manifest>

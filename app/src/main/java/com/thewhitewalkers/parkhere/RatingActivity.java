@@ -3,8 +3,10 @@ package com.thewhitewalkers.parkhere;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -17,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class RatingActivity extends AppCompatActivity {
 
@@ -57,8 +61,6 @@ public class RatingActivity extends AppCompatActivity {
                             "Please enter a comment and a rating!", Toast.LENGTH_SHORT).show();
                 }
                 else{
-
-
                     // redirect to listing
                     viewListing();
                 }
@@ -66,28 +68,32 @@ public class RatingActivity extends AppCompatActivity {
             }
         });
 
+        editTextComment.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editTextComment.setRawInputType(InputType.TYPE_CLASS_TEXT);
     }
     private boolean submitRating(){
-        final int numOfStars = ratingBar.getNumStars();
-        String comment = editTextComment.getText().toString(); //todo: save comments to database
+        final double numOfStars = ratingBar.getRating();
+        final String comment = editTextComment.getText().toString(); //todo: save comments to database
 
         if(numOfStars != 0 && !TextUtils.isEmpty(comment)){
             //save the rating to listing owner
-            final DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
-            userDatabase.addListenerForSingleValueEvent(new ValueEventListener(){
+            final DatabaseReference userDatabase1 = FirebaseDatabase.getInstance().getReference("users");
+            userDatabase1.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onDataChange(DataSnapshot dataSnapshot){
-                    if(dataSnapshot.getKey() == currentListing.getOwnerId()){
-                        User owner = dataSnapshot.getValue(User.class);
-                        owner.setAvgRating(numOfStars);
-                    }
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User u = dataSnapshot.child(currentListing.getOwnerId()).getValue(User.class);
+                    Rating r = new Rating(numOfStars, comment);
+                    u.ratingsList.add(r);
+
+                    userDatabase1.child(currentListing.getOwnerId()).setValue(u);
                 }
 
                 @Override
-                public void onCancelled(DatabaseError databaseError){
+                public void onCancelled(DatabaseError databaseError) {
 
                 }
             });
+
             return true;
         }
         return false;

@@ -4,31 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.thewhitewalkers.parkhere.viewRatings">
+    tools:context="com.thewhitewalkers.parkhere.ViewRatingsActivity">
 
 
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:weightSum="2">
+            android:weightSum="3">
 
 
             <TextView
-                android:id="@+id/inboxTitle"
+                android:id="@+id/ratingsTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:text="Ratings"
                 android:textAlignment="center"
                 android:textSize="30sp" />
 
             <Button
-                android:id="@+id/buttonHomepage"
+                android:id="@+id/buttonBackToListing"
                 style="@style/ButtonTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,9 +48,17 @@
                 android:orientation="vertical">
 
                 <RatingBar
-                    android:id="@+id/ratingBar2"
+                    android:id="@+id/ratingBarRating"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"/>
+
+                <TextView
+                    android:id="@+id/textViewRatings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Ratings" />
+
             </LinearLayout>
         </TableRow>
         <TableRow

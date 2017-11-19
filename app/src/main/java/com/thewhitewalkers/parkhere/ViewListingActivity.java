@@ -4,19 +4,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.view.View;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 public class ViewListingActivity extends AppCompatActivity {
 
     DatabaseReference requestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     FirebaseAuth firebaseAuth;
 
+    private RatingBar listingRatingBar;
 
     private TextView listingNameText;
     private TextView listingAddressText;
@@ -24,6 +29,8 @@ public class ViewListingActivity extends AppCompatActivity {
     private TextView listingOwnerText;
     private TextView listingStartText;
     private TextView listingEndText;
+    private Button backToHomeButton;
+    private Button viewRatingsButton;
     private Button requestButton;
     private Button ratingButton;
 
@@ -48,6 +55,7 @@ public class ViewListingActivity extends AppCompatActivity {
         String listingStart = thisListing.getStartTime();
         String listingEnd = thisListing.getEndTime();
 
+        listingRatingBar = findViewById(R.id.ratingBarListing);
         listingNameText = findViewById(R.id.listingNameText);
         listingOwnerText = findViewById(R.id.listingOwnerText);
         listingAddressText = findViewById(R.id.listingAddressText);
@@ -62,8 +70,25 @@ public class ViewListingActivity extends AppCompatActivity {
         listingStartText.setText("Start Time: "+listingStart);
         listingEndText.setText("End Time: "+listingEnd);
 
+        backToHomeButton = findViewById(R.id.buttonGoHome);
+        viewRatingsButton = findViewById(R.id.buttonViewRatings);
         requestButton = findViewById(R.id.requestButton);
         ratingButton = findViewById(R.id.ratingButton);
+
+        final DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
+        userDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User u = dataSnapshot.child(thisListing.getOwnerId()).getValue(User.class);
+                listingRatingBar.setRating((float)u.getAvgRating());
+                viewRatingsButton.setText("Click to View " + u.ratingsList.size() + " Ratings");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         if(thisListing.getOwnerId() != null) {
             if(thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
@@ -77,12 +102,23 @@ public class ViewListingActivity extends AppCompatActivity {
             }
         }
 
+
+        viewRatingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent ratingIntent = new Intent(getApplicationContext(), ViewRatingsActivity.class);
+                    ratingIntent.putExtra("listing", thisListing);
+                    startActivity(ratingIntent);
+                }
+            });
+
+
         requestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent createRequestIntent = new Intent(getApplicationContext(), CreateRequestActivity.class);
-                createRequestIntent.putExtra("listing", thisListing);
-                startActivity(createRequestIntent);
+                    @Override
+                    public void onClick(View view) {
+                        Intent createRequestIntent = new Intent(getApplicationContext(), CreateRequestActivity.class);
+                        createRequestIntent.putExtra("listing", thisListing);
+                        startActivity(createRequestIntent);
             }
         });
 
@@ -95,6 +131,12 @@ public class ViewListingActivity extends AppCompatActivity {
             }
         });
 
+        backToHomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+            }
+        });
     }
 
 
