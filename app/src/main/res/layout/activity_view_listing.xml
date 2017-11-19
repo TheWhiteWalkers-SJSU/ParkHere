@@ -11,6 +11,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_margin="20dp">
+        <Button
+            android:id="@+id/buttonGoHome"
+            style="@style/ButtonTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Back to Home"
+            android:textSize="15sp"
+            android:layout_marginLeft="5dp"/>
 
         <TextView
             android:id="@+id/listingNameText"
@@ -23,9 +31,19 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <RatingBar
+            android:id="@+id/ratingBarListing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"/>
+
+        <Button
+            android:id="@+id/buttonViewRatings"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Ratings"
+            android:textColor="@color/wallet_holo_blue_light" />
 
         <TextView
             android:id="@+id/listingOwnerText"
@@ -80,6 +98,16 @@
             android:text="Send Booking Request"
             android:layout_margin="20dp"
              />
+
+        <Button
+            android:id="@+id/ratingButton"
+            style="@style/ButtonThemeOrange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Give a Rating"
+            android:layout_margin="20dp"
+            />
 
     </LinearLayout>
 
