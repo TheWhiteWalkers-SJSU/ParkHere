@@ -81,6 +81,16 @@
             android:layout_margin="20dp"
              />
 
+        <Button
+            android:id="@+id/updateButton"
+            style="@style/ButtonThemeGreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="Update Listing"
+            android:layout_margin="20dp"
+            />
+
     </LinearLayout>
 
 

@@ -26,6 +26,7 @@ public class ViewListingActivity extends AppCompatActivity {
     private TextView listingEndText;
     private Button homeButton;
     private Button requestButton;
+    private Button updateButton;
 
 
     @Override
@@ -41,6 +42,7 @@ public class ViewListingActivity extends AppCompatActivity {
 
         String listingName = thisListing.getListingName();
         String listingOwner = thisListing.getOwnerEmail();
+
         //listingOwner should show email, but listings made early on did not fill in email field
         if(listingOwner == null) listingOwner = thisListing.getOwnerId();
         String listingAddress = thisListing.getListingAddress();
@@ -63,6 +65,13 @@ public class ViewListingActivity extends AppCompatActivity {
         listingEndText.setText("End Time: "+listingEnd);
 
         requestButton = findViewById(R.id.requestButton);
+        updateButton = findViewById(R.id.updateButton);
+
+        if(thisListing.getOwnerId() != null) {
+            if(!thisListing.getOwnerEmail().equals(user.getEmail())) {
+                updateButton.setVisibility(View.GONE);
+            }
+        }
 
         if(thisListing.getOwnerId() != null) {
             if(thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
@@ -84,6 +93,16 @@ public class ViewListingActivity extends AppCompatActivity {
                 startActivity(createRequestIntent);
             }
         });
+
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent updateListingIntent = new Intent(getApplicationContext(), UpdateListingActivity.class);
+                updateListingIntent.putExtra("listing", thisListing);
+                startActivity(updateListingIntent);
+            }
+        });
+
 
     }
 
