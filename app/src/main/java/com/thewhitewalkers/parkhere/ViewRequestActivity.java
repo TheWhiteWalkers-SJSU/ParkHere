@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,14 +34,12 @@ public class ViewRequestActivity extends AppCompatActivity {
     private Button acceptRequestButton;
     private Button denyRequestButton;
 
-
-    private String testMessage;
-
     private boolean requestsConflict;
     private Request currentRequest;
     private Listing currentListing;
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
+    private static DataSnapshot requestData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +50,7 @@ public class ViewRequestActivity extends AppCompatActivity {
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
 
         requestsConflict = false;
+        updateRequestSnapshot();
 
         backToInboxButton = findViewById(R.id.backToInbox);
         subjectLine = findViewById(R.id.subjectLine);
@@ -74,10 +74,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     //check if it has conflicts with existing booked requests before allowing it to be accepted
-//                    boolean conflict = hasRequestsConflict();
-//                    Toast.makeText(ViewRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
-//                    if(conflict) {
-                    if(requestsConflict) {
+                    if(hasRequestsConflict()) {
                         Toast.makeText(ViewRequestActivity.this, "Time/date unavailable for listing", Toast.LENGTH_SHORT).show();
                     }
                     else {
@@ -109,31 +106,14 @@ public class ViewRequestActivity extends AppCompatActivity {
         });
     }
 
-
-    private void hasRequestsConflict(){
-        //requestsConflict = false;
-        testMessage = "";
+    private void updateRequestSnapshot() {
         RequestDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //for all the requests in the db
-                for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
-                    Request request = requestSnapshot.getValue(Request.class);
-                    //only consider requests for the same listing
-                    if(request.getListingID().equals(currentRequest.getListingID())){
-                            /*for now just check that request type is not 0
-                            if(request.getRequestType() != 0 || request.getRequestType() == 2) { */
-                        //check requests that have been accepted by the owner already
-                        if(request.getRequestType() == 2) {
-                            if(request.getTimeDetails().hasConflict(currentRequest.getTimeDetails())) {
-                                requestsConflict = true;
-                                testMessage += "Conflict true: " + requestsConflict + ". ";
-                            }
-                            testMessage += "Comparing with a request. ";
-                        }
-                    }
-                }
-                Toast.makeText(ViewRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
+                requestData = dataSnapshot;
+                //for testing when data snapshot is updated
+                Toast.makeText(ViewRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
 
             }
             @Override
@@ -141,8 +121,63 @@ public class ViewRequestActivity extends AppCompatActivity {
 
             }
         });
-        //testMessage += "Conflict result: " + requestsConflict + ". ";
-        //return requestsConflict;
+    }
+
+
+    private boolean hasRequestsConflict() {
+        requestsConflict = false;
+        //for all the requests in the current request data snapshot
+        for(DataSnapshot requestSnapshot : requestData.getChildren()) {
+            Request request = requestSnapshot.getValue(Request.class);
+            //only consider requests for the same listing
+            if(request.getListingID().equals(currentRequest.getListingID())){
+                //check requests that have been accepted by the owner already
+                if(request.getRequestType() == 2) {
+                    if(request.getTimeDetails().hasConflict(currentRequest.getTimeDetails())) {
+                        requestsConflict = true;
+                    }
+                    //for testing how many requests are compared, to test print testMessage
+                    //testMessage += "Comparing with a request. ";
+                }
+            }
+        }
+        return requestsConflict;
+
+
+
+
+//        //requestsConflict = false;
+//        testMessage = "";
+//        RequestDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                //for all the requests in the db
+//                for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
+//                    Request request = requestSnapshot.getValue(Request.class);
+//                    //only consider requests for the same listing
+//                    if(request.getListingID().equals(currentRequest.getListingID())){
+//                            /*for now just check that request type is not 0
+//                            if(request.getRequestType() != 0 || request.getRequestType() == 2) { */
+//                        //check requests that have been accepted by the owner already
+//                        if(request.getRequestType() == 2) {
+//                            if(request.getTimeDetails().hasConflict(currentRequest.getTimeDetails())) {
+//                                requestsConflict = true;
+//                                testMessage += "Conflict true: " + requestsConflict + ". ";
+//                            }
+//                            testMessage += "Comparing with a request. ";
+//                        }
+//                    }
+//                }
+//                Toast.makeText(ViewRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
+//
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//        //testMessage += "Conflict result: " + requestsConflict + ". ";
+//        //return requestsConflict;
     }
 
 
