@@ -80,8 +80,12 @@ public class ViewListingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.child(thisListing.getOwnerId()).getValue(User.class);
-                listingRatingBar.setRating((float)u.getAvgRating());
-                viewRatingsButton.setText("Click to View " + u.ratingsList.size() + " Ratings");
+
+                if(u.ratingsList.get(0).getRating() != 100.0){
+                    listingRatingBar.setRating((float)u.getAvgRating());
+                    viewRatingsButton.setText("Click to View " + u.ratingsList.size() + " Ratings");
+                }
+
             }
 
             @Override

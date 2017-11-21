@@ -15,7 +15,7 @@ public class User {
     String lastName;
     String location;
     String phoneNumber;
-    public ArrayList<Rating> ratingsList = new ArrayList<Rating>();
+    public ArrayList<Rating> ratingsList = new ArrayList<Rating>();;
 
     public User() {
 
@@ -28,6 +28,7 @@ public class User {
         this.lastName = lastName;
         this.location = location;
         this.phoneNumber = phoneNumber;
+        ratingsList.add(new Rating());
     }
     public String getUserId(){
         return userId;
@@ -77,7 +78,9 @@ public class User {
         double total = 0;
         double size = ratingsList.size();
         for(Rating r : ratingsList){
-            total += r.getRating();
+            if(r.getRating() != 100.0){
+                total += r.getRating();
+            }
         }
 
         return total / size;

@@ -41,13 +41,15 @@ public class ViewRatingsActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.child(thisListing.getOwnerId()).getValue(User.class);
                 double numOfRatings = u.ratingsList.size();
-
-                if(numOfRatings != 0){
-                    textViewRatings.setText((int)numOfRatings + " Ratings");
-                    ratingBar.setRating((float) u.getAvgRating());
+                if(numOfRatings != 0 && u.ratingsList.get(0).getRating() != 100.0){
+                    if(numOfRatings != 0){
+                        textViewRatings.setText((int)numOfRatings + " Ratings");
+                        ratingBar.setRating((float) u.getAvgRating());
+                    }
+                    RatingsList adapter = new RatingsList(ViewRatingsActivity.this, u.ratingsList);
+                    ratingList.setAdapter(adapter);
                 }
-                RatingsList adapter = new RatingsList(ViewRatingsActivity.this, u.ratingsList);
-                ratingList.setAdapter(adapter);
+
             }
 
             @Override
