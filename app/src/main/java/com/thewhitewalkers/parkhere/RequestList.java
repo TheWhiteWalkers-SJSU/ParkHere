@@ -1,6 +1,7 @@
 package com.thewhitewalkers.parkhere;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -34,9 +35,14 @@ public class RequestList extends ArrayAdapter<Request> {
 
         TextView textViewName = listViewItem.findViewById(R.id.textViewRequestSubject);
         TextView textViewRequestedMessage= listViewItem.findViewById(R.id.textViewRequestedMessage);
-
+        TextView textViewReadFlag = listViewItem.findViewById(R.id.textViewReadFlag);
 
         Request request = requestList.get(position);
+
+        if(request.isHasBeenRead()){
+           textViewReadFlag.setText("Read");
+           textViewReadFlag.setTextColor(Color.rgb(255, 51, 51)); //rgb(255, 51, 51)
+        }
 
         //TODO: Currently the request view is being populated w/ the ListingID and Sender's UUID, this needs to be changed to the listing address and sender's email
         textViewName.setText(request.getSubject());
