@@ -34,12 +34,12 @@ public class ViewRequestActivity extends AppCompatActivity {
     private Button acceptRequestButton;
     private Button denyRequestButton;
 
-    private boolean requestsConflict;
     private Request currentRequest;
     private Listing currentListing;
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
     private static DataSnapshot requestData;
+    private boolean requestsConflict;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                     }
                     else {
                         acceptRequest();
+                        Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -107,14 +108,13 @@ public class ViewRequestActivity extends AppCompatActivity {
     }
 
     private void updateRequestSnapshot() {
-        RequestDatabase.addValueEventListener(new ValueEventListener() {
+        RequestDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //for all the requests in the db
                 requestData = dataSnapshot;
                 //for testing when data snapshot is updated
-                Toast.makeText(ViewRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
-
+                //Toast.makeText(ViewRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -142,42 +142,6 @@ public class ViewRequestActivity extends AppCompatActivity {
             }
         }
         return requestsConflict;
-
-
-
-
-//        //requestsConflict = false;
-//        testMessage = "";
-//        RequestDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                //for all the requests in the db
-//                for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
-//                    Request request = requestSnapshot.getValue(Request.class);
-//                    //only consider requests for the same listing
-//                    if(request.getListingID().equals(currentRequest.getListingID())){
-//                            /*for now just check that request type is not 0
-//                            if(request.getRequestType() != 0 || request.getRequestType() == 2) { */
-//                        //check requests that have been accepted by the owner already
-//                        if(request.getRequestType() == 2) {
-//                            if(request.getTimeDetails().hasConflict(currentRequest.getTimeDetails())) {
-//                                requestsConflict = true;
-//                                testMessage += "Conflict true: " + requestsConflict + ". ";
-//                            }
-//                            testMessage += "Comparing with a request. ";
-//                        }
-//                    }
-//                }
-//                Toast.makeText(ViewRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
-//
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//        //testMessage += "Conflict result: " + requestsConflict + ". ";
-//        //return requestsConflict;
     }
 
 
