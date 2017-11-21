@@ -295,11 +295,12 @@ public class SearchListingActivity extends AppCompatActivity {
         }
         else if(sortBy.equals(sortValues[2]) || sortBy.equals(sortValues[3])) { //sort by lowest/highest price
             Collections.sort(result, new Listing.PriceListingComparator());
-            if(sortBy.equals(sortValues[3])) //sort by highest price
+            //TODO : fix sorting by price
+            if(sortBy.equals(sortValues[3])) //sort by lowest price
                 Collections.reverse(result);
         }
-        //TODO : Uncomment when rating is implemented, currently ratings set to null
         else if(sortBy.equals(sortValues[4])) { //sort by highest rating
+            //TODO : Uncomment when rating is implemented, currently ratings set to null
 //            Collections.sort(result, new Listing.RatingListingComparator());
 //            Collections.reverse(result);
             Toast.makeText(SearchListingActivity.this, "Cannot sort by rating currently", Toast.LENGTH_SHORT).show();

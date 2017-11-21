@@ -59,7 +59,7 @@ public class InboxActivity extends AppCompatActivity {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Toast.makeText(getApplicationContext(), "Opening message...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Opening message...", Toast.LENGTH_SHORT).show();
                         Intent viewMessageIntent = new Intent(getApplicationContext(), ViewRequestActivity.class);
 
                         Listing listing = dataSnapshot.child(clickedRequest.getListingID()).getValue(Listing.class);

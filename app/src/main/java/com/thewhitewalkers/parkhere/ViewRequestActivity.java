@@ -8,13 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ViewRequestActivity extends AppCompatActivity {
 
@@ -28,6 +33,10 @@ public class ViewRequestActivity extends AppCompatActivity {
     private Button acceptRequestButton;
     private Button denyRequestButton;
 
+
+    private String testMessage;
+
+    private boolean requestsConflict;
     private Request currentRequest;
     private Listing currentListing;
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
@@ -40,6 +49,8 @@ public class ViewRequestActivity extends AppCompatActivity {
 
         currentRequest = (Request) getIntent().getSerializableExtra("request");
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
+
+        requestsConflict = false;
 
         backToInboxButton = findViewById(R.id.backToInbox);
         subjectLine = findViewById(R.id.subjectLine);
@@ -62,9 +73,19 @@ public class ViewRequestActivity extends AppCompatActivity {
             acceptRequestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    acceptRequest();
+                    //check if it has conflicts with existing booked requests before allowing it to be accepted
+//                    boolean conflict = hasRequestsConflict();
+//                    Toast.makeText(ViewRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
+//                    if(conflict) {
+                    if(requestsConflict) {
+                        Toast.makeText(ViewRequestActivity.this, "Time/date unavailable for listing", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        acceptRequest();
+                    }
                 }
             });
+
 
             denyRequestButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -87,6 +108,43 @@ public class ViewRequestActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void hasRequestsConflict(){
+        //requestsConflict = false;
+        testMessage = "";
+        RequestDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //for all the requests in the db
+                for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
+                    Request request = requestSnapshot.getValue(Request.class);
+                    //only consider requests for the same listing
+                    if(request.getListingID().equals(currentRequest.getListingID())){
+                            /*for now just check that request type is not 0
+                            if(request.getRequestType() != 0 || request.getRequestType() == 2) { */
+                        //check requests that have been accepted by the owner already
+                        if(request.getRequestType() == 2) {
+                            if(request.getTimeDetails().hasConflict(currentRequest.getTimeDetails())) {
+                                requestsConflict = true;
+                                testMessage += "Conflict true: " + requestsConflict + ". ";
+                            }
+                            testMessage += "Comparing with a request. ";
+                        }
+                    }
+                }
+                Toast.makeText(ViewRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        //testMessage += "Conflict result: " + requestsConflict + ". ";
+        //return requestsConflict;
+    }
+
 
     /**
         0 - Owner Action Required (from renter user)
