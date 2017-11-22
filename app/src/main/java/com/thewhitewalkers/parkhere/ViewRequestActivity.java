@@ -125,6 +125,7 @@ public class ViewRequestActivity extends AppCompatActivity {
 
 
     private boolean hasRequestsConflict() {
+        //testMessage = "";
         requestsConflict = false;
         //for all the requests in the current request data snapshot
         for(DataSnapshot requestSnapshot : requestData.getChildren()) {

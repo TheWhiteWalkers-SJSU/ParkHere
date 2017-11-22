@@ -16,8 +16,11 @@ import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -49,6 +52,9 @@ public class CreateRequestActivity extends AppCompatActivity {
 
     final String PRICING = "Total Price: ";
 
+    private static DataSnapshot requestData;
+    private boolean requestsConflict;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,10 +82,11 @@ public class CreateRequestActivity extends AppCompatActivity {
         toggleEndingAM = findViewById(R.id.endingAMButton);
 
         switchGeneratePricing = findViewById(R.id.generateSwitch);
-
         buttonCreateListing = findViewById(R.id.buttonCreateRequest);
-
         textViewListingName.setText(listingName);
+
+        requestsConflict = false;
+        updateRequestSnapshot();
 
         TextWatcher textWatcher = new TextWatcher() {
             @Override
@@ -131,12 +138,60 @@ public class CreateRequestActivity extends AppCompatActivity {
 
         buttonCreateListing.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                createRequest();
+                //check if inputs are valid before checking conflicts or creating the request
+                if(validInputs()) {
+                    //check if it has conflicts with existing booked requests before allowing it to be sent
+                    if (hasRequestsConflict()) {
+                        Toast.makeText(CreateRequestActivity.this, "Time/date unavailable for listing", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createRequest();
+                        Toast.makeText(CreateRequestActivity.this, "Sent Request", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                //when validInputs is false, it prints the correct error message in its method
             }
         });
     }
 
-    private void createRequest(){
+    private void updateRequestSnapshot() {
+        requestDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //for all the requests in the db
+                requestData = dataSnapshot;
+                //for testing when data snapshot is updated
+                //Toast.makeText(CreateRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private boolean hasRequestsConflict() {
+        requestsConflict = false;
+        //testMessage = "";
+        //for all the requests in the current request data snapshot
+        for(DataSnapshot requestSnapshot : requestData.getChildren()) {
+            Request request = requestSnapshot.getValue(Request.class);
+            //only consider requests for the same listing
+            if(request.getListingID().equals(listingId)){
+                //check requests that have been accepted by the owner already
+                if(request.getRequestType() == 2) {
+                    if(request.getTimeDetails().hasConflict(timeDetails)) {
+                        requestsConflict = true;
+                    }
+                    //for testing how many requests are compared, to test print testMessage
+                    //testMessage += "Comparing with a request. ";
+                }
+            }
+        }
+        //Toast.makeText(CreateRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
+        return requestsConflict;
+    }
+
+    private boolean validInputs() {
         // get the values from all the fields and save them to the Firebase db
         String requestSubject = editTextRequestSubjectLine.getText().toString().trim();
         String requestMessage = editTextRequestMessage.getText().toString().trim();
@@ -150,20 +205,29 @@ public class CreateRequestActivity extends AppCompatActivity {
         boolean isEndingAM = toggleEndingAM.isChecked();
         FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
 
-        if(!TextUtils.isEmpty(requestSubject) && !TextUtils.isEmpty(requestMessage) && updatedPrice()) {
-            String _id = requestDatabase.push().getKey();
-            Request newRequest = new Request(_id, listingOwner, user.getUid(), user.getEmail(), listingId, requestSubject, requestMessage, timeDetails, 0);
-            requestDatabase.child(_id).setValue(newRequest);
-
-            Toast.makeText(CreateRequestActivity.this, "Sent Request", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-        }
-        else if(!switchGeneratePricing.isChecked()){
+        if(!switchGeneratePricing.isChecked()){
             Toast.makeText(CreateRequestActivity.this, "click on switch to generate pricing", Toast.LENGTH_SHORT).show();
+        }
+        else if(!TextUtils.isEmpty(requestSubject) && !TextUtils.isEmpty(requestMessage) && updatedPrice()) {
+            return true;
         }
         else {
             Toast.makeText(CreateRequestActivity.this, "need to enter name, address, dates, and times", Toast.LENGTH_SHORT).show();
         }
+        return false;
+    }
+
+    private void createRequest(){
+        // get the values from all the fields and save them to the Firebase db
+        String requestSubject = editTextRequestSubjectLine.getText().toString().trim();
+        String requestMessage = editTextRequestMessage.getText().toString().trim();
+        FirebaseUser user = firebaseAuth.getInstance().getCurrentUser(); //get user
+
+        String _id = requestDatabase.push().getKey();
+        Request newRequest = new Request(_id, listingOwner, user.getUid(), user.getEmail(), listingId, requestSubject, requestMessage, timeDetails, 0);
+        requestDatabase.child(_id).setValue(newRequest);
+
+        startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
     }
 
     private boolean updatedPrice(){
