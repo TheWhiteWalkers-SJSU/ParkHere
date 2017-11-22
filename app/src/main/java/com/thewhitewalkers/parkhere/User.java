@@ -1,6 +1,7 @@
 package com.thewhitewalkers.parkhere;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -84,5 +85,18 @@ public class User {
         }
 
         return total / size;
+    }
+
+    //comparator to sort users by rating
+    public static class RatingUserComparator implements Comparator<User> {
+        public int compare(User user1, User user2) {
+            if(user1.getAvgRating() < user2.getAvgRating()) {
+                return -1;
+            }
+            else if(user1.getAvgRating() > user2.getAvgRating()) {
+                return 1;
+            }
+            return 0;
+        }
     }
 }

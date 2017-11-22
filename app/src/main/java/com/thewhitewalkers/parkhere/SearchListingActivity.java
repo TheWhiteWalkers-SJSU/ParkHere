@@ -29,8 +29,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
 
 public class SearchListingActivity extends AppCompatActivity {
 
@@ -52,6 +57,8 @@ public class SearchListingActivity extends AppCompatActivity {
     private String searchKeyword;
     private boolean isRangeSet;
 
+    private static DataSnapshot userData;
+    final DatabaseReference UserDatabase = FirebaseDatabase.getInstance().getReference("users");
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -88,6 +95,8 @@ public class SearchListingActivity extends AppCompatActivity {
         textRangeSetFalse = "No range set";
         textRangeSetTrue = "";
         isRangeSet = false;
+
+        updateUserSnapshot();
 
         spinnerSort.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -135,6 +144,10 @@ public class SearchListingActivity extends AppCompatActivity {
                     startActivity(viewListingIntent);
                 } catch (Exception e) {
                     Toast.makeText(SearchListingActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
+                }
+                finally {
+                    //reset spinner whenever click onto a listing
+                    spinnerSort.setSelection(0, false);
                 }
 
             }
@@ -301,10 +314,56 @@ public class SearchListingActivity extends AppCompatActivity {
         }
         else if(sortBy.equals(sortValues[4])) { //sort by highest rating
             //TODO : Uncomment when rating is implemented, currently ratings set to null
+            result = getRatingSortedListings(list);
 //            Collections.sort(result, new Listing.RatingListingComparator());
 //            Collections.reverse(result);
-            Toast.makeText(SearchListingActivity.this, "Cannot sort by rating currently", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(SearchListingActivity.this, "Cannot sort by rating currently", Toast.LENGTH_SHORT).show();
         }
         return result;
+    }
+
+    public void updateUserSnapshot() {
+        UserDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                userData = dataSnapshot;
+                //for testing when data snapshot is updated
+                Toast.makeText(SearchListingActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public List<Listing> getRatingSortedListings(List<Listing> listings) {
+        //HashMap<Listing, String> listingRating = new HashMap<Listing, String>();
+        TreeMap<String, Listing> ratingListing = new TreeMap<String, Listing>();
+        //for every listing in the search
+        for(int x = 0; x < listings.size(); x++) {
+            Listing list = listings.get(x);
+            //for every user in the user snapshot
+            for (DataSnapshot userSnapshot : userData.getChildren()) {
+                User user = userSnapshot.getValue(User.class);
+                //find the user (owner) for that listing
+                if (list.getOwnerId().equals(user.getUserId())) {
+                    //save the rating, listing pair with unique number appended to the end of rating
+                    //listingRating.put(list, user.getAvgRating() + " " + x);
+                    ratingListing.put(user.getAvgRating() + " " + x, list);
+                }
+            }
+        }
+
+        //get all the listings from map, which was sorted by descending/lowest rating
+        Collection<Listing> collListings = ratingListing.values();
+        //convert to array then list
+        Listing[] sortedListingLowest = collListings.toArray(new Listing[collListings.size()]);
+        List<Listing> sortedListingHighest = new ArrayList<Listing>();
+        sortedListingHighest = Arrays.asList(sortedListingLowest);
+        //reverse to be sorted by ascending/highest rating
+        Collections.reverse(sortedListingHighest);
+
+        return sortedListingHighest;
     }
 }
