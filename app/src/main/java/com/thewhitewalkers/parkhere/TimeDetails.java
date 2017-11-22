@@ -101,37 +101,6 @@ public class TimeDetails  implements Serializable {
         long days = ((ending.getTime()-starting.getTime())/1000)/60/60/24;
         return days+1;
     }
-//    public boolean hasConflict(TimeDetails bookingToCheck){
-//        //looking at two TimeDetails to see if they have a date/time conflict
-//        //if they are within range, then there is a conflict
-//        Date currentStart = this.getStarting();
-//        Date currentEnd = this.getEnding();
-//        Date checkStart = bookingToCheck.getStarting();
-//        Date checkEnd = bookingToCheck.getEnding();
-//        if(currentStart.before(checkStart) && currentEnd.after(checkStart)) {
-//            //start date within current time range, thus has conflict
-//            return true;
-//        }
-//        else if(currentStart.before(checkEnd) && currentEnd.after(checkEnd)) {
-//            //end date within current time range, thus has conflict
-//            return true;
-//        }
-//        else if(currentStart.equals(checkEnd)) {
-//            //when check end date is on same day as start date, check conflict at time level
-//            if(this.getStartingTime().compareTo(bookingToCheck.getEndingTime()) <= 0) {
-//                //check ending is after current's starting, thus has conflict
-//                return true;
-//            }
-//        }
-//        else if(currentEnd.equals(checkStart)) {
-//            //when check start is on same day as end date, check conflict at time level
-//            if(this.getEndingTime().compareTo(bookingToCheck.getStartingTime()) >= 0) {
-//                //check starting is after current's ending, thus has conflict
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     public boolean hasConflict(TimeDetails bookingToCheck){
         //looking at two TimeDetails to see if they have a date or time conflict
@@ -148,8 +117,6 @@ public class TimeDetails  implements Serializable {
         }
     }
 
-
-
     public boolean withinRange(TimeDetails check) {
         //where current/this TimeDetails is the range
         if(check == null) {
@@ -187,51 +154,6 @@ public class TimeDetails  implements Serializable {
         return false;
     }
 
-    public boolean withinRange(TimeDetails check) {
-        //where current/this TimeDetails is the range
-        if(check == null) {
-            return false;
-        }
-        Date rangeStart = this.getStarting();
-        Date rangeEnd = this.getEnding();
-        Date checkStart = check.getStarting();
-        Date checkEnd = check.getEnding();
-        if(rangeStart.before(checkStart) && rangeEnd.after(checkEnd)) {
-            //within date range
-            return true;
-        }
-        else if(rangeStart.equals(checkStart) && rangeEnd.equals(checkEnd)) {
-            //has same starting dates and ending dates
-            if(this.getTotalHours() >= check.getTotalHours()) {
-                //has less/equal total hours, thus time within or same
-                return true;
-            }
-        }
-        else if(rangeStart.equals(checkStart) && rangeEnd.after(checkEnd)) {
-            //has same starting date, before range ending date
-            if(this.getStartingTime().compareTo(check.getStartingTime()) <= 0) {
-                //range start time before/equal check start time
-                return true;
-            }
-        }
-        else if(rangeEnd.equals(checkEnd) && rangeStart.before(checkStart)) {
-            //has same ending date, after range starting date
-            if(this.getEndingTime().compareTo(check.getEndingTime()) >= 0) {
-                //range end time after/equal check end time
-                return true;
-            }
-        }
-        return false;
-    }
-    /*
-    public boolean withinSlot(TimeDetails bookingToCheck){
-
-    public boolean withinTimeSlot(TimeDetails bookingToCheck){
-        return withinDate(bookingToCheck) && withinTime(bookingToCheck);
-    }
-    public boolean withinDate(TimeDetails bookingToCheck){
-        return this.getStarting().before(bookingToCheck.getStarting()) && this.getEnding().after(bookingToCheck.getEnding());
-    }
     public boolean withinTime(TimeDetails bookingToCheck){
 
         String[] currentStartArray = timeSplit(this.getStartingTime());
