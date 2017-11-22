@@ -101,12 +101,54 @@ public class TimeDetails  implements Serializable {
         long days = ((ending.getTime()-starting.getTime())/1000)/60/60/24;
         return days+1;
     }
-    public boolean hasConflict(){
-        //MM/DD/YYYY
-        //HH:MM:AM
+//    public boolean hasConflict(TimeDetails bookingToCheck){
+//        //looking at two TimeDetails to see if they have a date/time conflict
+//        //if they are within range, then there is a conflict
+//        Date currentStart = this.getStarting();
+//        Date currentEnd = this.getEnding();
+//        Date checkStart = bookingToCheck.getStarting();
+//        Date checkEnd = bookingToCheck.getEnding();
+//        if(currentStart.before(checkStart) && currentEnd.after(checkStart)) {
+//            //start date within current time range, thus has conflict
+//            return true;
+//        }
+//        else if(currentStart.before(checkEnd) && currentEnd.after(checkEnd)) {
+//            //end date within current time range, thus has conflict
+//            return true;
+//        }
+//        else if(currentStart.equals(checkEnd)) {
+//            //when check end date is on same day as start date, check conflict at time level
+//            if(this.getStartingTime().compareTo(bookingToCheck.getEndingTime()) <= 0) {
+//                //check ending is after current's starting, thus has conflict
+//                return true;
+//            }
+//        }
+//        else if(currentEnd.equals(checkStart)) {
+//            //when check start is on same day as end date, check conflict at time level
+//            if(this.getEndingTime().compareTo(bookingToCheck.getStartingTime()) >= 0) {
+//                //check starting is after current's ending, thus has conflict
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
-        return false;
+    public boolean hasConflict(TimeDetails bookingToCheck){
+        //looking at two TimeDetails to see if they have a date or time conflict
+        Date currentStarting = this.getStarting();
+        Date currentEnding = this.getEnding();
+        Date checkStarting = bookingToCheck.getStarting();
+        Date checkEnding = bookingToCheck.getEnding();
+
+        if(!currentEnding.before(checkStarting) && !currentStarting.after(checkEnding)) {
+            return true; //there is a date conflict
+        }
+        else {
+            return withinTime(bookingToCheck);
+        }
     }
+
+
 
     public boolean withinRange(TimeDetails check) {
         //where current/this TimeDetails is the range
@@ -144,17 +186,89 @@ public class TimeDetails  implements Serializable {
         }
         return false;
     }
-    /*
-    public boolean withinSlot(TimeDetails bookingToCheck){
+
+    public boolean withinTimeSlot(TimeDetails bookingToCheck){
         return withinDate(bookingToCheck) && withinTime(bookingToCheck);
     }
     public boolean withinDate(TimeDetails bookingToCheck){
         return this.getStarting().before(bookingToCheck.getStarting()) && this.getEnding().after(bookingToCheck.getEnding());
     }
     public boolean withinTime(TimeDetails bookingToCheck){
+
+        String[] currentStartArray = timeSplit(this.getStartingTime());
+        int currentStartingHour = Integer.parseInt(currentStartArray[0]);
+        int currentStartingMin = Integer.parseInt(currentStartArray[1]);
+        String[] currentEndArray = timeSplit(this.getEndingTime());
+        int currentEndingHour = Integer.parseInt(currentEndArray[0]);
+        int currentEndingMin = Integer.parseInt(currentEndArray[1]);
+        boolean currentStartingAM = this.startingIsAM;
+        boolean currentEndingAM = this.endingIsAM;
+
+        String[] checkStartArray = timeSplit(bookingToCheck.getStartingTime());
+        int checkStartingHour = Integer.parseInt(checkStartArray[0]);
+        int checkStartingMin = Integer.parseInt(checkStartArray[1]);
+        String[] checkEndArray = timeSplit(bookingToCheck.getEndingTime());
+        int checkEndingHour = Integer.parseInt(checkEndArray[0]);
+        int checkEndingMin = Integer.parseInt(checkEndArray[1]);
+        boolean checkStartingAM = bookingToCheck.startingIsAM;
+        boolean checkEndingAM = bookingToCheck.endingIsAM;
+
+        //startingHour is 12 then we treat it as 0
+        if(checkStartingHour == 12){
+            checkStartingHour = 0;
+        }
+        if(currentStartingHour == 12){
+            currentStartingHour = 0;
+        }
+        if(currentStartingAM == currentEndingAM){ //current TimeDetails has the same am/pm e.g. 4:00pm - 6:00pm or 4:00am - 6:00am
+            if(currentStartingAM == checkStartingAM){
+                //ignore case of 12 and when the ending time is smaller than the starting time 7pm - p\6pm
+                //hours do not overlapp
+
+                if((currentStartingHour < checkStartingHour && currentEndingHour < checkStartingHour) || (currentStartingHour > checkEndingHour)){
+                    return false;
+                }
+                else if( (currentEndingHour == checkStartingHour && currentEndingMin < checkStartingMin)|| (currentStartingHour == checkEndingHour && currentStartingMin > checkEndingMin)){
+                    return false;
+                }
+
+            }
+            else{ //not conflicting
+                return false;
+            }
+        }
+        else{
+            // (currentChecking)
+            if((currentStartingAM == checkEndingAM) ){
+                if(currentStartingHour >= checkEndingHour ){
+                    if(currentStartingHour == checkEndingHour){
+                        if(currentStartingMin > checkEndingMin){
+                            return false;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+            else if(currentEndingAM == checkStartingAM){
+                if(currentEndingHour >= checkStartingHour ){
+                    if(currentEndingHour == checkStartingHour ){
+                        if(currentEndingMin < checkStartingMin){
+                            return false;
+                        }
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         return true;
     }
-    */
+
+
     public String[] dateSplit(String date){
         String[] split = date.split("[.-/]");
         return split;
