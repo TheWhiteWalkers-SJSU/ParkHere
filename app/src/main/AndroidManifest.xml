@@ -27,10 +27,10 @@
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".ViewListingActivity" />
         <activity android:name=".CreateRequestActivity" />
+        <activity android:name=".UpdateListingActivity" />
         <activity android:name=".RatingActivity" />
-        <activity android:name=".ViewRatingsActivity"></activity>
-        <activity android:name=".TabbedInboxActivity"></activity>
-
+        <activity android:name=".ViewRatingsActivity" />
+        <activity android:name=".TabbedInboxActivity" />
     </application>
 
 </manifest>

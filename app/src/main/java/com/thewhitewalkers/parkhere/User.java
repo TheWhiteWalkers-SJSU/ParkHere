@@ -15,7 +15,7 @@ public class User {
     String lastName;
     String location;
     String phoneNumber;
-    public ArrayList<Rating> ratingsList = new ArrayList<Rating>();;
+    public ArrayList<Rating> ratingsList = new ArrayList<Rating>();
 
     public User() {
 

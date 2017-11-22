@@ -86,7 +86,7 @@ public class RatingActivity extends AppCompatActivity {
                     if(u.ratingsList.get(0).getRating() == 100.0){
                         u.ratingsList.remove(0);
                     }
-
+                  
                     Rating r = new Rating(numOfStars, comment);
                     u.ratingsList.add(r);
 
