@@ -90,7 +90,7 @@ public class HomepageActivity extends AppCompatActivity {
         buttonInbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
             }
         });
 

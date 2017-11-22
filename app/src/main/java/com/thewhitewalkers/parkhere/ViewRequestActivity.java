@@ -116,7 +116,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
                     }
                 });
     }
@@ -128,7 +128,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
                     }
                 });
     }
