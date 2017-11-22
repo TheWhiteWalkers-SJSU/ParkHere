@@ -54,12 +54,14 @@ public class InboxActivity extends AppCompatActivity {
         inboxList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(final AdapterView parent, View v, final int position, long id) {
                 final Request clickedRequest = (Request)parent.getItemAtPosition(position);
+                clickedRequest.setHasBeenRead(true);
+                RequestDatabase.child(clickedRequest.getRequestID()).setValue(clickedRequest);
                 // Attach a listener to read the data at our posts reference
                 ListingDatabase.addValueEventListener(new ValueEventListener() {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Toast.makeText(getApplicationContext(), "Opening message...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Opening message...", Toast.LENGTH_SHORT).show();
                         Intent viewMessageIntent = new Intent(getApplicationContext(), ViewRequestActivity.class);
 
                         Listing listing = dataSnapshot.child(clickedRequest.getListingID()).getValue(Listing.class);

@@ -124,6 +124,10 @@ public class Request implements Serializable{
         return hasBeenRead;
     }
 
+    public TimeDetails getTimeDetails() {
+        return timeDetails;
+    }
+
     public String toString(){
         if(isDefault){
             return message;

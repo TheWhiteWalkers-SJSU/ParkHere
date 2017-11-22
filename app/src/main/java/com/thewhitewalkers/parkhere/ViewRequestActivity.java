@@ -8,13 +8,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ViewRequestActivity extends AppCompatActivity {
 
@@ -33,6 +39,8 @@ public class ViewRequestActivity extends AppCompatActivity {
     private Listing currentListing;
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
+    private static DataSnapshot requestData;
+    private boolean requestsConflict;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +49,9 @@ public class ViewRequestActivity extends AppCompatActivity {
 
         currentRequest = (Request) getIntent().getSerializableExtra("request");
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
+
+        requestsConflict = false;
+        updateRequestSnapshot();
 
         backToInboxButton = findViewById(R.id.backToInbox);
         subjectLine = findViewById(R.id.subjectLine);
@@ -59,7 +70,29 @@ public class ViewRequestActivity extends AppCompatActivity {
 
         acceptRequestButton = findViewById(R.id.acceptRequest);
         denyRequestButton = findViewById(R.id.denyRequest);
-        cancelRequestButton = findViewById(R.id.cancelRequest);
+
+        acceptRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //check if it has conflicts with existing booked requests before allowing it to be accepted
+                if(hasRequestsConflict()) {
+                    Toast.makeText(ViewRequestActivity.this, "Time/date unavailable for listing", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    acceptRequest();
+                    Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        denyRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                denyRequest();
+            }
+        });
+
 
         acceptRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +127,45 @@ public class ViewRequestActivity extends AppCompatActivity {
         });
     }
 
+    private void updateRequestSnapshot() {
+        RequestDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //for all the requests in the db
+                requestData = dataSnapshot;
+                //for testing when data snapshot is updated
+                //Toast.makeText(ViewRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    private boolean hasRequestsConflict() {
+        //testMessage = "";
+        requestsConflict = false;
+        //for all the requests in the current request data snapshot
+        for(DataSnapshot requestSnapshot : requestData.getChildren()) {
+            Request request = requestSnapshot.getValue(Request.class);
+            //only consider requests for the same listing
+            if(request.getListingID().equals(currentRequest.getListingID())){
+                //check requests that have been accepted by the owner already
+                if(request.getRequestType() == 2) {
+                    if(request.getTimeDetails().hasConflict(currentRequest.getTimeDetails())) {
+                        requestsConflict = true;
+                    }
+                    //for testing how many requests are compared, to test print testMessage
+                    //testMessage += "Comparing with a request. ";
+                }
+            }
+        }
+        return requestsConflict;
+    }
+
+
     /**
         0 - Owner Action Required (from renter user)
         1 - Booking Pending (from system)
@@ -122,7 +194,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
                     }
                 });
     }
@@ -134,7 +206,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
                     }
                 });
     }

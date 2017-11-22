@@ -82,6 +82,11 @@ public class RatingActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     User u = dataSnapshot.child(currentListing.getOwnerId()).getValue(User.class);
+
+                    if(u.ratingsList.get(0).getRating() == 100.0){
+                        u.ratingsList.remove(0);
+                    }
+                  
                     Rating r = new Rating(numOfStars, comment);
                     u.ratingsList.add(r);
 

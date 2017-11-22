@@ -5,7 +5,7 @@ public class Rating {
     private String comment;
 
     public Rating(){
-        rating = 0.0;
+        rating = 100.0; //our null rating
         comment = "";
     }
 
