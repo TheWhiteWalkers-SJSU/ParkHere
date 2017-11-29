@@ -35,7 +35,7 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_listing);
+        setContentView(R.layout.activity_create_parking_spot);
 
         firebaseAuth = FirebaseAuth.getInstance();
         parkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
@@ -47,7 +47,7 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
         buttonCreateListing = findViewById(R.id.buttonCreateListing);
         buttonCreateListing.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                createListing();
+                createParkingSpot();
             }
         });
 
@@ -61,7 +61,7 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
 
     }
 
-    private void createListing(){
+    private void createParkingSpot(){
         // get the values from all the fields and save them to the Firebase db
         String parkingSpotName = editTextName.getText().toString().trim();
         String parkingSpotAddress = editTextAddress.getText().toString().trim();
@@ -69,7 +69,7 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
 
         FirebaseUser user = firebaseAuth.getCurrentUser(); //get user
 
-        if(!TextUtils.isEmpty(parkingSpotName) || !TextUtils.isEmpty(parkingSpotAddress) || !TextUtils.isEmpty(parkingSpotDescription)) {
+        if(TextUtils.isEmpty(parkingSpotName) || TextUtils.isEmpty(parkingSpotAddress) || TextUtils.isEmpty(parkingSpotDescription)) {
             Toast.makeText(CreateParkingSpotActivity.this, "Please Enter All Fields", Toast.LENGTH_SHORT).show();
         } else {
             String _id = parkingSpotDatabase.push().getKey();
@@ -77,7 +77,7 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
             ParkingSpot newParkingSpot = new ParkingSpot(_id, parkingSpotName, parkingSpotAddress, parkingSpotDescription, user.getUid(), user.getEmail());
             parkingSpotDatabase.child(_id).setValue(newParkingSpot);
 
-            Toast.makeText(CreateParkingSpotActivity.this, "Created Listing", Toast.LENGTH_SHORT).show();
+            Toast.makeText(CreateParkingSpotActivity.this, "Created Parking Spot", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(CreateParkingSpotActivity.this, HomepageActivity.class));
         }
     }

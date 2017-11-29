@@ -37,6 +37,7 @@ public class HomepageActivity extends AppCompatActivity {
     private Button buttonInbox;
     private Button buttonCreateListing;
     private Button buttonSearchListing;
+    private Button buttonCreateParkingSpot;
     private ListView listViewListings;
     private ListView listViewBookings;
     private List<Listing> listingList = new ArrayList<>();
@@ -99,6 +100,14 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), SearchListingActivity.class));
+            }
+        });
+
+        buttonCreateParkingSpot = findViewById(R.id.buttonCreateParkingSpot);
+        buttonCreateParkingSpot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), CreateParkingSpotActivity.class));
             }
         });
 
