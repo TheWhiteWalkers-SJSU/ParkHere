@@ -74,6 +74,25 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonCreateParkingSpot"
+                style="@style/ButtonThemeOrange"
+                android:textSize="14sp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="5dp"
+                android:layout_gravity="center_horizontal"
+                android:text="Create Parking Spot"
+                />
+
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/buttonInbox"
