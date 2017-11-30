@@ -35,6 +35,7 @@ public class HomepageActivity extends AppCompatActivity {
     private TextView userEmail;
     private Button buttonLogout;
     private Button buttonInbox;
+    private Button buttonChat;
     private Button buttonCreateListing;
     private Button buttonSearchListing;
     private ListView listViewListings;
@@ -91,6 +92,14 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
+            }
+        });
+
+        buttonChat = findViewById(R.id.buttonChat);
+        buttonChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), ChatActivity.class));
             }
         });
 

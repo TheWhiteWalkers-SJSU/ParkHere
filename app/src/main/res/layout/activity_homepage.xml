@@ -75,15 +75,39 @@
         </LinearLayout>
 
 
-        <Button
-            android:id="@+id/buttonInbox"
-            style="@style/ButtonTheme"
-            android:textSize="16sp"
-            android:layout_margin="5dp"
+        <TableRow
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="Inbox"
-            android:textAlignment="center" />
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+
+            android:layout_margin="5dp">
+
+            <Button
+                android:id="@+id/buttonInbox"
+                style="@style/ButtonTheme"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Inbox"
+                android:textAlignment="center"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                />
+
+            <Button
+                android:id="@+id/buttonChat"
+                style="@style/ButtonTheme"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Chat"
+                android:textAlignment="center"
+                android:layout_weight="1"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                />
+
+        </TableRow>
+
 
         <TextView
             android:layout_width="match_parent"
