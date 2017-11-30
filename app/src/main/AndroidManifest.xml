@@ -31,6 +31,7 @@
         <activity android:name=".RatingActivity" />
         <activity android:name=".ViewRatingsActivity" />
         <activity android:name=".TabbedInboxActivity" />
+        <activity android:name=".CreateParkingSpotActivity"></activity>
     </application>
 
 </manifest>

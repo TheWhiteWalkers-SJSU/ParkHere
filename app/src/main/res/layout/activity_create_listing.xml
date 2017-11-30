@@ -208,18 +208,6 @@
                     android:layout_above="@id/buttonCreateListing"
                     />
 
-                <!--<EditText-->
-                    <!--android:id="@+id/editTextListingStartingDateAvailable"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:hint="Email"-->
-                    <!--android:inputType="textEmailAddress"-->
-
-                    <!--android:layout_margin="15dp"-->
-                    <!--android:layout_above="@id/editTextLoginPassword"-->
-                    <!--/>-->
-
-
              </LinearLayout>
         </FrameLayout>
     </ScrollView>
