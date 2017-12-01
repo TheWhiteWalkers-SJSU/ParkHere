@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 //import com.android.volley.Request;
 //import com.android.volley.RequestQueue;
@@ -18,7 +19,7 @@ import android.widget.ListView;
 //
 //import org.json.JSONException;
 //import org.json.JSONObject;
-
+//
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -35,18 +37,19 @@ public class ChatActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-    final DatabaseReference UserDatabase = FirebaseDatabase.getInstance().getReference("users").child(currentUser.getUid());
-    //TODO: get chat database
+    final DatabaseReference ChatDatabase = FirebaseDatabase.getInstance().getReference("chats");
 
     private Button buttonHomepage;
     private ListView listViewChat;
     private List<Chat> chatList = new ArrayList<>();
-    private User userIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        buttonHomepage = findViewById(R.id.buttonHomepage);
+        listViewChat = findViewById(R.id.listViewChats);
 
         buttonHomepage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +63,9 @@ public class ChatActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Chat clickedChat = (Chat) parent.getItemAtPosition(position);
                 Intent chatMessageIntent = new Intent(getApplicationContext(), ChatMessageActivity.class);
-                //TODO : send the clicked chat as intent
-//                chatMessageIntent.putExtra("chat", clickedChat);
-                startActivity(chatMessageIntent);
+                //send the clicked chat as intent
+                chatMessageIntent.putExtra("chat", clickedChat);
+//                startActivity(chatMessageIntent);
             }
         });
     }
@@ -70,90 +73,34 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        ChatDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatList.clear();
+                for(DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+                    //get information from the chat
+                    HashMap<String,String> emails = (HashMap<String,String>)chatSnapshot.getValue();
+                    HashMap<String,ArrayList<Message>> list = (HashMap<String,ArrayList<Message>>)chatSnapshot.getValue();
+                    String id = emails.get("chatId");
+                    String user1 = emails.get("emailUser1");
+                    String user2 = emails.get("emailUser2");
 
-        //TODO : Create "chat" in the database,
-        //TODO : add chats to list where the
-        //TODO:             currentUser.getEmail == currentChat.getEmailUser1() || currentUser.getEmail == currentChat.getEmailUser2
-//        UserDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                chatList.clear();
-//                for(DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-//                    User user = userSnapshot.getValue(User.class);
-//                    if(user.getUserId() == currentUser.getUid()){
-//                        userIntent = user;
-//                        chatList = user.getChatList();
-//                    }
-//                }
-//                ChatList adapter = new ChatList(ChatActivity.this, chatList);
-//                listViewChat.setAdapter(adapter);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
+                    Chat checkChat = new Chat(id, user1, user2, list.get("messageList"));
+
+                    //only display chats for the current user
+                    if(checkChat.getEmailUser1().equals(currentUser.getEmail()) || checkChat.getEmailUser2().equals(currentUser.getEmail())) {
+                        chatList.add(checkChat);
+                    }
+                }
+                ChatList adapter = new ChatList(ChatActivity.this, chatList);
+                adapter.setCurrentChatEmail(currentUser.getEmail());
+                listViewChat.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
-
-
-//        String url = "https://androidchatapp-76776.firebaseio.com/users.json";
-//
-//        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>(){
-//            @Override
-//            public void onResponse(String s) {
-//                doOnSuccess(s);
-//            }
-//        },new Response.ErrorListener(){
-//            @Override
-//            public void onErrorResponse(VolleyError volleyError) {
-//                System.out.println("" + volleyError);
-//            }
-//        });
-//
-//        RequestQueue rQueue = Volley.newRequestQueue(ChatActivity.this);
-//        rQueue.add(request);
-//
-//        listViewChat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Chat clickedChat = (Chat)parent.getItemAtPosition(position);
-//
-//
-//                startActivity(new Intent(ChatActivity.this, ChatMessageActivity.class));
-//            }
-//        });
-//    }
-//
-//    public void doOnSuccess(String s){
-//        try {
-//            JSONObject obj = new JSONObject(s);
-//
-//            Iterator i = obj.keys();
-//            String key = "";
-//
-//            while(i.hasNext()){
-//                key = i.next().toString();
-//
-//                if(!key.equals(UserDetails.username)) {
-//                    al.add(key);
-//                }
-//
-//                totalUsers++;
-//            }
-//
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if(totalUsers <=1){
-//            noUsersText.setVisibility(View.VISIBLE);
-//            usersList.setVisibility(View.GONE);
-//        }
-//        else{
-//            noUsersText.setVisibility(View.GONE);
-//            usersList.setVisibility(View.VISIBLE);
-//            usersList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, al));
-//        }
-//
 }

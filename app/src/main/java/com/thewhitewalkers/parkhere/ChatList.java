@@ -16,11 +16,17 @@ public class ChatList extends ArrayAdapter<Chat> {
 
     private Activity context;
     private List<Chat> chatList;
+    private String currentEmail;
+    private String otherEmail;
 
     public ChatList(Activity context, List<Chat> cList){
         super(context, R.layout.chat_item, cList);
         this.context = context;
         this.chatList = cList;
+    }
+
+    public void setCurrentChatEmail(String email) {
+        currentEmail = email;
     }
 
     @NonNull
@@ -30,12 +36,16 @@ public class ChatList extends ArrayAdapter<Chat> {
         View chatItem = inflater.inflate(R.layout.chat_item, null, true);
 
         TextView textViewUser = chatItem.findViewById(R.id.textViewMessageUser);
-        TextView textViewNameAddress = chatItem.findViewById(R.id.textViewMessageNameAddress);
-
         Chat chat = chatList.get(position);
 
-        textViewUser.setText(chat.getRecipient().getEmail());
-//        textViewNameAddress.setText(chat.getNameAddress());
+        //if current user is 1st email, set other user to 2nd email, vice versa
+        if(currentEmail.equals(chat.getEmailUser1())) {
+            otherEmail = chat.getEmailUser2();
+        }
+        else {
+            otherEmail = chat.getEmailUser1();
+        }
+        textViewUser.setText(otherEmail);
 
         return chatItem;
     }

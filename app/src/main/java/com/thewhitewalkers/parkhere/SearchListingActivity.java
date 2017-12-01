@@ -296,7 +296,6 @@ public class SearchListingActivity extends AppCompatActivity {
         else if(sortBy.equals(sortValues[2]) || sortBy.equals(sortValues[3])) { //sort by lowest/highest price
             Collections.sort(result, new Listing.PriceListingComparator());
 
-            //TODO : fix sorting by price
             if(sortBy.equals(sortValues[3])) //sort by lowest price
                 Collections.reverse(result);
         }

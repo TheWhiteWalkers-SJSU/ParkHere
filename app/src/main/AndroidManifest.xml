@@ -21,6 +21,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".HomepageActivity" />
         <activity android:name=".InboxActivity" />
+        <activity android:name=".ChatActivity" />
+        <activity android:name=".ChatMessageActivity" />
         <activity android:name=".ViewRequestActivity" />
         <activity android:name=".CreateListingActivity" />
         <activity android:name=".SearchListingActivity" />

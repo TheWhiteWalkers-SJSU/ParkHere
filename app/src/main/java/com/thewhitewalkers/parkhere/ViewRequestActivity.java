@@ -93,26 +93,12 @@ public class ViewRequestActivity extends AppCompatActivity {
             }
         });
 
-
-        acceptRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                acceptRequest();
-            }
-        });
-        denyRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                denyRequest();
-            }
-        });
         cancelRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cancelRequest();
             }
         });
-
 
         viewListingButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
