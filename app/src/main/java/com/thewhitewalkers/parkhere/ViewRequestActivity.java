@@ -70,6 +70,7 @@ public class ViewRequestActivity extends AppCompatActivity {
 
         acceptRequestButton = findViewById(R.id.acceptRequest);
         denyRequestButton = findViewById(R.id.denyRequest);
+        cancelRequestButton = findViewById(R.id.cancelRequest);
 
         acceptRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
