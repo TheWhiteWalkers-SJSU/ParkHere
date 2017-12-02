@@ -41,8 +41,12 @@ public class ViewRequestActivity extends AppCompatActivity {
     private Listing currentListing;
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
+    DatabaseReference chatsDatabase = FirebaseDatabase.getInstance().getReference("chats");
+    private static DataSnapshot chatData;
     private static DataSnapshot requestData;
     private boolean requestsConflict;
+    String listingEmail;
+    String requestEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +56,12 @@ public class ViewRequestActivity extends AppCompatActivity {
         currentRequest = (Request) getIntent().getSerializableExtra("request");
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
 
+        listingEmail = currentListing.getOwnerEmail();
+        requestEmail = currentRequest.getSenderEmail();
+
         requestsConflict = false;
         updateRequestSnapshot();
+        updateChatSnapshot();
 
         backToInboxButton = findViewById(R.id.backToInbox);
         subjectLine = findViewById(R.id.subjectLine);
@@ -96,6 +104,13 @@ public class ViewRequestActivity extends AppCompatActivity {
                 else {
                     acceptRequest();
                     Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
+
+                    //if chat does not exist already, create one
+                    if(!chatExists(listingEmail, requestEmail)) {
+                        String _id = chatsDatabase.push().getKey();
+                        Chat newChat = new Chat(_id, listingEmail, requestEmail);
+                        chatsDatabase.child(_id).setValue(newChat);
+                    }
                 }
             }
         });
@@ -124,6 +139,35 @@ public class ViewRequestActivity extends AppCompatActivity {
         backToInboxButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
+            }
+        });
+    }
+
+    private boolean chatExists(String check1, String check2) {
+        for(DataSnapshot chatSnapshot : chatData.getChildren()) {
+            //get information from the chat
+            HashMap<String,String> emails = (HashMap<String,String>)chatSnapshot.getValue();
+            String user1 = emails.get("emailUser1");
+            String user2 = emails.get("emailUser2");
+
+            //check if a chat btwn the same two users already exists
+            if((user1.equals(check1) && user2.equals(check2)) || (user2.equals(check1) && user1.equals(check2))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateChatSnapshot() {
+        chatsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatData = dataSnapshot;
+                Toast.makeText(ViewRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

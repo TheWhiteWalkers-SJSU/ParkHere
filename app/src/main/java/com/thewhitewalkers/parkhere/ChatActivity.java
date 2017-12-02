@@ -65,7 +65,7 @@ public class ChatActivity extends AppCompatActivity {
                 Intent chatMessageIntent = new Intent(getApplicationContext(), ChatMessageActivity.class);
                 //send the clicked chat as intent
                 chatMessageIntent.putExtra("chat", clickedChat);
-//                startActivity(chatMessageIntent);
+                startActivity(chatMessageIntent);
             }
         });
     }

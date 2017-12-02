@@ -2,7 +2,7 @@ package com.thewhitewalkers.parkhere;
 
 import java.io.Serializable;
 
-public class Message  implements Serializable {
+public class Message implements Serializable {
 //    private Time dateTime;
 //    private User user;
     private String email;

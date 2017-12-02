@@ -30,13 +30,13 @@ public class MessageList extends ArrayAdapter<Message> {
         View messageItem = inflater.inflate(R.layout.message_item, null, true);
 
         TextView textViewUser = messageItem.findViewById(R.id.textViewMessageUser);
-        TextView textViewDateTime = messageItem.findViewById(R.id.textViewMessageDateTime);
+//        TextView textViewDateTime = messageItem.findViewById(R.id.textViewMessageDateTime);
         TextView textViewBody = messageItem.findViewById(R.id.textViewMessageBody);
 
         Message message = messageList.get(position);
-
+//
         textViewUser.setText(message.getEmail());
-//        textViewDateTime.setText(message.getListingAddress());
+////        textViewDateTime.setText(message.getListingAddress());
         textViewBody.setText(message.getBody());
 
         return messageItem;
