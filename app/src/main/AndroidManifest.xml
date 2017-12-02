@@ -11,6 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- The API key for Google Maps-based APIs. -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +39,10 @@
         <activity android:name=".RatingActivity" />
         <activity android:name=".ViewRatingsActivity" />
         <activity android:name=".TabbedInboxActivity" />
-        <activity android:name=".CreateParkingSpotActivity"></activity>
+        <activity android:name=".CreateParkingSpotActivity" />
+        <activity android:name=".MapActivity"/>
+
+        <service  android:name=".GeocodeIntentService" />
     </application>
 
 </manifest>

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<TableLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -30,31 +32,51 @@
             android:textSize="15dp"/>
     </TableRow>
 
-    <Button
-        android:id="@+id/buttonSearch"
-        style="@style/ButtonThemeOrange"
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:text="Search"
-        android:textSize="13dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/pageHeader"
-        />
-
-    <EditText
-        android:id="@+id/editTextSearch"
+    <TableRow
+        android:id="@+id/pageSearchAddress"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:hint="Enter search criteria"
-        android:layout_toLeftOf="@id/buttonSearch"
-
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_below="@id/pageHeader"
-        />
+        android:layout_marginVertical="10dp"
+        android:weightSum="3">
 
+        <Button
+            android:id="@+id/buttonMap"
+            style="@style/ButtonTheme"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+
+            android:layout_weight="1"
+            android:text="Show Map"
+            android:textSize="13dp"/>
+
+    </TableRow>
+    <TableRow
+        android:id="@+id/pageFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:weightSum="3">
+        <EditText
+            android:id="@+id/editTextSearch"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="2"
+            android:hint="Enter search criteria"
+            android:layout_below="@id/pageHeader"
+            />
+        <Button
+            android:id="@+id/buttonSearch"
+            style="@style/ButtonThemeOrange"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Search"
+            android:textSize="13dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            />
+    </TableRow>
     <TableRow
         android:id="@+id/searchFilter"
         android:layout_width="match_parent"
@@ -111,4 +133,4 @@
 
         android:layout_below="@id/searchRangeSet"
         />
-</RelativeLayout>
+</TableLayout>

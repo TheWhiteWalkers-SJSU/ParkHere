@@ -39,6 +39,7 @@ public class SearchListingActivity extends AppCompatActivity {
     private Button buttonSearch;
     private Button buttonRange;
     private Button buttonHomepage;
+    private Button buttonMap;
     private ListView listSearchListings;
     private List<Listing> searchList = new ArrayList<>();
     private TextView searchRangeSet;
@@ -78,6 +79,7 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonSearch = findViewById(R.id.buttonSearch);
         buttonRange = findViewById(R.id.buttonSearchRange);
         buttonHomepage = findViewById(R.id.buttonHomepage);
+        buttonMap = findViewById(R.id.buttonMap);
         listSearchListings = findViewById(R.id.listSearchListings);
         searchRangeSet = findViewById(R.id.searchRangeSet);
         spinnerSort = findViewById(R.id.spinnerSort);
@@ -137,6 +139,13 @@ public class SearchListingActivity extends AppCompatActivity {
                     Toast.makeText(SearchListingActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        buttonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), MapActivity.class));
             }
         });
     }
