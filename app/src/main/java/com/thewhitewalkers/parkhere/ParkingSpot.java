@@ -7,36 +7,31 @@ import android.os.Parcelable;
 
 public class ParkingSpot implements Serializable {
 
-    String listingId;
+    String parkingSpotId;
     String name;
     String address;
     String description;
     String ownerId;
     String ownerEmail;
     String listingRating;
+    int parkingSpotRating;
     Integer priorBookings;
 
     public ParkingSpot() {
 
     }
 
-    public ParkingSpot(String listingId, String name, String address, String description, String ownerId, String ownerEmail) {
-        this.listingId = listingId;
+    public ParkingSpot(String parkingSpotId, String name, String address, String description, String ownerId, String ownerEmail) {
+        this.parkingSpotId = parkingSpotId;
         this.name = name;
         this.address = address;
         this.description = description;
         this.ownerId = ownerId;
         this.ownerEmail = ownerEmail;
-        this.listingRating = listingRating;
-        this.priorBookings = priorBookings;
     }
 
-    public String getListingId() {
-        return listingId;
-    }
-
-    public void setListingId(String listingId) {
-        this.listingId = listingId;
+    public String getParkingSpotId() {
+        return parkingSpotId;
     }
 
     public String getName() {
@@ -79,11 +74,10 @@ public class ParkingSpot implements Serializable {
         this.ownerEmail = ownerEmail;
     }
 
-    public String getListingRating() {
-        return listingRating;
-    }
+    public int getParkingSpotRating() { return parkingSpotRating; }
 
-    public void setListingRating(String listingRating) {
+    // need a method to calculate rating and set the new value
+    public void setParkingSpotRating(String listingRating) {
         this.listingRating = listingRating;
     }
 

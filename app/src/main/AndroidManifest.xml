@@ -31,7 +31,13 @@
         <activity android:name=".RatingActivity" />
         <activity android:name=".ViewRatingsActivity" />
         <activity android:name=".TabbedInboxActivity" />
-        <activity android:name=".CreateParkingSpotActivity"></activity>
+        <activity android:name=".CreateParkingSpotActivity" />
+        <activity
+            android:name=".ViewParkingSpots"
+            android:label="@string/title_activity_view_parking_spots"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ViewParkingSpotActivity" />
+        <activity android:name=".UpdateParkingSpotActivity"></activity>
     </application>
 
 </manifest>
