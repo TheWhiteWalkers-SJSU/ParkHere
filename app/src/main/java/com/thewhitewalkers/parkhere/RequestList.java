@@ -12,10 +12,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by Rohit on 10/31/17.
- */
-
 public class RequestList extends ArrayAdapter<Request> {
 
     private Activity context;

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginRight="10dp"
         android:weightSum="2">
         <TextView
             android:id="@+id/pageTitle"
@@ -33,24 +33,53 @@
     </TableRow>
 
     <TableRow
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/buttonSearchAddress"
+            style="@style/ButtonTheme"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:text="Search Address"
+            android:textSize="13dp"/>
+        <Button
+            android:id="@+id/buttonMap"
+            style="@style/ButtonTheme"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:text="View on Map"
+            android:textSize="13dp"/>
+
+
+    </TableRow>
+
+    <TableRow
         android:id="@+id/pageSearchAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginVertical="10dp"
-        android:weightSum="3">
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
 
-        <Button
-            android:id="@+id/buttonMap"
-            style="@style/ButtonTheme"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-
+        <TextView
+            android:id="@+id/textViewAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Show Map"
-            android:textSize="13dp"/>
+            android:text="Address"
+            android:textSize="12sp"
+            android:textStyle="italic" />
 
     </TableRow>
+
     <TableRow
         android:id="@+id/pageFilter"
         android:layout_width="match_parent"
@@ -85,31 +114,33 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="15dp"
         android:layout_marginLeft="15dp"
-        >
+        android:weightSum="6">
         <Button
             android:id="@+id/buttonSearchRange"
             style="@style/ButtonThemeOrange"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:text="Set date/time range"
             android:textSize="13dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="3"
             />
 
         <TextView
             android:id="@+id/textSort"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Sort by"
-            android:textSize="16dp"
             android:textColor="@color/colorBlack"
-            />
+            android:textSize="16dp" />
 
         <Spinner
             android:id="@+id/spinnerSort"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="40dp"
             android:prompt="@array/sort_array"
+            android:layout_weight="2"
             />
     </TableRow>
 
@@ -134,3 +165,4 @@
         android:layout_below="@id/searchRangeSet"
         />
 </TableLayout>
+

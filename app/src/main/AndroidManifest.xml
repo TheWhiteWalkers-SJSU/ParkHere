@@ -40,9 +40,12 @@
         <activity android:name=".ViewRatingsActivity" />
         <activity android:name=".TabbedInboxActivity" />
         <activity android:name=".CreateParkingSpotActivity" />
-        <activity android:name=".MapActivity"/>
+        <activity android:name=".MapActivity" />
+        <activity android:name=".VerifyAddressActivity" />
 
-        <service  android:name=".GeocodeIntentService" />
+        <service android:name=".GeocodeIntentService" />
+
+        <activity android:name=".VerifyAddressActivity"></activity>
     </application>
 
 </manifest>

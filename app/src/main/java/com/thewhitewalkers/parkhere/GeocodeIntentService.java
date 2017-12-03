@@ -4,11 +4,8 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.ResultReceiver;
-import android.text.TextUtils;
-
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +42,7 @@ public class GeocodeIntentService extends IntentService{
         List<Address> addresses = null;
 
         try{
-            addresses = geocoder.getFromLocationName(name, 1);
+            addresses = geocoder.getFromLocationName(name, 5);
 
         }
         catch(IOException ioException){
@@ -58,25 +55,23 @@ public class GeocodeIntentService extends IntentService{
         if(addresses == null || addresses.size() == 0){
             //toast
 
-            deliverResultToReceiver(0, "no ", null);
+            deliverResultToReceiver(0,new ArrayList<Address>());
         }
         else{
             //send to listview for selection :)
-            Address addr = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<>();
-
-            for(int i = 0; i <= addr.getMaxAddressLineIndex(); i++){
-                addressFragments.add(addr.getAddressLine(i));
+            ArrayList<Address> fiveAddresses = new ArrayList<>(5);
+            for(int i = 0;  i < addresses.size(); i++){
+                fiveAddresses.add(addresses.get(i));
+                System.out.println("banana?" + i);
             }
-            deliverResultToReceiver(1,
-                    TextUtils.join(System.getProperty("line.separator"), addressFragments), addr);
+            System.out.println("banana?");
+            deliverResultToReceiver(1, fiveAddresses);
         }
     }
 
-    private void deliverResultToReceiver(int resultCode, String message, Address address){
+    private void deliverResultToReceiver(int resultCode, ArrayList<Address> addressedQuerried){
         Bundle bundle = new Bundle();
-        bundle.putParcelable("ADDRESS", address);
-        bundle.putString("result", message);
+        bundle.putParcelableArrayList("ADDRESSES", addressedQuerried);
         receiver.send(resultCode, bundle);
     }
 }
