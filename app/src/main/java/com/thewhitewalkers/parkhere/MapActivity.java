@@ -6,8 +6,6 @@ import android.location.Address;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,7 +22,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private static final String TAG = MapActivity.class.getSimpleName();
 
-    private Button buttonBackToSearch;
     private GoogleMap map;
     private Address querriedAddress;
     private ArrayList<Listing> searchResults;
@@ -42,16 +39,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-        buttonBackToSearch = (Button) findViewById(R.id.buttonBackToSearch);
-
-
-        buttonBackToSearch.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //startIntentService();
-            }
-        });
     }
 
     @Override

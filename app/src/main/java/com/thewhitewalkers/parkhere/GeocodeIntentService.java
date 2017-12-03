@@ -62,9 +62,7 @@ public class GeocodeIntentService extends IntentService{
             ArrayList<Address> fiveAddresses = new ArrayList<>(5);
             for(int i = 0;  i < addresses.size(); i++){
                 fiveAddresses.add(addresses.get(i));
-                System.out.println("banana?" + i);
             }
-            System.out.println("banana?");
             deliverResultToReceiver(1, fiveAddresses);
         }
     }

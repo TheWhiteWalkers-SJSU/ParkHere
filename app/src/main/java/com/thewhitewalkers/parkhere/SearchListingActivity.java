@@ -180,7 +180,6 @@ public class SearchListingActivity extends AppCompatActivity {
                 if(hasQuerried){
                     Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                     if(querriedAddress != null){
-                        System.out.println("meow");
                         intent.putExtra("ADDRESS", querriedAddress);
                         startActivity(intent);
                     }

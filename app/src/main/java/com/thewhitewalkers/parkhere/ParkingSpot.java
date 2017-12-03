@@ -3,6 +3,9 @@ package com.thewhitewalkers.parkhere;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Locale;
+
+import android.location.Address;
 import android.os.Parcelable;
 
 public class ParkingSpot implements Serializable {
