@@ -43,11 +43,11 @@ public class UpdateParkingSpotActivity extends AppCompatActivity {
         buttonUpdateParkingSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            updateParkingSpotFields();
+                updateParkingSpotFields();
             }
         });
 
-        buttonBackToParkingSpot= findViewById(R.id.buttonBackToParkingSpot);
+        buttonBackToParkingSpot = findViewById(R.id.buttonBackToParkingSpot);
         buttonBackToParkingSpot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,6 +56,7 @@ public class UpdateParkingSpotActivity extends AppCompatActivity {
                 startActivity(viewParkingSpotIntent);
             }
         });
+    }
 
     public void updateParkingSpotFields() {
         Map<String, Object> ParkingSpotUpdate = new HashMap<>();

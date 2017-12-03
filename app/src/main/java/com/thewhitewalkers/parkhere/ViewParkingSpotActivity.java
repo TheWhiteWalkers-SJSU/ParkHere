@@ -38,19 +38,17 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
         Intent ParkingSpotIntent = getIntent();
         final ParkingSpot thisParkingSpot = (ParkingSpot) ParkingSpotIntent.getSerializableExtra("ParkingSpot");
 
-        String ParkingSpotName = thisParkingSpot.getParkingSpotName();
+        String ParkingSpotName = thisParkingSpot.getName();
         String ParkingSpotOwner = thisParkingSpot.getOwnerEmail();
 
         if(ParkingSpotOwner == null) ParkingSpotOwner = thisParkingSpot.getOwnerId();
-        String ParkingSpotAddress = thisParkingSpot.getParkingSpotAddress();
-        String ParkingSpotDescription = thisParkingSpot.getParkingSpotDescription();
-        String ParkingSpotStart = thisParkingSpot.getStartTime();
-        String ParkingSpotEnd = thisParkingSpot.getEndTime();
+        String ParkingSpotAddress = thisParkingSpot.getAddress();
+        String ParkingSpotDescription = thisParkingSpot.getDescription();
 
-        ParkingSpotNameText = findViewById(R.id.ParkingSpotNameText);
-        ParkingSpotOwnerText = findViewById(R.id.ParkingSpotOwnerText);
-        ParkingSpotAddressText = findViewById(R.id.ParkingSpotAddressText);
-        ParkingSpotDescriptionText = findViewById(R.id.ParkingSpotDescriptionText);
+        ParkingSpotNameText = findViewById(R.id.editTextName);
+        ParkingSpotOwnerText = findViewById(R.id.editTextOwner);
+        ParkingSpotAddressText = findViewById(R.id.editTextAddress);
+        ParkingSpotDescriptionText = findViewById(R.id.editTextDescription);
 
         deleteButton = findViewById(R.id.deleteButton);
         updateButton = findViewById(R.id.updateButton);

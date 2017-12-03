@@ -39,7 +39,7 @@
                 </TableRow>
 
                 <EditText
-                    android:id="@+id/editTextName"
+                    android:id="@+id/editTextParkingSpotName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Spot Name"
@@ -52,7 +52,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/editTextAddress"
+                    android:id="@+id/editTextParkingSpotAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Spot Address"
@@ -63,7 +63,7 @@
                     />
 
                 <EditText
-                    android:id="@+id/editTextDescription"
+                    android:id="@+id/editTextParkingSpotDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Spot Description"
@@ -74,15 +74,27 @@
                     />
 
                 <Button
-                    android:id="@+id/buttonCreateListing"
+                    android:id="@+id/buttonUpdateParkingSpot"
                     style="@style/ButtonThemeGreen"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Edit Parking Spot"
+                    android:text="Update Parking Spot"
 
                     android:layout_margin="15dp"
-                    android:layout_above="@id/buttonCreateListing"
+                    android:layout_above="@id/buttonUpdateParkingSpot"
                     />
+
+                <Button
+                    android:id="@+id/buttonBackToParkingSpot"
+                    style="@style/ButtonThemeRed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Back"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/buttonBackToParkingSpot"
+                    />
+
 
 
             </LinearLayout>

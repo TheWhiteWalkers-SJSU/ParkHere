@@ -73,6 +73,16 @@
                     android:layout_above="@id/editTextDescription"
                     />
 
+                <EditText
+                    android:id="@+id/editTextOwner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Spot Description"
+                    android:inputType="textMultiLine"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/editTextDescription"
+                    />
 
             </LinearLayout>
         </FrameLayout>
