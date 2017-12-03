@@ -39,10 +39,6 @@ public class Chat implements Serializable {
         return emailUser2;
     }
 
-    public List<Message> getMessageList() {
-        return messageList;
-    }
-
     public void addMessage(Message m) {
         messageList.add(m);
     }

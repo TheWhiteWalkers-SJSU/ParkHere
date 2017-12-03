@@ -84,7 +84,6 @@ public class ChatActivity extends AppCompatActivity {
                     String id = emails.get("chatId");
                     String user1 = emails.get("emailUser1");
                     String user2 = emails.get("emailUser2");
-
                     Chat checkChat = new Chat(id, user1, user2, list.get("messageList"));
 
                     //only display chats for the current user

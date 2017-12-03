@@ -56,18 +56,12 @@ public class ChatMessageActivity extends AppCompatActivity {
         buttonSendChatMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //get input, add new messsage to current chat
                 String body = textViewMessage.getText().toString().trim();
                 Message newMessage = new Message(currentUser.getEmail(), body);
-                //TODO : if do timestamp, put here
                 currentChat.addMessage(newMessage);
                 ChatsDatabase.child(currentChat.getChatId()).setValue(currentChat);
-
-                //displayChatMessages();
-                //TODO : add the new message to arraylist of messages in the current clicked chat
-
-                // Clear the input
+                //Clear the input
                 textViewMessage.setText("");
             }
         });
@@ -78,7 +72,6 @@ public class ChatMessageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 updateChatData = dataSnapshot;
-//                Toast.makeText(getApplicationContext(), "id: " + id, Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -88,31 +81,18 @@ public class ChatMessageActivity extends AppCompatActivity {
     }
 
     public void displayChatMessages() {
-//        TODO : for every chat in the "ChatDatabase", find one that matches email 1/email 2 value combo
-//        TODO : messageList = matching chat's messageList updated from the db
-//
-//        TODO : if doesnt work, try updateRequestSnapshot and hasRequestsConflict approach from CreateRequestActivity
-//
-
         ChatsDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 messageList.clear();
-                for(DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
-                    //get information from the chat
-                    HashMap<String,String> emails = (HashMap<String,String>)chatSnapshot.getValue();
-                    HashMap<String,ArrayList<Message>> list = (HashMap<String,ArrayList<Message>>)chatSnapshot.getValue();
-                    String id = emails.get("chatId");
-                    String user1 = emails.get("emailUser1");
-                    String user2 = emails.get("emailUser2");
+                //get the current chat and load its message list
+                Chat checkChat = dataSnapshot.child(currentChat.getChatId()).getValue(Chat.class);
+                messageList = checkChat.messageList;
 
-                    Chat checkChat = new Chat(id, user1, user2, list.get("messageList"));
-
-                    messageList.add(new Message("test@gmail", "test"));
-                    Toast.makeText(getApplicationContext(), "check: " + checkChat.getMessageList().getClass(), Toast.LENGTH_SHORT).show();
-                }
                 MessageList adapter = new MessageList(ChatMessageActivity.this, messageList);
                 listViewChatMessages.setAdapter(adapter);
+                //scroll to latest message
+                listViewChatMessages.setSelection(adapter.getCount()-1);
             }
 
             @Override
@@ -120,42 +100,6 @@ public class ChatMessageActivity extends AppCompatActivity {
 
             }
         });
-
-
-
-//        ChatsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                messageList.clear();
-//                for(DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
-//                    //get information from the chat
-//                    HashMap<String,String> emails = (HashMap<String,String>)chatSnapshot.getValue();
-//                    HashMap<String,ArrayList<Message>> list = (HashMap<String,ArrayList<Message>>)chatSnapshot.getValue();
-//                    String id = emails.get("chatId");
-//                    String user1 = emails.get("emailUser1");
-//                    String user2 = emails.get("emailUser2");
-//                    Chat checkChat = new Chat(id, user1, user2, list.get("messageList"));
-//
-//                    //check if the chat is the current chat
-//                    if(checkChat.getChatId().equals(currentChat.getChatId())) {
-//                        //refresh and get all the messages
-////                        ArrayList<Message> messages = list.get("messageList");
-////                        messageList = messages;
-////                        for(Message m : messages) {
-//                        messageList.add(checkChat.getMessageList().get(0));
-////                        }
-////                        Toast.makeText(getApplicationContext(), "Size: " + checkChat.getMessageList().size(), Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                }
-//                MessageList adapter = new MessageList(ChatMessageActivity.this, messageList);
-//                listViewChatMessages.setAdapter(adapter);
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
 }

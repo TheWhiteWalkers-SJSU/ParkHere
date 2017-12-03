@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="match_parent"
     >
 
     <TextView
@@ -10,6 +10,5 @@
         android:text="User email"
         android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
         android:textColor="@color/colorBlack"
-        android:layout_centerVertical="true"
         />
 </RelativeLayout>
