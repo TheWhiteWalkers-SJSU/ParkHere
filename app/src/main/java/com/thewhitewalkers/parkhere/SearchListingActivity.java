@@ -90,6 +90,9 @@ public class SearchListingActivity extends AppCompatActivity {
     private Address querriedAddress;
     private boolean hasQuerried;
 
+    //temp stuff
+    final DatabaseReference ParkingDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+    ArrayList<ParkingSpot> parkingList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,8 +141,11 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
                 searchKeyword = editTextSearch.getText().toString().trim();
                 updateSearch();
+                */
+                check();
                 Toast.makeText(SearchListingActivity.this, "Searching", Toast.LENGTH_SHORT).show();
             }
         });
@@ -181,6 +187,7 @@ public class SearchListingActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                     if(querriedAddress != null){
                         intent.putExtra("ADDRESS", querriedAddress);
+                        intent.putExtra("RESULTS", parkingList);
                         startActivity(intent);
                     }
 
@@ -190,8 +197,39 @@ public class SearchListingActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
+        //temp....
+        parkingList = new ArrayList<ParkingSpot>();
+
+        ParkingDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot parkingSnapshot : dataSnapshot.getChildren()) {
+
+                    ParkingSpot spot = parkingSnapshot.getValue(ParkingSpot.class);
+                    if(!spot.getOwnerEmail().equals("waddup@gmail.com")) {
+                        System.out.println("hello?");
+                        parkingList.add(spot);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+    private void check(){
+        for(ParkingSpot p : parkingList){
+            double distance = haversine(querriedAddress.getLatitude(), querriedAddress.getLongitude(), p.getLat(), p.getLng());
+            System.out.println("distance: "+ distance);
+            if(distance < 15){ //less than 15km
+                //searchList.add();
+            }
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -443,5 +481,20 @@ public class SearchListingActivity extends AppCompatActivity {
             });
 
         }
+    }
+    //source: haversine formula http://www.movable-type.co.uk/scripts/latlong.html
+    public double haversine(double lat1, double lng1, double lat2, double lng2){
+        double r = 6341; //6371 km
+        double phi1 = Math.toRadians(lat1);
+        double phi2 = Math.toRadians(lat2);
+        double latChange = Math.toRadians(lat2-lat1);
+        double lngChange = Math.toRadians(lng2 - lng1);
+
+        double a = Math.sin(latChange/2) * Math.sin(latChange/2);
+        a = a + (Math.cos(phi1) * Math.cos(phi2) * Math.sin(lngChange/2) * Math.sin(lngChange/2));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = r * c;
+
+        return d;
     }
 }

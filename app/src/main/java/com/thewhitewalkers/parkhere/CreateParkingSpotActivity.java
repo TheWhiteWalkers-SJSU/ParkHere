@@ -106,6 +106,10 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
                 String _id = parkingSpotDatabase.push().getKey();
 
                 ParkingSpot newParkingSpot = new ParkingSpot(_id, parkingSpotName, parkingSpotAddress, parkingSpotDescription, user.getUid(), user.getEmail());
+
+                newParkingSpot.setLatLng(foundAddress.getLatitude(),foundAddress.getLongitude());
+                newParkingSpot.setPriorBookings(0);
+
                 parkingSpotDatabase.child(_id).setValue(newParkingSpot);
 
                 Toast.makeText(CreateParkingSpotActivity.this, "Created Parking Spot", Toast.LENGTH_SHORT).show();
@@ -132,7 +136,6 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
                 String addressQuerry = editTextSearchAddressDialog.getText().toString();
                 if(!addressQuerry.equals("")){
                     //fetch
-                    System.out.println("hello?");
                     startIntentService(addressQuerry);
                 }
             }
@@ -162,7 +165,6 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
         }
         else{
             textViewResultsAddressDialog.setText("Results");
-            System.out.println("jj");
             AddressList adapter = new AddressList(CreateParkingSpotActivity.this, addrs);
             listViewAddressDialog.setAdapter(adapter);
         }
