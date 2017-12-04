@@ -37,8 +37,6 @@ public class CreateListingActivity extends AppCompatActivity {
     FirebaseUser user = firebaseAuth.getCurrentUser(); //get user
 
     private EditText editTextListingName;
-    private EditText editTextListingAddress;
-    private EditText editTextListingDescription;
     private EditText editTextListingPrice;
     private EditText editTextListingDateStarting;
     private EditText editTextListingDateEnding;
@@ -53,6 +51,7 @@ public class CreateListingActivity extends AppCompatActivity {
     ParkingSpotList parkingSpotAdapter = null;
     private boolean isStartingAM;
     private boolean isEndingAM;
+    private ParkingSpot selectedParkingSpot;
 
     private TimeDetails timeDetails;
 
@@ -64,8 +63,6 @@ public class CreateListingActivity extends AppCompatActivity {
         timeDetails = new TimeDetails();
 
         editTextListingName = findViewById(R.id.editTextListingName);
-        editTextListingAddress = findViewById(R.id.editTextListingAddress);
-        editTextListingDescription = findViewById(R.id.editTextListingDescription);
         editTextListingPrice = findViewById(R.id.editTextListingPrice);
         editTextListingDateStarting = findViewById(R.id.editTextListingStartDate);
         editTextListingDateEnding = findViewById(R.id.editTextListingEndDate);
@@ -92,7 +89,7 @@ public class CreateListingActivity extends AppCompatActivity {
         buttonSelectParkingSpot = findViewById(R.id.buttonSelectParkingSpot);
         buttonSelectParkingSpot.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                selectListing();
+                selectParkingSpot();
             }
         });
     }
@@ -100,8 +97,6 @@ public class CreateListingActivity extends AppCompatActivity {
     private void createListing(){
         // get the values from all the fields and save them to the Firebase db
         String listingName = editTextListingName.getText().toString().trim();
-        String listingAddress = editTextListingAddress.getText().toString().trim();
-        String listingDescription = editTextListingDescription.getText().toString().trim();
         String listingPrice = editTextListingPrice.getText().toString().trim();
         String listingDateStarting = editTextListingDateStarting.getText().toString();
         String listingDateEnding = editTextListingDateEnding.getText().toString();
@@ -111,7 +106,7 @@ public class CreateListingActivity extends AppCompatActivity {
         String checkDateResult;
         String checkTimeResult;
 
-        if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingAddress) && !TextUtils.isEmpty(listingPrice) && !TextUtils.isEmpty(listingDateStarting) && !TextUtils.isEmpty(listingDateEnding) && !TextUtils.isEmpty(listingTimeStarting) && !TextUtils.isEmpty(listingTimeEnding)) {
+        if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingPrice) && !TextUtils.isEmpty(listingDateStarting) && !TextUtils.isEmpty(listingDateEnding) && !TextUtils.isEmpty(listingTimeStarting) && !TextUtils.isEmpty(listingTimeEnding)) {
             checkDateResult = checkBookingDate(listingDateStarting, listingDateEnding);
             checkTimeResult = checkBookingTime(listingTimeStarting, listingTimeEnding);
 
@@ -121,11 +116,12 @@ public class CreateListingActivity extends AppCompatActivity {
                 Toast.makeText(CreateListingActivity.this, checkTimeResult, Toast.LENGTH_SHORT).show();
             else
             {
-                String _id = listingDatabase.push().getKey();
+                String _id = ListingDatabase.push().getKey();
                 timeDetails = new TimeDetails(listingDateStarting, listingDateEnding, listingTimeStarting, isStartingAM, listingTimeEnding, isEndingAM);
-                Listing newListing = new Listing(_id, listingName, listingAddress, listingDescription, listingPrice, user.getUid(), user.getEmail(), timeDetails, "available");
-                listingDatabase.child(_id).setValue(newListing);
-                listingDatabase.child(_id).child("timeDetails").setValue(timeDetails);
+                Listing newListing = new Listing(_id, listingName, selectedParkingSpot.getAddress(), selectedParkingSpot.getDescription(), listingPrice, user.getUid(), user.getEmail(), timeDetails, "available");
+                newListing.setParkingSpot(selectedParkingSpot);
+                ListingDatabase.child(_id).setValue(newListing);
+                ListingDatabase.child(_id).child("timeDetails").setValue(timeDetails);
 
                 // need to add the listing Id onto the user object
                 DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
@@ -142,13 +138,14 @@ public class CreateListingActivity extends AppCompatActivity {
         }
     }
 
-    public void selectListing() {
+    public void selectParkingSpot() {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(CreateListingActivity.this);
         builder.setTitle("Pick a Parking Spot")
                 .setAdapter(parkingSpotAdapter, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        selectedParkingSpot = parkingSpotAdapter.getItem(which);
                         String strName = parkingSpotAdapter.getItem(which).getAddress();
                         AlertDialog.Builder builderInner = new AlertDialog.Builder(CreateListingActivity.this);
                         builderInner.setMessage(strName);

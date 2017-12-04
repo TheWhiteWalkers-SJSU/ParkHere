@@ -61,28 +61,6 @@
                     />
 
                 <EditText
-                    android:id="@+id/editTextListingAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Listing Address"
-                    android:inputType="textPostalAddress"
-
-                    android:layout_margin="15dp"
-                    android:layout_above="@id/editTextListingAddress"
-                    />
-
-                <EditText
-                    android:id="@+id/editTextListingDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Listing Description"
-                    android:inputType="textMultiLine"
-
-                    android:layout_margin="15dp"
-                    android:layout_above="@id/editTextListingDescription"
-                    />
-
-                <EditText
                     android:id="@+id/editTextListingPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
