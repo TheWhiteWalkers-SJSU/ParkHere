@@ -14,7 +14,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="115dp">
 
-
         <Button
             android:id="@+id/buttonGoHome"
             style="@style/ButtonTheme"
@@ -104,27 +103,28 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical">
+            android:layout_height="wrap_content">
 
             <TableRow>
 
                 <Button
                     android:id="@+id/updateButton"
                     style="@style/ButtonThemeGreen"
-                    android:layout_width="130dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:layout_margin="20dp"
+                    android:layout_weight="1"
                     android:text="Update Listing" />
+            </TableRow>
 
+            <TableRow>
                 <Button
                     android:id="@+id/deleteButton"
                     style="@style/ButtonThemeRed"
-                    android:layout_width="130dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
                     android:layout_margin="20dp"
+                    android:layout_weight="1"
                     android:text="Delete Listing" />
             </TableRow>
 

@@ -119,6 +119,8 @@ public class AcceptedRequests extends Fragment {
         inboxList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(final AdapterView parent, View v, final int position, long id) {
                 final Request clickedRequest = (Request)parent.getItemAtPosition(position);
+                clickedRequest.setHasBeenRead(true);
+                RequestDatabase.child(clickedRequest.getRequestID()).setValue(clickedRequest);
                 // Attach a listener to read the data at our posts reference
                 ListingDatabase.addValueEventListener(new ValueEventListener() {
 

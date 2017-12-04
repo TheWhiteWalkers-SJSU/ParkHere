@@ -22,12 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CreateRequestActivity extends AppCompatActivity {
 
     DatabaseReference requestDatabase = FirebaseDatabase.getInstance().getReference("requests");
-
     FirebaseAuth firebaseAuth;
 
     private TextView textViewListingName;

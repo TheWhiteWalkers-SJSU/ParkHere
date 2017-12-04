@@ -74,8 +74,17 @@ public class ViewListingActivity extends AppCompatActivity {
         listingOwnerText.setText(listingOwner);
         listingAddressText.setText(listingAddress);
         listingDescriptionText.setText(listingDescription);
-        listingStartText.setText("Start Time: "+listingStart);
-        listingEndText.setText("End Time: "+listingEnd);
+
+        String AM1 = "AM";
+        String AM2 = "AM";
+        if(!thisListing.getTimeDetails().isStartingIsAM()){
+            AM1 = "PM";
+        }
+        if(!thisListing.getTimeDetails().isEndingIsAM()){
+            AM2 = "PM";
+        }
+        listingStartText.setText("Start Time: "+ listingStart + AM1);
+        listingEndText.setText("End Time: "+ listingEnd + AM2);
 
         backToHomeButton = findViewById(R.id.buttonGoHome);
         viewRatingsButton = findViewById(R.id.buttonViewRatings);
@@ -96,7 +105,9 @@ public class ViewListingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.child(thisListing.getOwnerId()).getValue(User.class);
                 listingRatingBar.setRating((float)u.getAvgRating());
-                viewRatingsButton.setText("Click to View " + u.ratingsList.size() + " Ratings");
+                if(u.ratingsList.get(0).getRating() != 100.0) {
+                    viewRatingsButton.setText("Click to View " + u.ratingsList.size() + " Ratings");
+                }
             }
 
             @Override
