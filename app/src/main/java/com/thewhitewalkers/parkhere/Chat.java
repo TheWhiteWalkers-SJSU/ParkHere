@@ -2,13 +2,14 @@ package com.thewhitewalkers.parkhere;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Chat implements Serializable {
 
     private String chatId;
     private String emailUser1;
     private String emailUser2;
-    public ArrayList<Message> messageList = new ArrayList<Message>();
+    public List<Message> messageList = new ArrayList<Message>();
 
     public Chat() {}
 
@@ -19,7 +20,7 @@ public class Chat implements Serializable {
         messageList.add(new Message());
     }
 
-    public Chat(String id, String e1, String e2, ArrayList<Message> m) {
+    public Chat(String id, String e1, String e2, List<Message> m) {
         chatId = id;
         emailUser1 = e1;
         emailUser2 = e2;
@@ -36,10 +37,6 @@ public class Chat implements Serializable {
 
     public String getEmailUser2() {
         return emailUser2;
-    }
-
-    public ArrayList<Message> getMessageList() {
-        return messageList;
     }
 
     public void addMessage(Message m) {

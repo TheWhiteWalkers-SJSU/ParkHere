@@ -10,16 +10,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-//import com.android.volley.Request;
-//import com.android.volley.RequestQueue;
-//import com.android.volley.Response;
-//import com.android.volley.VolleyError;
-//import com.android.volley.toolbox.StringRequest;
-//import com.android.volley.toolbox.Volley;
-//
-//import org.json.JSONException;
-//import org.json.JSONObject;
-//
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -65,7 +55,7 @@ public class ChatActivity extends AppCompatActivity {
                 Intent chatMessageIntent = new Intent(getApplicationContext(), ChatMessageActivity.class);
                 //send the clicked chat as intent
                 chatMessageIntent.putExtra("chat", clickedChat);
-//                startActivity(chatMessageIntent);
+                startActivity(chatMessageIntent);
             }
         });
     }
@@ -84,7 +74,6 @@ public class ChatActivity extends AppCompatActivity {
                     String id = emails.get("chatId");
                     String user1 = emails.get("emailUser1");
                     String user2 = emails.get("emailUser2");
-
                     Chat checkChat = new Chat(id, user1, user2, list.get("messageList"));
 
                     //only display chats for the current user

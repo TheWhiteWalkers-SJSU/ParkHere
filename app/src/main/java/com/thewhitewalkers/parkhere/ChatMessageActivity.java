@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,29 +56,22 @@ public class ChatMessageActivity extends AppCompatActivity {
         buttonSendChatMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //get input, add new messsage to current chat
                 String body = textViewMessage.getText().toString().trim();
-//                Message newMessage = new Message(chatIntentEmail, body);
-                //TODO : if do timestamp, put here
-
-
-                displayChatMessages();
-                //TODO : add the new message to arraylist of messages in the current clicked chat
-
-                // Clear the input
+                Message newMessage = new Message(currentUser.getEmail(), body);
+                currentChat.addMessage(newMessage);
+                ChatsDatabase.child(currentChat.getChatId()).setValue(currentChat);
+                //Clear the input
                 textViewMessage.setText("");
             }
         });
     }
 
     private void updateChatDatabase() {
-        ChatsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatsDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 updateChatData = dataSnapshot;
-//                Toast.makeText(getApplicationContext(), "id: " + id, Toast.LENGTH_SHORT).show();
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -87,34 +81,20 @@ public class ChatMessageActivity extends AppCompatActivity {
     }
 
     public void displayChatMessages() {
-//        TODO : for every chat in the "ChatDatabase", find one that matches email 1/email 2 value combo
-//        TODO : messageList = matching chat's messageList updated from the db
-//
-//        TODO : if doesnt work, try updateRequestSnapshot and hasRequestsConflict approach from CreateRequestActivity
-//
-        ChatsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatsDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 messageList.clear();
-                for(DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
-                    //get information from the chat
-                    HashMap<String,String> emails = (HashMap<String,String>)chatSnapshot.getValue();
-                    HashMap<String,ArrayList<Message>> list = (HashMap<String,ArrayList<Message>>)chatSnapshot.getValue();
-                    String id = emails.get("chatId");
-                    String user1 = emails.get("emailUser1");
-                    String user2 = emails.get("emailUser2");
-                    Chat checkChat = new Chat(id, user1, user2, list.get("messageList"));
+                //get the current chat and load its message list
+                Chat checkChat = dataSnapshot.child(currentChat.getChatId()).getValue(Chat.class);
+                messageList = checkChat.messageList;
 
-                    //check if the chat is the current chat
-                    if(checkChat.getChatId().equals(currentChat.getChatId())) {
-                        //refresh and get all the messages
-                        messageList = checkChat.getMessageList();
-                    }
-
-                }
                 MessageList adapter = new MessageList(ChatMessageActivity.this, messageList);
                 listViewChatMessages.setAdapter(adapter);
+                //scroll to latest message
+                listViewChatMessages.setSelection(adapter.getCount()-1);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

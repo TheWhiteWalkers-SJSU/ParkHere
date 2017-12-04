@@ -15,6 +15,8 @@ import java.util.HashMap;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,8 +43,14 @@ public class ViewRequestActivity extends AppCompatActivity {
     private Listing currentListing;
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
+    DatabaseReference chatsDatabase = FirebaseDatabase.getInstance().getReference("chats");
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private static DataSnapshot chatData;
     private static DataSnapshot requestData;
     private boolean requestsConflict;
+    String listingEmail;
+    String requestEmail;
+    String currentChatId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +60,13 @@ public class ViewRequestActivity extends AppCompatActivity {
         currentRequest = (Request) getIntent().getSerializableExtra("request");
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
 
+        listingEmail = currentListing.getOwnerEmail();
+        requestEmail = currentRequest.getSenderEmail();
+        currentChatId = "";
+
         requestsConflict = false;
         updateRequestSnapshot();
+        updateChatSnapshot();
 
         backToInboxButton = findViewById(R.id.backToInbox);
         subjectLine = findViewById(R.id.subjectLine);
@@ -86,6 +99,25 @@ public class ViewRequestActivity extends AppCompatActivity {
         denyRequestButton = findViewById(R.id.denyRequest);
         cancelRequestButton = findViewById(R.id.cancelRequest);
 
+        //for sent requests
+        if(currentRequest.getSenderID().equals(currentUser.getUid())) {
+            //disable accept, deny req
+            acceptRequestButton.setVisibility(View.GONE);
+            denyRequestButton.setVisibility(View.GONE);
+        }
+        //for pending requests
+        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentListing.getListingStatus().equals("available")) {
+            //disable cancel req
+            cancelRequestButton.setVisibility(View.GONE);
+        }
+        //for accepted requests
+        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentListing.getListingStatus().equals("booked")) {
+            //disable accept, deny, cancel req
+            acceptRequestButton.setVisibility(View.GONE);
+            denyRequestButton.setVisibility(View.GONE);
+            cancelRequestButton.setVisibility(View.GONE);
+        }
+
         acceptRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -96,6 +128,19 @@ public class ViewRequestActivity extends AppCompatActivity {
                 else {
                     acceptRequest();
                     Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
+
+                    //if chat does not exist already, create one between owner and renter
+                    if(!chatExists(listingEmail, requestEmail)) {
+                        createChat(listingEmail, requestEmail);
+                    }
+                    //add message for system notification, create chat if needed
+                    String message = "Your request for listing \"" + currentListing.getListingName() + "\" was accepted!";
+                    if(!chatExists("ParkHere", requestEmail)) {
+                        createChatWithMessage("ParkHere", requestEmail, message);
+                    }
+                    else {
+                        addMessage(currentChatId, "ParkHere", message);
+                    }
                 }
             }
         });
@@ -105,6 +150,14 @@ public class ViewRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 denyRequest();
+                //add message for system notification, create chat if needed
+                String message = "Your request for listing \"" + currentListing.getListingName() + "\" was denied.";
+                if(!chatExists("ParkHere", requestEmail)) {
+                    createChatWithMessage("ParkHere", requestEmail, message);
+                }
+                else {
+                    addMessage(currentChatId, "ParkHere", message);
+                }
             }
         });
 
@@ -124,6 +177,67 @@ public class ViewRequestActivity extends AppCompatActivity {
         backToInboxButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
+            }
+        });
+    }
+
+    private boolean chatExists(String check1, String check2) {
+        for(DataSnapshot chatSnapshot : chatData.getChildren()) {
+            //get information from the chat
+            HashMap<String,String> emails = (HashMap<String,String>)chatSnapshot.getValue();
+            String id = emails.get("chatId");
+            String user1 = emails.get("emailUser1");
+            String user2 = emails.get("emailUser2");
+
+            //check if a chat btwn the same two users already exists
+            if((user1.equals(check1) && user2.equals(check2)) || (user2.equals(check1) && user1.equals(check2))) {
+                currentChatId = id;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void createChat(String user1, String user2) {
+        //create a new id
+        String _id = chatsDatabase.push().getKey();
+        //create the chat, save to db with the id generated
+        Chat newChat = new Chat(_id, user1, user2);
+        chatsDatabase.child(_id).setValue(newChat);
+        currentChatId = _id;
+    }
+
+    private void createChatWithMessage(String user1, String user2, String body) {
+        //create a new id
+        String _id = chatsDatabase.push().getKey();
+        //create the chat with additional message, save to db with the id generated
+        Chat newChat = new Chat(_id, user1, user2);
+        Message add = new Message("ParkHere", body);
+        newChat.addMessage(add);
+        chatsDatabase.child(_id).setValue(newChat);
+        currentChatId = _id;
+    }
+
+    private void addMessage(String chatId, String email, String body) {
+        //get the current chat
+        Chat currentChat = chatData.child(chatId).getValue(Chat.class);
+        //create and add the message to the chat
+        Message add = new Message(email, body);
+        currentChat.addMessage(add);
+        //update the chat in the db
+        chatsDatabase.child(chatId).setValue(currentChat);
+    }
+
+    private void updateChatSnapshot() {
+        chatsDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatData = dataSnapshot;
+//                Toast.makeText(ViewRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
     }

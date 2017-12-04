@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class MessageList extends ArrayAdapter<Message> {
@@ -34,9 +35,11 @@ public class MessageList extends ArrayAdapter<Message> {
         TextView textViewBody = messageItem.findViewById(R.id.textViewMessageBody);
 
         Message message = messageList.get(position);
+        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("MM/dd/yyyy @ HH:mm");
+        String dateTime = dateTimeFormat.format(message.getDate());
 
         textViewUser.setText(message.getEmail());
-//        textViewDateTime.setText(message.getListingAddress());
+        textViewDateTime.setText(dateTime);
         textViewBody.setText(message.getBody());
 
         return messageItem;

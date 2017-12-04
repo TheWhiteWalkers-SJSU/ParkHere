@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 public class ChatList extends ArrayAdapter<Chat> {
@@ -34,7 +37,6 @@ public class ChatList extends ArrayAdapter<Chat> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View chatItem = inflater.inflate(R.layout.chat_item, null, true);
-
         TextView textViewUser = chatItem.findViewById(R.id.textViewMessageUser);
         Chat chat = chatList.get(position);
 
@@ -46,7 +48,6 @@ public class ChatList extends ArrayAdapter<Chat> {
             otherEmail = chat.getEmailUser1();
         }
         textViewUser.setText(otherEmail);
-
         return chatItem;
     }
 }

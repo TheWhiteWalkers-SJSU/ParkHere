@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RatingActivity extends AppCompatActivity {
 
@@ -31,6 +32,9 @@ public class RatingActivity extends AppCompatActivity {
     TextView description1;
     TextView description2;
 
+    DatabaseReference chatsDatabase = FirebaseDatabase.getInstance().getReference("chats");
+    private static DataSnapshot chatData;
+    String currentChatId;
     private Listing currentListing;
 
     @Override
@@ -38,7 +42,9 @@ public class RatingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
 
+        currentChatId = "";
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
+        updateChatSnapshot();
 
         buttonBackToListing = findViewById(R.id.buttonBackToListing);
         buttonSubmitRating = findViewById(R.id.buttonSubmitRating);
@@ -61,6 +67,15 @@ public class RatingActivity extends AppCompatActivity {
                             "Please enter a comment and a rating!", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    //add message for system notification, create chat if needed
+                    String ownerEmail = currentListing.getOwnerEmail();
+                    String message = "You received a rating for listing \"" + currentListing.getListingName() + "\".";
+                    if(!chatExists("ParkHere", ownerEmail)) {
+                        createChatWithMessage("ParkHere", ownerEmail, message);
+                    }
+                    else {
+                        addMessage(currentChatId, "ParkHere", message);
+                    }
                     // redirect to listing
                     viewListing();
                 }
@@ -114,5 +129,56 @@ public class RatingActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private boolean chatExists(String check1, String check2) {
+        for(DataSnapshot chatSnapshot : chatData.getChildren()) {
+            //get information from the chat
+            HashMap<String,String> emails = (HashMap<String,String>)chatSnapshot.getValue();
+            String id = emails.get("chatId");
+            String user1 = emails.get("emailUser1");
+            String user2 = emails.get("emailUser2");
+
+            //check if a chat btwn the same two users already exists
+            if((user1.equals(check1) && user2.equals(check2)) || (user2.equals(check1) && user1.equals(check2))) {
+                currentChatId = id;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void createChatWithMessage(String user1, String user2, String body) {
+        //create a new id
+        String _id = chatsDatabase.push().getKey();
+        //create the chat with additional message, save to db with the id generated
+        Chat newChat = new Chat(_id, user1, user2);
+        Message add = new Message("ParkHere", body);
+        newChat.addMessage(add);
+        chatsDatabase.child(_id).setValue(newChat);
+        currentChatId = _id;
+    }
+
+    private void addMessage(String chatId, String email, String body) {
+        //get the current chat
+        Chat currentChat = chatData.child(chatId).getValue(Chat.class);
+        //create and add the message to the chat
+        Message add = new Message(email, body);
+        currentChat.addMessage(add);
+        //update the chat in the db
+        chatsDatabase.child(chatId).setValue(currentChat);
+    }
+
+    private void updateChatSnapshot() {
+        chatsDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chatData = dataSnapshot;
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
