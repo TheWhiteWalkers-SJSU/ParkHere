@@ -68,7 +68,7 @@ public class ChatMessageActivity extends AppCompatActivity {
     }
 
     private void updateChatDatabase() {
-        ChatsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        ChatsDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 updateChatData = dataSnapshot;

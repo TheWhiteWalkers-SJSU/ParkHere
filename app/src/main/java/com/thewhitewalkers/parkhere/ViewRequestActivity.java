@@ -47,6 +47,7 @@ public class ViewRequestActivity extends AppCompatActivity {
     private boolean requestsConflict;
     String listingEmail;
     String requestEmail;
+    String currentChatId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class ViewRequestActivity extends AppCompatActivity {
 
         listingEmail = currentListing.getOwnerEmail();
         requestEmail = currentRequest.getSenderEmail();
+        currentChatId = "";
 
         requestsConflict = false;
         updateRequestSnapshot();
@@ -105,11 +107,17 @@ public class ViewRequestActivity extends AppCompatActivity {
                     acceptRequest();
                     Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
 
-                    //if chat does not exist already, create one
+                    //if chat does not exist already, create one between owner and renter
                     if(!chatExists(listingEmail, requestEmail)) {
-                        String _id = chatsDatabase.push().getKey();
-                        Chat newChat = new Chat(_id, listingEmail, requestEmail);
-                        chatsDatabase.child(_id).setValue(newChat);
+                        createChat(listingEmail, requestEmail);
+                    }
+                    //add message for system notification, create chat if needed
+                    String message = "Your request for listing \"" + currentListing.getListingName() + "\" was accepted!";
+                    if(!chatExists("ParkHere", requestEmail)) {
+                        createChatWithMessage("ParkHere", requestEmail, message);
+                    }
+                    else {
+                        addMessage(currentChatId, "ParkHere", message);
                     }
                 }
             }
@@ -120,6 +128,14 @@ public class ViewRequestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 denyRequest();
+                //add message for system notification, create chat if needed
+                String message = "Your request for listing \"" + currentListing.getListingName() + "\" was denied.";
+                if(!chatExists("ParkHere", requestEmail)) {
+                    createChatWithMessage("ParkHere", requestEmail, message);
+                }
+                else {
+                    addMessage(currentChatId, "ParkHere", message);
+                }
             }
         });
 
@@ -147,23 +163,55 @@ public class ViewRequestActivity extends AppCompatActivity {
         for(DataSnapshot chatSnapshot : chatData.getChildren()) {
             //get information from the chat
             HashMap<String,String> emails = (HashMap<String,String>)chatSnapshot.getValue();
+            String id = emails.get("chatId");
             String user1 = emails.get("emailUser1");
             String user2 = emails.get("emailUser2");
 
             //check if a chat btwn the same two users already exists
             if((user1.equals(check1) && user2.equals(check2)) || (user2.equals(check1) && user1.equals(check2))) {
+                currentChatId = id;
                 return true;
             }
         }
         return false;
     }
 
+    private void createChat(String user1, String user2) {
+        //create a new id
+        String _id = chatsDatabase.push().getKey();
+        //create the chat, save to db with the id generated
+        Chat newChat = new Chat(_id, user1, user2);
+        chatsDatabase.child(_id).setValue(newChat);
+        currentChatId = _id;
+    }
+
+    private void createChatWithMessage(String user1, String user2, String body) {
+        //create a new id
+        String _id = chatsDatabase.push().getKey();
+        //create the chat with additional message, save to db with the id generated
+        Chat newChat = new Chat(_id, user1, user2);
+        Message add = new Message("ParkHere", body);
+        newChat.addMessage(add);
+        chatsDatabase.child(_id).setValue(newChat);
+        currentChatId = _id;
+    }
+
+    private void addMessage(String chatId, String email, String body) {
+        //get the current chat
+        Chat currentChat = chatData.child(chatId).getValue(Chat.class);
+        //create and add the message to the chat
+        Message add = new Message(email, body);
+        currentChat.addMessage(add);
+        //update the chat in the db
+        chatsDatabase.child(chatId).setValue(currentChat);
+    }
+
     private void updateChatSnapshot() {
-        chatsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        chatsDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 chatData = dataSnapshot;
-                //Toast.makeText(ViewRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ViewRequestActivity.this, "Updated data snapshot", Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

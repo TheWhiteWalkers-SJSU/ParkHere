@@ -10,16 +10,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-//import com.android.volley.Request;
-//import com.android.volley.RequestQueue;
-//import com.android.volley.Response;
-//import com.android.volley.VolleyError;
-//import com.android.volley.toolbox.StringRequest;
-//import com.android.volley.toolbox.Volley;
-//
-//import org.json.JSONException;
-//import org.json.JSONObject;
-//
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
