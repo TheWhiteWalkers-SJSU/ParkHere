@@ -2,16 +2,10 @@ package com.thewhitewalkers.parkhere;
 
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Locale;
-
-import android.location.Address;
-import android.os.Parcelable;
 
 public class ParkingSpot implements Serializable {
 
-    String listingId;
+    String parkingSpotId;
     String name;
     String address;
     String description;
@@ -26,23 +20,23 @@ public class ParkingSpot implements Serializable {
 
     }
 
-    public ParkingSpot(String listingId, String name, String address, String description, String ownerId, String ownerEmail) {
-        this.listingId = listingId;
+    public ParkingSpot(String parkingSpotId, String name, String address, String description, String ownerId, String ownerEmail) {
+        this.parkingSpotId = parkingSpotId;
         this.name = name;
         this.address = address;
         this.description = description;
         this.ownerId = ownerId;
         this.ownerEmail = ownerEmail;
-        this.listingRating = listingRating;
-        this.priorBookings = priorBookings;
+        this.listingRating = "";
+        this.priorBookings = 0;
     }
 
-    public String getListingId() {
-        return listingId;
+    public String getParkingSpotId() {
+        return parkingSpotId;
     }
 
-    public void setListingId(String listingId) {
-        this.listingId = listingId;
+    public void setparkingSpotId(String parkingSpotId) {
+        this.parkingSpotId = parkingSpotId;
     }
 
     public String getName() {

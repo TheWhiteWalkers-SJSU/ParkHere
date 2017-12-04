@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.thewhitewalkers.parkhere.CreateParkingSpotActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="106dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/buttonHomepage"
+                        style="@style/ButtonTheme"
+                        android:textSize="15sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Home" />
+                </TableRow>
+
+                <EditText
+                    android:id="@+id/editTextParkingSpotName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Spot Name"
+                    android:inputType="text"
+
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_above="@id/editTextName"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextParkingSpotAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Spot Address"
+                    android:inputType="textPostalAddress"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/editTextAddress"
+                    />
+
+                <EditText
+                    android:id="@+id/editTextParkingSpotDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Spot Description"
+                    android:inputType="textMultiLine"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/editTextDescription"
+                    />
+
+                <Button
+                    android:id="@+id/buttonUpdateParkingSpot"
+                    style="@style/ButtonThemeGreen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Update Parking Spot"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/buttonUpdateParkingSpot"
+                    />
+
+                <Button
+                    android:id="@+id/buttonBackToParkingSpot"
+                    style="@style/ButtonThemeRed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Back"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/buttonBackToParkingSpot"
+                    />
+
+
+
+            </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
+
+
+</android.support.constraint.ConstraintLayout>

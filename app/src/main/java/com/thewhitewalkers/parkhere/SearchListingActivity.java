@@ -208,9 +208,9 @@ public class SearchListingActivity extends AppCompatActivity {
 
                     ParkingSpot spot = parkingSnapshot.getValue(ParkingSpot.class);
                     if(!spot.getOwnerEmail().equals("waddup@gmail.com")) {
-                        System.out.println("hello?");
                         parkingList.add(spot);
                     }
+
                 }
             }
 

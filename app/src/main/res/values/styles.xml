@@ -8,29 +8,37 @@
         <item name="colorAccent">@color/colorAccent</item>
 
     </style>
-    <style name="ButtonTheme" >
+
+    <style name="ButtonTheme">
         <item name="android:textColor">@color/colorButtonText</item>
         <item name="android:textSize">19dip</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/defaultbuttonshadow</item>
     </style>
+
     <style name="ButtonThemeOrange">
         <item name="android:textColor">@color/colorButtonText</item>
         <item name="android:textSize">19dip</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/orangebuttonshadow</item>
     </style>
+
     <style name="ButtonThemeGreen">
         <item name="android:textColor">@color/colorButtonText</item>
         <item name="android:textSize">19dip</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/greenbuttonshadow</item>
     </style>
+
     <style name="ButtonThemeRed">
         <item name="android:textColor">@color/colorButtonText</item>
         <item name="android:textSize">19dip</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/redbuttonshadow</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

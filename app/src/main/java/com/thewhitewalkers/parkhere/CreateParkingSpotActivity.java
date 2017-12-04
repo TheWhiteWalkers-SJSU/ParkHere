@@ -108,7 +108,6 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
                 ParkingSpot newParkingSpot = new ParkingSpot(_id, parkingSpotName, parkingSpotAddress, parkingSpotDescription, user.getUid(), user.getEmail());
 
                 newParkingSpot.setLatLng(foundAddress.getLatitude(),foundAddress.getLongitude());
-                newParkingSpot.setPriorBookings(0);
 
                 parkingSpotDatabase.child(_id).setValue(newParkingSpot);
 
