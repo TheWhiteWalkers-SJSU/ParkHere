@@ -90,9 +90,17 @@ public class SearchListingActivity extends AppCompatActivity {
     private Address querriedAddress;
     private boolean hasQuerried;
 
-    //temp stuff
-    final DatabaseReference ParkingDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+    //temp
     ArrayList<ParkingSpot> parkingList;
+
+    //NFR
+    final DatabaseReference HistoryDatabase = FirebaseDatabase.getInstance().getReference("history");
+    private boolean fromHistory;
+    private History recentHistory;
+    private RecentAddress historyAddress;
+    private String foundAddress;
+    private ListView listViewHistoryDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,6 +181,9 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonSearchAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                fromHistory = false;
+                hasQuerried = false;
+                textViewAddress.setText("");
                 showAddressDialog();
             }
         });
@@ -180,8 +191,17 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(hasQuerried){
+                if(fromHistory){
                     Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    intent.putExtra("isHistory", true);
+                    intent.putExtra("lat", historyAddress.getLat());
+                    intent.putExtra("lng", historyAddress.getLng());
+                    intent.putExtra("RESULTS", parkingList);
+                    startActivity(intent);
+                }
+                else if(hasQuerried){
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    intent.putExtra("isHistory", false);
                     if(querriedAddress != null){
                         intent.putExtra("ADDRESS", querriedAddress);
                         intent.putExtra("RESULTS", parkingList);
@@ -196,7 +216,7 @@ public class SearchListingActivity extends AppCompatActivity {
 
 
         parkingList = new ArrayList<ParkingSpot>();
-
+        foundAddress = "";
         /*
         ParkingDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -345,6 +365,25 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonSearchAddressDialog =  view.findViewById(R.id.buttonSearchAddressDialog);
         textViewResultsAddressDialog = view.findViewById(R.id.textViewResultsAddressDialog);
 
+        //start
+        listViewHistoryDialog = view.findViewById(R.id.listViewHistoryDialog);
+        final FirebaseUser user = firebaseAuth.getCurrentUser(); //get user
+        HistoryDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                recentHistory = dataSnapshot.child(user.getUid()).getValue(History.class);
+                HistoryList adapter = new HistoryList(SearchListingActivity.this, recentHistory.getRecentHistory());
+                listViewHistoryDialog.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //end
+
         buttonSearchAddressDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -372,6 +411,14 @@ public class SearchListingActivity extends AppCompatActivity {
                 addressDialog.dismiss();
             }
         });
+        listViewHistoryDialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView parent, View v, final int position, long id) {
+                historyAddress = (RecentAddress) parent.getItemAtPosition(position);
+                updateWithHistoryAddress();
+                addressDialog.dismiss();
+            }
+        });
     }
 
     public void createAddressListViewDialog(ArrayList<Address> addrs){
@@ -392,8 +439,37 @@ public class SearchListingActivity extends AppCompatActivity {
         for(int i = 0; i <= querriedAddress.getMaxAddressLineIndex(); i++){
             addressFrags.add(querriedAddress.getAddressLine(i));
         }
-        textViewAddress.setText(TextUtils.join(System.getProperty("line.separator"), addressFrags));
 
+        foundAddress = TextUtils.join(System.getProperty("line.separator"), addressFrags);
+        if(foundAddress.length() < 50){
+            textViewAddress.setText(foundAddress);
+        }
+        else{
+            textViewAddress.setText(foundAddress.substring(0, 50));
+        }
+
+        //start
+        final FirebaseUser user = firebaseAuth.getCurrentUser(); //get user
+        HistoryDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                History h = dataSnapshot.child(user.getUid()).getValue(History.class);
+
+                h.addAddress(foundAddress, querriedAddress.getLatitude(), querriedAddress.getLongitude());
+                HistoryDatabase.child(user.getUid()).setValue(h);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        //end
+    }
+    public void updateWithHistoryAddress(){
+        fromHistory = true;
+        foundAddress = historyAddress.getAddress();
+        textViewAddress.setText(foundAddress.substring(0, 50));
     }
 
     public String checkBookingDate(String dateStarting, String dateEnding){
