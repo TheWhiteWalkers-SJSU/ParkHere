@@ -141,11 +141,8 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
                 searchKeyword = editTextSearch.getText().toString().trim();
                 updateSearch();
-                */
-                check();
                 Toast.makeText(SearchListingActivity.this, "Searching", Toast.LENGTH_SHORT).show();
             }
         });
@@ -190,7 +187,6 @@ public class SearchListingActivity extends AppCompatActivity {
                         intent.putExtra("RESULTS", parkingList);
                         startActivity(intent);
                     }
-
                 }
                 else{
                     Toast.makeText(SearchListingActivity.this, "Search Address Before View On Map", Toast.LENGTH_SHORT).show();
@@ -198,9 +194,10 @@ public class SearchListingActivity extends AppCompatActivity {
             }
         });
 
-        //temp....
+
         parkingList = new ArrayList<ParkingSpot>();
 
+        /*
         ParkingDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -219,17 +216,18 @@ public class SearchListingActivity extends AppCompatActivity {
 
             }
         });
-
+        */
     }
+    /*
     private void check(){
         for(ParkingSpot p : parkingList){
             double distance = haversine(querriedAddress.getLatitude(), querriedAddress.getLongitude(), p.getLat(), p.getLng());
-            System.out.println("distance: "+ distance);
             if(distance < 15){ //less than 15km
                 //searchList.add();
             }
         }
     }
+    */
     @Override
     protected void onStart() {
         super.onStart();

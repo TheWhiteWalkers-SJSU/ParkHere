@@ -84,8 +84,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         for(int i = 0; i < searchResults.size(); i++){
             ParkingSpot p = searchResults.get(i);
-            if(!p.getOwnerEmail().equals("waddup@gmail.com")){
-
 
             p_lat = p.getLat();
             p_lng = p.getLng();
@@ -117,7 +115,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             polygon.setTag(tag);
             polygon.setClickable(true);
             squares.add(polygon);
-            }
+
         }
         map.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
             @Override
