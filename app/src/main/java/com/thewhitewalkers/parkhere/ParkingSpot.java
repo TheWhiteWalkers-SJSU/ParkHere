@@ -13,7 +13,6 @@ public class ParkingSpot implements Serializable {
     String description;
     String ownerId;
     String ownerEmail;
-    String listingRating;
     int parkingSpotRating;
     Integer priorBookings;
 
@@ -77,9 +76,9 @@ public class ParkingSpot implements Serializable {
     public int getParkingSpotRating() { return parkingSpotRating; }
 
     // need a method to calculate rating and set the new value
-    public void setParkingSpotRating(String listingRating) {
-        this.listingRating = listingRating;
-    }
+    //    public void setParkingSpotRating(String listingRating) {
+    //        this.listingRating = listingRating;
+    //    }
 
     public Integer getPriorBookings() {
         return priorBookings;

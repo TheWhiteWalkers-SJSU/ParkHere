@@ -22,6 +22,7 @@ public class Listing implements Serializable {
     String listingStatus;
     String renterId;
     String listingRating;
+    String parkingSpotId;
 
     public Listing() {
 
@@ -160,7 +161,6 @@ public class Listing implements Serializable {
         return "N/A";
     }
 
-
     //comparator to sort the searched listings by price
     public static class PriceListingComparator implements Comparator<Listing> {
         public int compare(Listing list1, Listing list2) {
@@ -173,6 +173,14 @@ public class Listing implements Serializable {
         public int compare(Listing list1, Listing list2) {
             return list1.getListingRating().compareTo(list2.getListingRating());
         }
+    }
+
+    public String getParkingSpotId() {
+        return parkingSpotId;
+    }
+
+    public void setParkingSpotId(String parkingSpotId) {
+        this.parkingSpotId = parkingSpotId;
     }
 
 }

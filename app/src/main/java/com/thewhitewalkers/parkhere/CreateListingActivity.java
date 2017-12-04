@@ -1,29 +1,40 @@
 package com.thewhitewalkers.parkhere;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.content.DialogInterface;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 public class CreateListingActivity extends AppCompatActivity {
 
-    FirebaseAuth firebaseAuth;
+    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     DatabaseReference listingDatabase;
-
+    final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+    final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
+    FirebaseUser user = firebaseAuth.getCurrentUser(); //get user
 
     private EditText editTextListingName;
     private EditText editTextListingAddress;
@@ -37,6 +48,9 @@ public class CreateListingActivity extends AppCompatActivity {
     private ToggleButton toggleEndingAM;
     private Button buttonCreateListing;
     private Button buttonHomepage;
+    private Button buttonSelectParkingSpot;
+    private List<ParkingSpot> parkingSpotList = new ArrayList<>();
+    ParkingSpotList parkingSpotAdapter = null;
     private boolean isStartingAM;
     private boolean isEndingAM;
 
@@ -47,8 +61,6 @@ public class CreateListingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_listing);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        listingDatabase = FirebaseDatabase.getInstance().getReference("listings");
         timeDetails = new TimeDetails();
 
         editTextListingName = findViewById(R.id.editTextListingName);
@@ -77,6 +89,12 @@ public class CreateListingActivity extends AppCompatActivity {
             }
         });
 
+        buttonSelectParkingSpot = findViewById(R.id.buttonSelectParkingSpot);
+        buttonSelectParkingSpot.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                selectListing();
+            }
+        });
     }
 
     private void createListing(){
@@ -92,8 +110,6 @@ public class CreateListingActivity extends AppCompatActivity {
         setToggleAM(toggleStartingAM.getText().equals("AM"), toggleEndingAM.getText().equals("AM"));
         String checkDateResult;
         String checkTimeResult;
-
-        FirebaseUser user = firebaseAuth.getCurrentUser(); //get user
 
         if(!TextUtils.isEmpty(listingName) && !TextUtils.isEmpty(listingAddress) && !TextUtils.isEmpty(listingPrice) && !TextUtils.isEmpty(listingDateStarting) && !TextUtils.isEmpty(listingDateEnding) && !TextUtils.isEmpty(listingTimeStarting) && !TextUtils.isEmpty(listingTimeEnding)) {
             checkDateResult = checkBookingDate(listingDateStarting, listingDateEnding);
@@ -126,6 +142,35 @@ public class CreateListingActivity extends AppCompatActivity {
         }
     }
 
+    public void selectListing() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateListingActivity.this);
+        builder.setTitle("Pick a Parking Spot")
+                .setAdapter(parkingSpotAdapter, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strName = parkingSpotAdapter.getItem(which).getAddress();
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(CreateListingActivity.this);
+                        builderInner.setMessage(strName);
+                        builderInner.setTitle("Your Selected Item is");
+                        builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                        builderInner.show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
     public String checkBookingDate(String dateStarting, String dateEnding){
         if(!timeDetails.checkDateFormat(dateStarting) || !timeDetails.checkDateFormat(dateEnding) ){
             return "dates must be in MM/DD/YYYY format!";
@@ -153,5 +198,32 @@ public class CreateListingActivity extends AppCompatActivity {
     public void setToggleAM(boolean start, boolean end) {
         isStartingAM = start;
         isEndingAM = end;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        ParkingSpotDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                parkingSpotList.clear();
+                for (DataSnapshot parkingSpotSnapshot : dataSnapshot.getChildren()) {
+                    ParkingSpot parkingSpot = parkingSpotSnapshot.getValue(ParkingSpot.class);
+                    // TODO: need to change to match only email, accepting uuid because of old entries in DB
+                    if (parkingSpotList != null) {
+                        if (parkingSpot.getOwnerId().equals(user.getEmail()) || parkingSpot.getOwnerId().equals(user.getUid())) {
+                            parkingSpotList.add(parkingSpot);
+                        }
+                    }
+                }
+                parkingSpotAdapter = new ParkingSpotList(CreateListingActivity.this, parkingSpotList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

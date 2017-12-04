@@ -197,6 +197,18 @@
                     </TableRow>
                 </TableLayout>
 
+
+                <Button
+                    android:id="@+id/buttonSelectParkingSpot"
+                    style="@style/ButtonThemeOrange"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Select Parking Spot"
+
+                    android:layout_margin="15dp"
+                    android:layout_above="@id/buttonSelectParkingSpot"
+                    />
+
                 <Button
                     android:id="@+id/buttonCreateListing"
                     style="@style/ButtonThemeOrange"
