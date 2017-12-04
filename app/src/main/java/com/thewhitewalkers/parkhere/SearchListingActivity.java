@@ -4,14 +4,20 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.location.Address;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -28,6 +34,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,8 +47,11 @@ public class SearchListingActivity extends AppCompatActivity {
     private Button buttonSearch;
     private Button buttonRange;
     private Button buttonHomepage;
+    private Button buttonSearchAddress;
+    private Button buttonMap;
     private ListView listSearchListings;
     private List<Listing> searchList = new ArrayList<>();
+    private TextView textViewAddress;
     private TextView searchRangeSet;
     private String textRangeSetFalse;
     private String textRangeSetTrue;
@@ -69,15 +80,34 @@ public class SearchListingActivity extends AppCompatActivity {
     private String startTime;
     private String endTime;
 
+    //address dialog
+    private AddressResultReceiver receiver;
+    private EditText editTextSearchAddressDialog;
+    private Button buttonSearchAddressDialog;
+    private ListView listViewAddressDialog;
+    private Dialog addressDialog;
+    private TextView textViewResultsAddressDialog;
+    private Address querriedAddress;
+    private boolean hasQuerried;
+
+    //temp stuff
+    final DatabaseReference ParkingDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+    ArrayList<ParkingSpot> parkingList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_listing);
 
+        receiver = new AddressResultReceiver(new Handler());
+        hasQuerried = false;
+
         editTextSearch = findViewById(R.id.editTextSearch);
         buttonSearch = findViewById(R.id.buttonSearch);
         buttonRange = findViewById(R.id.buttonSearchRange);
         buttonHomepage = findViewById(R.id.buttonHomepage);
+        buttonSearchAddress = findViewById(R.id.buttonSearchAddress);
+        textViewAddress = findViewById(R.id.textViewAddress);
+        buttonMap = findViewById(R.id.buttonMap);
         listSearchListings = findViewById(R.id.listSearchListings);
         searchRangeSet = findViewById(R.id.searchRangeSet);
         spinnerSort = findViewById(R.id.spinnerSort);
@@ -111,8 +141,11 @@ public class SearchListingActivity extends AppCompatActivity {
         buttonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
                 searchKeyword = editTextSearch.getText().toString().trim();
                 updateSearch();
+                */
+                check();
                 Toast.makeText(SearchListingActivity.this, "Searching", Toast.LENGTH_SHORT).show();
             }
         });
@@ -139,8 +172,64 @@ public class SearchListingActivity extends AppCompatActivity {
 
             }
         });
-    }
 
+        buttonSearchAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddressDialog();
+            }
+        });
+
+        buttonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(hasQuerried){
+                    Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                    if(querriedAddress != null){
+                        intent.putExtra("ADDRESS", querriedAddress);
+                        intent.putExtra("RESULTS", parkingList);
+                        startActivity(intent);
+                    }
+
+                }
+                else{
+                    Toast.makeText(SearchListingActivity.this, "Search Address Before View On Map", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //temp....
+        parkingList = new ArrayList<ParkingSpot>();
+
+        ParkingDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot parkingSnapshot : dataSnapshot.getChildren()) {
+
+                    ParkingSpot spot = parkingSnapshot.getValue(ParkingSpot.class);
+                    if(!spot.getOwnerEmail().equals("waddup@gmail.com")) {
+                        parkingList.add(spot);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+    private void check(){
+        for(ParkingSpot p : parkingList){
+            double distance = haversine(querriedAddress.getLatitude(), querriedAddress.getLongitude(), p.getLat(), p.getLng());
+            System.out.println("distance: "+ distance);
+            if(distance < 15){ //less than 15km
+                //searchList.add();
+            }
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -191,8 +280,8 @@ public class SearchListingActivity extends AppCompatActivity {
         builder.setView(view)
                 .setTitle("Set date/time range")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
                         Dialog d = (Dialog) dialog;
 
                         //get views
@@ -248,6 +337,66 @@ public class SearchListingActivity extends AppCompatActivity {
                 .create().show();
 
     }
+    public void showAddressDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_verify_address, null);
+
+        listViewAddressDialog = view.findViewById(R.id.listViewAddressDialog);
+        editTextSearchAddressDialog = view.findViewById(R.id.editTextSearchAddressDialog);
+        buttonSearchAddressDialog =  view.findViewById(R.id.buttonSearchAddressDialog);
+        textViewResultsAddressDialog = view.findViewById(R.id.textViewResultsAddressDialog);
+
+        buttonSearchAddressDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String addressQuerry = editTextSearchAddressDialog.getText().toString();
+                if(!addressQuerry.equals("")){
+                    //fetch
+                    startIntentService(addressQuerry);
+                }
+            }
+        });
+
+        addressDialog = builder.setView(view)
+                .setTitle("Search Destination Address")
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                }).create();
+        addressDialog.show();
+        listViewAddressDialog.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView parent, View v, final int position, long id) {
+                querriedAddress = (Address) parent.getItemAtPosition(position);
+                updateWithQuerriedAddress();
+                addressDialog.dismiss();
+            }
+        });
+    }
+
+    public void createAddressListViewDialog(ArrayList<Address> addrs){
+        if(addrs == null || addrs.isEmpty()){
+            textViewResultsAddressDialog.setText("No Results. Try to Be More Exact");
+        }
+        else{
+            textViewResultsAddressDialog.setText("Results");
+            AddressList adapter = new AddressList(SearchListingActivity.this, addrs);
+            listViewAddressDialog.setAdapter(adapter);
+        }
+
+    }
+
+    public void updateWithQuerriedAddress(){
+        hasQuerried = true;
+        ArrayList<String> addressFrags = new ArrayList<>();
+        for(int i = 0; i <= querriedAddress.getMaxAddressLineIndex(); i++){
+            addressFrags.add(querriedAddress.getAddressLine(i));
+        }
+        textViewAddress.setText(TextUtils.join(System.getProperty("line.separator"), addressFrags));
+
+    }
 
     public String checkBookingDate(String dateStarting, String dateEnding){
         if(!searchRange.checkDateFormat(dateStarting) || !searchRange.checkDateFormat(dateEnding) ){
@@ -296,7 +445,6 @@ public class SearchListingActivity extends AppCompatActivity {
         else if(sortBy.equals(sortValues[2]) || sortBy.equals(sortValues[3])) { //sort by lowest/highest price
             Collections.sort(result, new Listing.PriceListingComparator());
 
-            //TODO : fix sorting by price
             if(sortBy.equals(sortValues[3])) //sort by lowest price
                 Collections.reverse(result);
         }
@@ -307,5 +455,46 @@ public class SearchListingActivity extends AppCompatActivity {
             Toast.makeText(SearchListingActivity.this, "Cannot sort by rating currently", Toast.LENGTH_SHORT).show();
         }
         return result;
+    }
+
+    private void startIntentService(String addr){
+        Intent intent = new Intent(getApplicationContext(), GeocodeIntentService.class);
+        intent.putExtra("RECEIVER", receiver);
+        intent.putExtra("ADDRESS", addr);
+        startService(intent);
+    }
+
+    private class AddressResultReceiver extends ResultReceiver {
+        public AddressResultReceiver(Handler handler){
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, final Bundle resultData){
+
+            final ArrayList<Address> addrs = resultData.getParcelableArrayList("ADDRESSES");
+            runOnUiThread(new Runnable(){
+                @Override
+                public void run() {
+                    createAddressListViewDialog(addrs);
+                }
+            });
+
+        }
+    }
+    //source: haversine formula http://www.movable-type.co.uk/scripts/latlong.html
+    public double haversine(double lat1, double lng1, double lat2, double lng2){
+        double r = 6341; //6371 km
+        double phi1 = Math.toRadians(lat1);
+        double phi2 = Math.toRadians(lat2);
+        double latChange = Math.toRadians(lat2-lat1);
+        double lngChange = Math.toRadians(lng2 - lng1);
+
+        double a = Math.sin(latChange/2) * Math.sin(latChange/2);
+        a = a + (Math.cos(phi1) * Math.cos(phi2) * Math.sin(lngChange/2) * Math.sin(lngChange/2));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = r * c;
+
+        return d;
     }
 }

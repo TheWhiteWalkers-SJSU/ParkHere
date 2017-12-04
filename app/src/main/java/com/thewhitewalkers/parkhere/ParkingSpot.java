@@ -2,8 +2,6 @@ package com.thewhitewalkers.parkhere;
 
 
 import java.io.Serializable;
-import java.util.Comparator;
-import android.os.Parcelable;
 
 public class ParkingSpot implements Serializable {
 
@@ -14,8 +12,9 @@ public class ParkingSpot implements Serializable {
     String ownerId;
     String ownerEmail;
     String listingRating;
-    int parkingSpotRating;
-    Integer priorBookings;
+    int priorBookings;
+    double lat;
+    double lng;
 
     public ParkingSpot() {
 
@@ -28,10 +27,16 @@ public class ParkingSpot implements Serializable {
         this.description = description;
         this.ownerId = ownerId;
         this.ownerEmail = ownerEmail;
+        this.listingRating = "";
+        this.priorBookings = 0;
     }
 
     public String getParkingSpotId() {
         return parkingSpotId;
+    }
+
+    public void setparkingSpotId(String parkingSpotId) {
+        this.parkingSpotId = parkingSpotId;
     }
 
     public String getName() {
@@ -74,19 +79,31 @@ public class ParkingSpot implements Serializable {
         this.ownerEmail = ownerEmail;
     }
 
-    public int getParkingSpotRating() { return parkingSpotRating; }
+    public String getListingRating() {
+        return listingRating;
+    }
 
-    // need a method to calculate rating and set the new value
-    public void setParkingSpotRating(String listingRating) {
+    public void setListingRating(String listingRating) {
         this.listingRating = listingRating;
     }
 
-    public Integer getPriorBookings() {
+    public int getPriorBookings() {
         return priorBookings;
     }
 
-    public void setPriorBookings(Integer priorBookings) {
+    public void setPriorBookings(int priorBookings) {
         this.priorBookings = priorBookings;
     }
 
+    public void setLatLng(double lat, double lng){
+        this.lat = lat;
+        this.lng = lng;
+    }
+
+    public double getLat(){
+        return lat;
+    }
+    public double getLng(){
+        return lng;
+    }
 }

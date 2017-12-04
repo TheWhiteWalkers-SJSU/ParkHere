@@ -27,6 +27,7 @@ import java.util.HashMap;
 public class CreateRequestActivity extends AppCompatActivity {
 
     DatabaseReference requestDatabase = FirebaseDatabase.getInstance().getReference("requests");
+    DatabaseReference chatsDatabase = FirebaseDatabase.getInstance().getReference("chats");
 
     FirebaseAuth firebaseAuth;
 
@@ -50,6 +51,9 @@ public class CreateRequestActivity extends AppCompatActivity {
     String listingOwner;
     String listingRate;
 
+    String listingEmail;
+    String requestEmail;
+
     final String PRICING = "Total Price: ";
 
     private static DataSnapshot requestData;
@@ -66,6 +70,8 @@ public class CreateRequestActivity extends AppCompatActivity {
         listingId = thisListing.getListingId();
         listingOwner = thisListing.getOwnerId();
         listingRate = thisListing.getListingPrice();
+        listingEmail = thisListing.getOwnerEmail();
+        requestEmail = "";
 
         timeDetails = new TimeDetails();
 
@@ -146,6 +152,17 @@ public class CreateRequestActivity extends AppCompatActivity {
                     } else {
                         createRequest();
                         Toast.makeText(CreateRequestActivity.this, "Sent Request", Toast.LENGTH_SHORT).show();
+
+                        //TODO : TEMP--------------------------------------------
+
+                        //TODO : make sure chat with this email combo doesnt already exist in db
+                        String _id = chatsDatabase.push().getKey();
+
+                        Chat newChat = new Chat(_id, listingEmail, requestEmail);
+                        chatsDatabase.child(_id).setValue(newChat);
+
+
+                        //TODO : TEMP--------------------------------------------
                     }
                 }
                 //when validInputs is false, it prints the correct error message in its method
@@ -226,6 +243,8 @@ public class CreateRequestActivity extends AppCompatActivity {
         String _id = requestDatabase.push().getKey();
         Request newRequest = new Request(_id, listingOwner, user.getUid(), user.getEmail(), listingId, requestSubject, requestMessage, timeDetails, 0);
         requestDatabase.child(_id).setValue(newRequest);
+
+        requestEmail = user.getEmail();
 
         startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
     }

@@ -29,6 +29,8 @@ public class ViewRequestActivity extends AppCompatActivity {
     private TextView senderLine;
     private TextView messageText;
     private TextView listingAddress;
+    private TextView listingDate;
+    private TextView listingTime;
     private TextView listingPrice;
     private Button viewListingButton;
     private Button acceptRequestButton;
@@ -58,6 +60,8 @@ public class ViewRequestActivity extends AppCompatActivity {
         senderLine = findViewById(R.id.senderLine);
         messageText = findViewById(R.id.message);
         listingAddress = findViewById(R.id.listingAddress);
+        listingDate = findViewById(R.id.listingDate);
+        listingTime = findViewById(R.id.listingTime);
         listingPrice = findViewById(R.id.listingPrice);
         viewListingButton = findViewById(R.id.viewListing);
 
@@ -65,11 +69,22 @@ public class ViewRequestActivity extends AppCompatActivity {
         senderLine.setText("From: " + currentRequest.getSenderEmail());
         messageText.setText(currentRequest.getMessage());
         listingAddress.setText(currentListing.getListingAddress());
-        listingPrice.setText(currentListing.getListingPrice());
+        listingDate.setText("Starting on " + currentRequest.getTimeDetails().getStartingDate() + " to " + currentRequest.getTimeDetails().getEndingDate());
+        String AM1 = "AM";
+        String AM2 = "AM";
+        if(!currentRequest.getTimeDetails().isStartingIsAM()){
+            AM1 = "PM";
+        }
+        if(!currentRequest.getTimeDetails().isEndingIsAM()){
+            AM2 = "PM";
+        }
+        listingTime.setText("From " + currentRequest.getTimeDetails().getStartingTime() + AM1 + " to " + currentRequest.getTimeDetails().getEndingTime() + AM2);
+        listingPrice.setText("Price: $" + currentListing.getListingPrice());
 
 
         acceptRequestButton = findViewById(R.id.acceptRequest);
         denyRequestButton = findViewById(R.id.denyRequest);
+        cancelRequestButton = findViewById(R.id.cancelRequest);
 
         acceptRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,26 +108,12 @@ public class ViewRequestActivity extends AppCompatActivity {
             }
         });
 
-
-        acceptRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                acceptRequest();
-            }
-        });
-        denyRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                denyRequest();
-            }
-        });
         cancelRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cancelRequest();
             }
         });
-
 
         viewListingButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -122,7 +123,7 @@ public class ViewRequestActivity extends AppCompatActivity {
 
         backToInboxButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
             }
         });
     }

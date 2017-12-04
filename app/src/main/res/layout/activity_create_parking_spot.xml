@@ -51,16 +51,30 @@
         android:layout_above="@id/editTextName"
         />
 
-    <EditText
-        android:id="@+id/editTextAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Spot Address"
-        android:inputType="textPostalAddress"
+        <Button
+            android:id="@+id/buttonFindParkingAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/colorAccent"
+            android:text="Find Address of Your Parking Space"
+            android:textAlignment="center"
+            android:textColor="@color/colorButtonText"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        android:layout_margin="15dp"
-        android:layout_above="@id/editTextAddress"
-        />
+        <!--<EditText
+            android:id="@+id/editTextAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Spot Address"
+            android:inputType="textPostalAddress"
+
+            android:layout_margin="15dp"
+            android:layout_above="@id/editTextAddress"
+            />-->
 
     <EditText
         android:id="@+id/editTextDescription"

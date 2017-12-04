@@ -327,4 +327,11 @@ public class TimeDetails  implements Serializable {
     public String getEndingTime(){
         return endingTime;
     }
+
+    public boolean isStartingIsAM(){
+        return startingIsAM;
+    }
+    public boolean isEndingIsAM(){
+        return endingIsAM;
+    }
 }
