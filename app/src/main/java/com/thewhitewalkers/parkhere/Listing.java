@@ -22,6 +22,7 @@ public class Listing implements Serializable {
     String listingStatus;
     String renterId;
     String listingRating;
+    ParkingSpot parkingSpot;
 
     public Listing() {
 
@@ -160,6 +161,14 @@ public class Listing implements Serializable {
         return "N/A";
     }
 
+
+    public ParkingSpot getParkingSpot() {
+        return parkingSpot;
+    }
+
+    public void setParkingSpot(ParkingSpot parkingSpot) {
+        this.parkingSpot = parkingSpot;
+    }
 
     //comparator to sort the searched listings by price
     public static class PriceListingComparator implements Comparator<Listing> {
