@@ -15,6 +15,8 @@ import java.util.HashMap;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +44,7 @@ public class ViewRequestActivity extends AppCompatActivity {
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
     DatabaseReference chatsDatabase = FirebaseDatabase.getInstance().getReference("chats");
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     private static DataSnapshot chatData;
     private static DataSnapshot requestData;
     private boolean requestsConflict;
@@ -95,6 +98,25 @@ public class ViewRequestActivity extends AppCompatActivity {
         acceptRequestButton = findViewById(R.id.acceptRequest);
         denyRequestButton = findViewById(R.id.denyRequest);
         cancelRequestButton = findViewById(R.id.cancelRequest);
+
+        //for sent requests
+        if(currentRequest.getSenderID().equals(currentUser.getUid())) {
+            //disable accept, deny req
+            acceptRequestButton.setVisibility(View.GONE);
+            denyRequestButton.setVisibility(View.GONE);
+        }
+        //for pending requests
+        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentListing.getListingStatus().equals("available")) {
+            //disable cancel req
+            cancelRequestButton.setVisibility(View.GONE);
+        }
+        //for accepted requests
+        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentListing.getListingStatus().equals("booked")) {
+            //disable accept, deny, cancel req
+            acceptRequestButton.setVisibility(View.GONE);
+            denyRequestButton.setVisibility(View.GONE);
+            cancelRequestButton.setVisibility(View.GONE);
+        }
 
         acceptRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
