@@ -42,9 +42,11 @@
         <activity android:name=".CreateParkingSpotActivity" />
         <activity android:name=".MapActivity" />
         <activity android:name=".ViewParkingSpotActivity" />
-        <activity android:name=".UpdateParkingSpotActivity"></activity>
+        <activity android:name=".UpdateParkingSpotActivity" />
 
         <service android:name=".GeocodeIntentService" />
+
+        <activity android:name=".ViewMyParkingSpotsActivity"></activity>
     </application>
 
 </manifest>

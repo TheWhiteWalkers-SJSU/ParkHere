@@ -68,13 +68,13 @@ public class UpdateParkingSpotActivity extends AppCompatActivity {
 
         // if the value is not empty add it to the update hashmap
         if(!newParkingSpotName.isEmpty()) {
-            ParkingSpotUpdate.put("ParkingSpotName", newParkingSpotName);
+            ParkingSpotUpdate.put("name", newParkingSpotName);
         }
         if(!newParkingSpotAddress.isEmpty()) {
-            ParkingSpotUpdate.put("ParkingSpotAddress", newParkingSpotAddress);
+            ParkingSpotUpdate.put("address", newParkingSpotAddress);
         }
         if(!newParkingSpotDescription.isEmpty()) {
-            ParkingSpotUpdate.put("ParkingSpotDescription", newParkingSpotDescription);
+            ParkingSpotUpdate.put("description", newParkingSpotDescription);
         }
 
         ParkingSpotDatabase.child(currentParkingSpot.getParkingSpotId()).updateChildren(ParkingSpotUpdate)
@@ -82,7 +82,7 @@ public class UpdateParkingSpotActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         Toast.makeText(UpdateParkingSpotActivity.this, "Updated Parking Spot...", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+                        startActivity(new Intent(getApplicationContext(), ViewMyParkingSpotsActivity.class));
                     }
                 });
     }

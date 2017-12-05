@@ -26,6 +26,7 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
     private TextView ParkingSpotOwnerText;
     private Button updateButton;
     private Button deleteButton;
+    private Button homeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +46,14 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
         String ParkingSpotAddress = thisParkingSpot.getAddress();
         String ParkingSpotDescription = thisParkingSpot.getDescription();
 
-        ParkingSpotNameText = findViewById(R.id.editTextName);
-        ParkingSpotOwnerText = findViewById(R.id.editTextOwner);
-        ParkingSpotAddressText = findViewById(R.id.editTextAddress);
-        ParkingSpotDescriptionText = findViewById(R.id.editTextDescription);
+        ParkingSpotNameText = findViewById(R.id.textViewName);
+        ParkingSpotOwnerText = findViewById(R.id.textViewOwner);
+        ParkingSpotAddressText = findViewById(R.id.textViewAddress);
+        ParkingSpotDescriptionText = findViewById(R.id.textViewDescription);
 
         deleteButton = findViewById(R.id.deleteButton);
         updateButton = findViewById(R.id.updateButton);
+        homeButton = findViewById(R.id.homeButton);
 
         ParkingSpotNameText.setText(ParkingSpotName);
         ParkingSpotOwnerText.setText(ParkingSpotOwner);
@@ -89,6 +91,13 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
                 Toast.makeText(ViewParkingSpotActivity.this, "Deleted ParkingSpot...", Toast.LENGTH_SHORT).show();
                 ParkingSpotDatabase.child(thisParkingSpot.getParkingSpotId()).removeValue();
+            }
+        });
+
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
             }
         });
 
