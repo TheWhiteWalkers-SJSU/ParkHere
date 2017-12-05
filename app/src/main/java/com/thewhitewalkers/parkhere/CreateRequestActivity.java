@@ -171,7 +171,7 @@ public class CreateRequestActivity extends AppCompatActivity {
 
     private boolean hasRequestsConflict() {
         requestsConflict = false;
-        //testMessage = "";
+//        testMessage = "";
         //for all the requests in the current request data snapshot
         for(DataSnapshot requestSnapshot : requestData.getChildren()) {
             Request request = requestSnapshot.getValue(Request.class);
@@ -183,11 +183,11 @@ public class CreateRequestActivity extends AppCompatActivity {
                         requestsConflict = true;
                     }
                     //for testing how many requests are compared, to test print testMessage
-                    //testMessage += "Comparing with a request. ";
+//                    testMessage += "Comparing with a request. ";
                 }
             }
         }
-        //Toast.makeText(CreateRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(CreateRequestActivity.this, testMessage, Toast.LENGTH_SHORT).show();
         return requestsConflict;
     }
 

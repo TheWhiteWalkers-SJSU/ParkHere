@@ -22,6 +22,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 public class ViewRequestActivity extends AppCompatActivity {
@@ -44,6 +46,7 @@ public class ViewRequestActivity extends AppCompatActivity {
     final DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     final DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
     DatabaseReference chatsDatabase = FirebaseDatabase.getInstance().getReference("chats");
+    DatabaseReference parkingDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
     private static DataSnapshot chatData;
     private static DataSnapshot requestData;
@@ -92,7 +95,8 @@ public class ViewRequestActivity extends AppCompatActivity {
             AM2 = "PM";
         }
         listingTime.setText("From " + currentRequest.getTimeDetails().getStartingTime() + AM1 + " to " + currentRequest.getTimeDetails().getEndingTime() + AM2);
-        listingPrice.setText("Price: $" + currentListing.getListingPrice());
+        String totalPrice = currentRequest.getTimeDetails().setPrice(currentListing.getListingPrice());
+        listingPrice.setText("Price: " + totalPrice + " ($" +currentListing.getListingPrice() + "/hour)");
 
 
         acceptRequestButton = findViewById(R.id.acceptRequest);
@@ -106,12 +110,12 @@ public class ViewRequestActivity extends AppCompatActivity {
             denyRequestButton.setVisibility(View.GONE);
         }
         //for pending requests
-        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentListing.getListingStatus().equals("available")) {
+        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentRequest.getRequestType() == 0) {
             //disable cancel req
             cancelRequestButton.setVisibility(View.GONE);
         }
         //for accepted requests
-        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentListing.getListingStatus().equals("booked")) {
+        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentRequest.getRequestType() == 2) {
             //disable accept, deny, cancel req
             acceptRequestButton.setVisibility(View.GONE);
             denyRequestButton.setVisibility(View.GONE);
@@ -127,6 +131,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                 }
                 else {
                     acceptRequest();
+                    incrementNumBookings();
                     Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
 
                     //if chat does not exist already, create one between owner and renter
@@ -260,7 +265,6 @@ public class ViewRequestActivity extends AppCompatActivity {
 
 
     private boolean hasRequestsConflict() {
-        //testMessage = "";
         requestsConflict = false;
         //for all the requests in the current request data snapshot
         for(DataSnapshot requestSnapshot : requestData.getChildren()) {
@@ -273,7 +277,6 @@ public class ViewRequestActivity extends AppCompatActivity {
                         requestsConflict = true;
                     }
                     //for testing how many requests are compared, to test print testMessage
-                    //testMessage += "Comparing with a request. ";
                 }
             }
         }
@@ -347,5 +350,29 @@ public class ViewRequestActivity extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), InboxActivity.class));
                     }
                 });
+    }
+
+    private void incrementNumBookings() {
+        //get parking spot id for current listing
+        final String parkingId = currentListing.getParkingSpot().getParkingSpotId();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("parkingSpots").child(parkingId).child("priorBookings");
+        //increment prior bookings for current listing's parking spot
+        ref.runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                if (mutableData.getValue() == null) {
+                    mutableData.setValue(1);
+                } else {
+                    int count = mutableData.getValue(Integer.class);
+                    mutableData.setValue(count + 1);
+                }
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean success, DataSnapshot dataSnapshot) {
+                // Analyse databaseError for any error during increment
+            }
+        });
     }
 }

@@ -234,7 +234,7 @@ public class SearchListingActivity extends AppCompatActivity {
                 for(DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
                     Listing listing = listingSnapshot.getValue(Listing.class);
                     //get available listings, not own listings, not own booked listings
-                    if(listing.getListingStatus().equals("available") && (!listing.getOwnerId().equals(user.getEmail()) && !listing.getOwnerId().equals(user.getUid()))) {
+                    if((!listing.getOwnerId().equals(user.getEmail()) && !listing.getOwnerId().equals(user.getUid()))) {
                         ParkingSpot currentSpot = listing.getParkingSpot();
                         double spotLat = currentSpot.getLat();
                         double spotLng = currentSpot.getLng();

@@ -40,7 +40,6 @@
                     android:id="@+id/editTextRequestSubjectLine"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_above="@id/editTextListingAddress"
                     android:layout_margin="15dp"
 
                     android:hint="Subject"

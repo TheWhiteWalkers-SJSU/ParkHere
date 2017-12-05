@@ -173,7 +173,15 @@ public class Listing implements Serializable {
     //comparator to sort the searched listings by price
     public static class PriceListingComparator implements Comparator<Listing> {
         public int compare(Listing list1, Listing list2) {
-            return list1.getListingPrice().compareTo(list2.getListingPrice());
+            double price1 = Double.parseDouble(list1.getListingPrice());
+            double price2 = Double.parseDouble(list2.getListingPrice());
+            if(price1 < price2) {
+                return -1;
+            }
+            else if(price1 > price2) {
+                return 1;
+            }
+            return 0;
         }
     }
 

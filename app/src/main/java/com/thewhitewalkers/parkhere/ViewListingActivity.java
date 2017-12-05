@@ -28,6 +28,7 @@ public class ViewListingActivity extends AppCompatActivity {
     private TextView listingNameText;
     private TextView listingAddressText;
     private TextView listingDescriptionText;
+    private TextView listingPriceText;
     private TextView listingOwnerText;
     private TextView listingStartText;
     private TextView listingEndText;
@@ -58,12 +59,14 @@ public class ViewListingActivity extends AppCompatActivity {
             String listingDescription = thisListing.getListingDescription();
             String listingStart = thisListing.getStartTime();
             String listingEnd = thisListing.getEndTime();
+            String listingPrice = thisListing.getListingPrice();
 
             listingRatingBar = findViewById(R.id.ratingBarListing);
             listingNameText = findViewById(R.id.listingNameText);
             listingOwnerText = findViewById(R.id.listingOwnerText);
             listingAddressText = findViewById(R.id.listingAddressText);
             listingDescriptionText = findViewById(R.id.listingDescriptionText);
+            listingPriceText = findViewById(R.id.listingPriceText);
             listingStartText = findViewById(R.id.listingStart);
             listingEndText = findViewById(R.id.listingEnd);
 
@@ -71,6 +74,7 @@ public class ViewListingActivity extends AppCompatActivity {
             listingOwnerText.setText(listingOwner);
             listingAddressText.setText(listingAddress);
             listingDescriptionText.setText(listingDescription);
+            listingPriceText.setText("$" + listingPrice + "/hour");
 
             String AM1 = "AM";
             String AM2 = "AM";

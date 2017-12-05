@@ -109,12 +109,18 @@ public class TimeDetails  implements Serializable {
         Date checkStarting = bookingToCheck.getStarting();
         Date checkEnding = bookingToCheck.getEnding();
 
-        if(!currentEnding.before(checkStarting) && !currentStarting.after(checkEnding)) {
+        if(currentStarting.equals(checkStarting) || currentEnding.equals(checkEnding)) {
+            return withinTime(bookingToCheck); //matching start or end, must check times
+        }
+        if (!currentEnding.before(checkStarting) && !currentStarting.after(checkEnding)) {
             return true; //there is a date conflict
         }
-        else {
-            return withinTime(bookingToCheck);
+        if(!withinRange(bookingToCheck)) {
+            return false; //no overlap or same dates
         }
+        //else must check for time conflict
+        return withinTime(bookingToCheck);
+
     }
 
     public boolean withinRange(TimeDetails check) {
