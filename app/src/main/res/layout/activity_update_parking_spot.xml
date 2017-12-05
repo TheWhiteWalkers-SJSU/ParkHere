@@ -29,13 +29,15 @@
                     android:weightSum="2">
 
                     <Button
-                        android:id="@+id/buttonHomepage"
+                        android:id="@+id/buttonBackToParkingSpot"
                         style="@style/ButtonTheme"
-                        android:textSize="15sp"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Home" />
+                        android:text="Back"
+                        android:layout_margin="15dp"
+                        android:layout_above="@id/buttonBackToParkingSpot"
+                        />
+
                 </TableRow>
 
                 <EditText
@@ -44,11 +46,9 @@
                     android:layout_height="wrap_content"
                     android:hint="Spot Name"
                     android:inputType="text"
-
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
-                    android:layout_above="@id/editTextName"
                     />
 
                 <EditText
@@ -57,9 +57,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Spot Address"
                     android:inputType="textPostalAddress"
-
                     android:layout_margin="15dp"
-                    android:layout_above="@id/editTextAddress"
                     />
 
                 <EditText
@@ -68,9 +66,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Spot Description"
                     android:inputType="textMultiLine"
-
                     android:layout_margin="15dp"
-                    android:layout_above="@id/editTextDescription"
                     />
 
                 <Button
@@ -79,23 +75,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Update Parking Spot"
-
                     android:layout_margin="15dp"
-                    android:layout_above="@id/buttonUpdateParkingSpot"
                     />
-
-                <Button
-                    android:id="@+id/buttonBackToParkingSpot"
-                    style="@style/ButtonThemeRed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Back"
-
-                    android:layout_margin="15dp"
-                    android:layout_above="@id/buttonBackToParkingSpot"
-                    />
-
-
 
             </LinearLayout>
         </FrameLayout>

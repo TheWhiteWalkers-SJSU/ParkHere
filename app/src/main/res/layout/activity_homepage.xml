@@ -9,10 +9,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="495dp"
-        android:orientation="vertical"
         android:layout_margin="10dp"
-        tools:layout_editor_absoluteY="8dp"
-        tools:layout_editor_absoluteX="8dp">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="7dp">
 
         <TextView
             android:id="@+id/userEmail"
@@ -39,91 +39,123 @@
             <Button
                 android:id="@+id/buttonCreateListing"
                 style="@style/ButtonThemeOrange"
-                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_margin="5dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
                 android:text="Create Listing"
-             />
+                android:textSize="14sp" />
 
 
             <Button
                 android:id="@+id/buttonLogout"
                 style="@style/ButtonThemeRed"
-                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_margin="5dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
                 android:text="Logout"
                 android:textAlignment="center"
-                 />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/buttonSearchListing"
                 style="@style/ButtonThemeOrange"
-                android:textSize="14sp"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_margin="5dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
                 android:text="Search Listings"
                 android:textAlignment="center"
-                />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal">
+        <!--<LinearLayout-->
+            <!--android:layout_width="188dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:orientation="horizontal">-->
 
-            <Button
-                android:id="@+id/buttonCreateParkingSpot"
-                style="@style/ButtonThemeOrange"
-                android:textSize="14sp"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_margin="5dp"
-                android:layout_gravity="center_horizontal"
-                android:text="Create Parking Spot"
-                />
+            <!--<Button-->
+                <!--android:id="@+id/buttonCreateParkingSpot"-->
+                <!--style="@style/ButtonThemeOrange"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="Create PS"-->
+                <!--android:textSize="14sp" />-->
 
-        </LinearLayout>
+            <!--<Button-->
+                <!--android:id="@+id/buttonViewParkingSpots"-->
+                <!--style="@style/ButtonThemeGreen"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:text="View PS"-->
+                <!--android:textSize="14sp" />-->
 
+        <!--</LinearLayout>-->
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
+            android:layout_margin="5dp"
 
-            android:layout_margin="5dp">
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/buttonCreateParkingSpot"
+                style="@style/ButtonTheme"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:text="Create PS"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/buttonViewParkingSpots"
+                style="@style/ButtonTheme"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_weight="1"
+                android:text="View PS"
+                android:textAlignment="center" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+
+            android:weightSum="2">
 
             <Button
                 android:id="@+id/buttonInbox"
                 style="@style/ButtonTheme"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="Inbox"
-                android:textAlignment="center"
-                android:layout_weight="1"
                 android:layout_marginBottom="5dp"
                 android:layout_marginRight="5dp"
-                />
+                android:layout_weight="1"
+                android:text="Inbox"
+                android:textAlignment="center" />
 
             <Button
                 android:id="@+id/buttonChat"
                 style="@style/ButtonTheme"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="Chat"
-                android:textAlignment="center"
-                android:layout_weight="1"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp"
-                />
+                android:layout_weight="1"
+                android:text="Chat"
+                android:textAlignment="center" />
 
         </TableRow>
 
@@ -132,9 +164,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBlack"
-            android:textColor="@color/wallet_holo_blue_light"
+            android:text="My Listings:"
             android:textAlignment="center"
-            android:text="My Listings:" />
+            android:textColor="@color/wallet_holo_blue_light" />
 
         <ListView
             android:id="@+id/listViewListings"
@@ -151,9 +183,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBlack"
-            android:textColor="@color/wallet_holo_blue_light"
+            android:text="My Bookings:"
             android:textAlignment="center"
-            android:text="My Bookings:" />
+            android:textColor="@color/wallet_holo_blue_light" />
 
         <ListView
             android:id="@+id/listViewBookings"

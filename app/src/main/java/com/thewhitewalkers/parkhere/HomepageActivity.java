@@ -39,6 +39,7 @@ public class HomepageActivity extends AppCompatActivity {
     private Button buttonCreateListing;
     private Button buttonSearchListing;
     private Button buttonCreateParkingSpot;
+    private Button buttonViewParkingSpots;
     private ListView listViewListings;
     private ListView listViewBookings;
     private List<Listing> listingList = new ArrayList<>();
@@ -51,10 +52,6 @@ public class HomepageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
-
-        //firebaseAuth.getCurrentUser().delete();
-        //ListingDatabase.removeValue();
-
 
         userEmail = findViewById(R.id.userEmail);
         userEmail.setText("Welcome to ParkHere "+ user.getEmail());
@@ -117,6 +114,14 @@ public class HomepageActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), CreateParkingSpotActivity.class));
+            }
+        });
+
+        buttonViewParkingSpots = findViewById(R.id.buttonViewParkingSpots);
+        buttonViewParkingSpots.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), ViewMyParkingSpotsActivity.class));
             }
         });
 
