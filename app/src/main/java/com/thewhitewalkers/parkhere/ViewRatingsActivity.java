@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ViewRatingsActivity extends AppCompatActivity {
 
-    private Button buttonBackToListing;
+    private Button buttonBackToHome;
     private TextView ratingsTitle;
     private TextView textViewRatings;
     private RatingBar ratingBar;
@@ -33,21 +33,21 @@ public class ViewRatingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_ratings);
 
         Intent listingIntent = getIntent();
-        final Listing thisListing = (Listing) listingIntent.getSerializableExtra("listing");
+        final ParkingSpot thisParking = (ParkingSpot) listingIntent.getSerializableExtra("SPOT");
 
-        final DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
-        userDatabase.addValueEventListener(new ValueEventListener() {
+        final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+        ParkingSpotDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User u = dataSnapshot.child(thisListing.getOwnerId()).getValue(User.class);
-                double numOfRatings = u.ratingsList.size();
+                ParkingSpot ps = dataSnapshot.child(thisParking.getParkingSpotId()).getValue(ParkingSpot.class);
+                double numOfRatings = ps.ratingsList.size();
 
-                if(numOfRatings != 0 && u.ratingsList.get(0).getRating() != 100.0){
+                if(numOfRatings != 0 && ps.ratingsList.get(0).getRating() != 100.0){
                     if(numOfRatings != 0){
                         textViewRatings.setText((int)numOfRatings + " Ratings");
-                        ratingBar.setRating((float) u.getAvgRating());
+                        ratingBar.setRating((float) ps.getAvgRating());
                     }
-                    RatingsList adapter = new RatingsList(ViewRatingsActivity.this, u.ratingsList);
+                    RatingsList adapter = new RatingsList(ViewRatingsActivity.this, ps.ratingsList);
                     ratingList.setAdapter(adapter);
                 }
             }
@@ -58,18 +58,17 @@ public class ViewRatingsActivity extends AppCompatActivity {
             }
         });
 
-        buttonBackToListing = findViewById(R.id.buttonBackToListing);
+        buttonBackToHome = findViewById(R.id.buttonBackToListing);
         ratingsTitle = findViewById(R.id.ratingsTitle);
         ratingBar = findViewById(R.id.ratingBarRating);
         textViewRatings = findViewById(R.id.textViewRatings);
         ratingList = findViewById(R.id.ratingListView);
 
-        buttonBackToListing.setOnClickListener(new View.OnClickListener() {
+
+        buttonBackToHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent backToListingIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
-                backToListingIntent.putExtra("listing", thisListing);
-                startActivity(backToListingIntent);
+                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
             }
         });
 

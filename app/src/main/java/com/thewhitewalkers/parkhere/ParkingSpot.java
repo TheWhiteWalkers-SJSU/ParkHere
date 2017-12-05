@@ -1,6 +1,7 @@
 package com.thewhitewalkers.parkhere;;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ParkingSpot implements Serializable {
 
@@ -10,7 +11,7 @@ public class ParkingSpot implements Serializable {
     String description;
     String ownerId;
     String ownerEmail;
-    int parkingSpotRating;
+    public ArrayList<Rating> ratingsList = new ArrayList<Rating>();
     int priorBookings;
     double lat;
     double lng;
@@ -27,6 +28,7 @@ public class ParkingSpot implements Serializable {
         this.ownerId = ownerId;
         this.ownerEmail = ownerEmail;
         this.priorBookings = 0;
+        ratingsList.add(new Rating());
     }
 
     public String getParkingSpotId() {
@@ -95,5 +97,17 @@ public class ParkingSpot implements Serializable {
     }
     public double getLng(){
         return lng;
+    }
+
+    public double getAvgRating(){
+        double total = 0;
+        double size = ratingsList.size();
+        for(Rating r : ratingsList){
+            if(r.getRating() != 100.0){
+                total += r.getRating();
+            }
+        }
+
+        return total / size;
     }
 }

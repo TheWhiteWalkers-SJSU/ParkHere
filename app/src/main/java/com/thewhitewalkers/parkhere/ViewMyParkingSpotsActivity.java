@@ -24,6 +24,7 @@ public class ViewMyParkingSpotsActivity extends AppCompatActivity {
 
     final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
     private List<ParkingSpot> parkingSpotList = new ArrayList<>();
+    Button buttonHomeForViewMyParking;
     ListView listViewParkingSpots;
 
     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -36,7 +37,16 @@ public class ViewMyParkingSpotsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_my_parking_spots);
 
+
+        buttonHomeForViewMyParking = findViewById(R.id.buttonHomeForViewMyParking);
         listViewParkingSpots = findViewById(R.id.listViewParkingSpots);
+
+        buttonHomeForViewMyParking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+            }
+        });
 
         listViewParkingSpots.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(final AdapterView parent, View v, final int position, long id) {
@@ -46,7 +56,6 @@ public class ViewMyParkingSpotsActivity extends AppCompatActivity {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Toast.makeText(getApplicationContext(), "Opening spot...", Toast.LENGTH_SHORT).show();
                         Intent viewMessageIntent = new Intent(getApplicationContext(), ViewParkingSpotActivity.class);
 
                         ParkingSpot ParkingSpot = dataSnapshot.child(clickedParkingSpot.getParkingSpotId()).getValue(ParkingSpot.class);

@@ -99,15 +99,15 @@ public class ViewListingActivity extends AppCompatActivity {
             }
         }
 
-        final DatabaseReference userDatabase = FirebaseDatabase.getInstance().getReference("users");
-        userDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+        ParkingSpotDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User u = dataSnapshot.child(thisListing.getOwnerId()).getValue(User.class);
-                listingRatingBar.setRating((float)u.getAvgRating());
-                if(u.ratingsList.size() > 0) {
-                    if(u.ratingsList.get(0).getRating() != 100.0) {
-                        viewRatingsButton.setText("Click to View " + u.ratingsList.size() + " Ratings");
+                ParkingSpot ps = dataSnapshot.child(thisListing.getParkingSpot().getParkingSpotId()).getValue(ParkingSpot.class);
+                listingRatingBar.setRating((float)ps.getAvgRating());
+                if(ps.ratingsList.size() > 0) {
+                    if(ps.ratingsList.get(0).getRating() != 100.0) {
+                        viewRatingsButton.setText("Click to View " + ps.ratingsList.size() + " Ratings");
                     }
                 }
             }
@@ -147,7 +147,7 @@ public class ViewListingActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Intent ratingIntent = new Intent(getApplicationContext(), ViewRatingsActivity.class);
-                    ratingIntent.putExtra("listing", thisListing);
+                    ratingIntent.putExtra("SPOT", thisListing.getParkingSpot());
                     startActivity(ratingIntent);
                 }
             });
@@ -176,6 +176,7 @@ public class ViewListingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent createRatingIntent = new Intent(getApplicationContext(), RatingActivity.class);
                 createRatingIntent.putExtra("listing", thisListing);
+                createRatingIntent.putExtra("SPOT", thisListing.getParkingSpot());
                 startActivity(createRatingIntent);
             }
         });

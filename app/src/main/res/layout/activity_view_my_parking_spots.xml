@@ -9,6 +9,20 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp">
+
+            <Button
+                android:layout_margin="10dp"
+                android:id="@+id/buttonHomeForViewMyParking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Back to Home"
+                style="@style/ButtonTheme"/>
+
+        </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
