@@ -30,12 +30,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap map;
     private Address querriedAddress;
+    private double historyLat;
+    private double historyLng;
     //private ArrayList<Listing> searchResults;
     private ArrayList<ParkingSpot> searchResults;
     private ArrayList<Polygon> squares;
 
     private TextView textViewTitleDialog;
     private Button buttonViewListingDialog;
+
+    private double lat;
+    private double lng;
 
     final int TWENTY = 0x20000000; //0 bookings
     final int FOURTY = 0x40000000; // 1-3
@@ -48,8 +53,22 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_map_activity);
 
+        lat = 0.0;
+        lng = 0.0;
+
         Intent mapIntent = getIntent();
-        querriedAddress = (Address) mapIntent.getParcelableExtra("ADDRESS");
+        boolean isHistory = mapIntent.getBooleanExtra("isHistory" ,false);
+
+        if(isHistory){
+            lat = mapIntent.getDoubleExtra("lat", 0.0);
+            lng = mapIntent.getDoubleExtra("lng", 0.0);
+        }
+        else{
+            querriedAddress = (Address) mapIntent.getParcelableExtra("ADDRESS");
+            lat = querriedAddress.getLatitude();
+            lng = querriedAddress.getLongitude();
+        }
+
         //searchResults = (ArrayList<Listing>) mapIntent.getSerializableExtra("RESULTS");
         searchResults = (ArrayList<ParkingSpot>) mapIntent.getSerializableExtra("RESULTS");
 
@@ -70,8 +89,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } catch(Resources.NotFoundException e) {
             Log.e(TAG, "Can't find style. Error: ", e);
         }
-        double lat = querriedAddress.getLatitude();
-        double lng = querriedAddress.getLongitude();
 
         map = googleMap;
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(lat, lng)));
