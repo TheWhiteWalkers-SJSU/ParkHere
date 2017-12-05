@@ -105,8 +105,10 @@ public class ViewListingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User u = dataSnapshot.child(thisListing.getOwnerId()).getValue(User.class);
                 listingRatingBar.setRating((float)u.getAvgRating());
-                if(u.ratingsList.get(0).getRating() != 100.0) {
-                    viewRatingsButton.setText("Click to View " + u.ratingsList.size() + " Ratings");
+                if(u.ratingsList.size() > 0) {
+                    if(u.ratingsList.get(0).getRating() != 100.0) {
+                        viewRatingsButton.setText("Click to View " + u.ratingsList.size() + " Ratings");
+                    }
                 }
             }
 

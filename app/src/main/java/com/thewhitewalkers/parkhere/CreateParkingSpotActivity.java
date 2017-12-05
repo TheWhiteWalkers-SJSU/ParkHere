@@ -134,7 +134,6 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String addressQuerry = editTextSearchAddressDialog.getText().toString();
                 if(!addressQuerry.equals("")){
-                    //fetch
                     startIntentService(addressQuerry);
                 }
             }

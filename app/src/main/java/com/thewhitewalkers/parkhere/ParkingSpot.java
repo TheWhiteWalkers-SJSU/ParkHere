@@ -11,6 +11,7 @@ public class ParkingSpot implements Serializable {
     String description;
     String ownerId;
     String ownerEmail;
+    int parkingSpotRating;
     int priorBookings;
     double lat;
     double lng;
@@ -76,8 +77,7 @@ public class ParkingSpot implements Serializable {
     public void setOwnerEmail(String ownerEmail) {
         this.ownerEmail = ownerEmail;
     }
-
-
+  
     public int getPriorBookings() {
         return priorBookings;
     }
