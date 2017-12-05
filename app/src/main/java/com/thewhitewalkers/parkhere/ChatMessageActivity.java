@@ -40,6 +40,7 @@ public class ChatMessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_message);
+        ChatsDatabase.keepSynced(true);
 
         buttonSendChatMessage = findViewById(R.id.buttonSendChatMessage);
         textViewMessage = findViewById(R.id.textViewMessage);

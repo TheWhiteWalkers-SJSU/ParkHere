@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //set database to save for offline data viewing
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         buttonRegister = findViewById(R.id.buttonRegister);
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
