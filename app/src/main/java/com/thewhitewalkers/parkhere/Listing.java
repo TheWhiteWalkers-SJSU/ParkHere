@@ -185,11 +185,4 @@ public class Listing implements Serializable {
         }
     }
 
-    //comparator to sort the searched listings by rating
-    public static class RatingListingComparator implements Comparator<Listing> {
-        public int compare(Listing list1, Listing list2) {
-            return list1.getListingRating().compareTo(list2.getListingRating());
-        }
-    }
-
 }
