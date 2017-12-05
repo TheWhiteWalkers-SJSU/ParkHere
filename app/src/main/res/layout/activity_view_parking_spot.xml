@@ -34,6 +34,20 @@ android:layout_height="match_parent">
             android:layout_marginTop="15dp"
             android:inputType="text" />
 
+        <RatingBar
+            android:id="@+id/ratingBarListingForSP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true" />
+
+        <Button
+            android:id="@+id/buttonViewRatingsForSP"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Ratings"
+            android:textColor="@color/wallet_holo_blue_light" />
+
         <TextView
             android:id="@+id/textViewDescription"
             android:layout_width="match_parent"

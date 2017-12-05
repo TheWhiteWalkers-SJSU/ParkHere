@@ -36,6 +36,7 @@ public class RatingActivity extends AppCompatActivity {
     private static DataSnapshot chatData;
     String currentChatId;
     private Listing currentListing;
+    private ParkingSpot currentParking;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class RatingActivity extends AppCompatActivity {
 
         currentChatId = "";
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
+        currentParking = (ParkingSpot) getIntent().getSerializableExtra("SPOT");
         updateChatSnapshot();
 
         buttonBackToListing = findViewById(R.id.buttonBackToListing);
@@ -92,20 +94,20 @@ public class RatingActivity extends AppCompatActivity {
 
         if(numOfStars != 0 && !TextUtils.isEmpty(comment)){
             //save the rating to listing owner
-            final DatabaseReference userDatabase1 = FirebaseDatabase.getInstance().getReference("users");
-            userDatabase1.addListenerForSingleValueEvent(new ValueEventListener() {
+            final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+            ParkingSpotDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    User u = dataSnapshot.child(currentListing.getOwnerId()).getValue(User.class);
+                    ParkingSpot ps = dataSnapshot.child(currentParking.getParkingSpotId()).getValue(ParkingSpot.class);
 
-                    if(u.ratingsList.get(0).getRating() == 100.0){
-                        u.ratingsList.remove(0);
+                    if(ps.ratingsList.get(0).getRating() == 100.0){
+                        ps.ratingsList.remove(0);
                     }
                   
                     Rating r = new Rating(numOfStars, comment);
-                    u.ratingsList.add(r);
+                    ps.ratingsList.add(r);
 
-                    userDatabase1.child(currentListing.getOwnerId()).setValue(u);
+                    ParkingSpotDatabase.child(currentParking.getParkingSpotId()).setValue(ps);
                 }
 
                 @Override
