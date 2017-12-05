@@ -21,6 +21,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -32,8 +37,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Address querriedAddress;
     private double historyLat;
     private double historyLng;
-    //private ArrayList<Listing> searchResults;
-    private ArrayList<ParkingSpot> searchResults;
+    private ArrayList<Listing> searchResults;
     private ArrayList<Polygon> squares;
 
     private TextView textViewTitleDialog;
@@ -41,7 +45,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private double lat;
     private double lng;
-
+    private ParkingSpot currentSpot;
     final int TWENTY = 0x20000000; //0 bookings
     final int FOURTY = 0x40000000; // 1-3
     final int SIXTY = 0x60000000; //4-7
@@ -69,8 +73,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             lng = querriedAddress.getLongitude();
         }
 
-        //searchResults = (ArrayList<Listing>) mapIntent.getSerializableExtra("RESULTS");
-        searchResults = (ArrayList<ParkingSpot>) mapIntent.getSerializableExtra("RESULTS");
+        searchResults = (ArrayList<Listing>) mapIntent.getSerializableExtra("RESULTS");
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -100,10 +103,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         double p_lng = 0;
 
         for(int i = 0; i < searchResults.size(); i++){
-            ParkingSpot p = searchResults.get(i);
-
-            p_lat = p.getLat();
-            p_lng = p.getLng();
+            Listing currentListing = searchResults.get(i);
+            currentSpot = currentListing.getParkingSpot();
+            p_lat = currentSpot.getLat();
+            p_lng = currentSpot.getLng();
 
             PolygonOptions rectOptions = new PolygonOptions()
                     .add(new LatLng(p_lat, p_lng),
@@ -111,10 +114,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             new LatLng(p_lat + edge, p_lng+ edge),
                             new LatLng(p_lat, p_lng + edge),
                             new LatLng(p_lat, p_lng));
+            final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+            ParkingSpotDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot parkingSnapshot : dataSnapshot.getChildren()) {
+                        ParkingSpot spot = parkingSnapshot.getValue(ParkingSpot.class);
+                        if(spot.getParkingSpotId().equals(currentSpot.getParkingSpotId())) {
+                            System.out.println("hello??");
+                            currentSpot.setPriorBookings(spot.getPriorBookings());
+                        }
+                    }
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
             // Frequency Overlay
             int color = TWENTY;
-            int freq = p.getPriorBookings();
+            int freq = currentSpot.getPriorBookings();
+            System.out.println("meow" + freq);
             if(freq >= 1 && freq <= 3){ // 1-3
                 color = FOURTY;
             }
@@ -142,7 +163,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
     }
-    public void showListingDialog(ParkingSpot spot) {
+    public void showListingDialog(Listing currentListing) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.map_dialog, null);
@@ -150,12 +171,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         textViewTitleDialog = view.findViewById(R.id.textViewTitleDialog);
         buttonViewListingDialog =  view.findViewById(R.id.buttonViewListingDialog);
 
-        textViewTitleDialog.setText(spot.getAddress());
+        String listingAddr = currentListing.getListingAddress();
+        textViewTitleDialog.setText(listingAddr);
 
+        final Listing listingToAdd = currentListing;
         buttonViewListingDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //intent to see that listing...
+                Intent intent = new Intent(getApplicationContext(), ViewListingActivity.class);
+                intent.putExtra("listing", listingToAdd);
             }
         });
 

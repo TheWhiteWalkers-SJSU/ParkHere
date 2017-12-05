@@ -36,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +51,7 @@ public class SearchListingActivity extends AppCompatActivity {
     private Button buttonSearchAddress;
     private Button buttonMap;
     private ListView listSearchListings;
-    private List<Listing> searchList = new ArrayList<>();
+    private ArrayList<Listing> searchList = new ArrayList<>();
     private TextView textViewAddress;
     private TextView searchRangeSet;
     private String textRangeSetFalse;
@@ -89,9 +90,6 @@ public class SearchListingActivity extends AppCompatActivity {
     private TextView textViewResultsAddressDialog;
     private Address querriedAddress;
     private boolean hasQuerried;
-
-    //temp
-    ArrayList<ParkingSpot> parkingList;
 
     //NFR
     final DatabaseReference HistoryDatabase = FirebaseDatabase.getInstance().getReference("history");
@@ -196,7 +194,7 @@ public class SearchListingActivity extends AppCompatActivity {
                     intent.putExtra("isHistory", true);
                     intent.putExtra("lat", historyAddress.getLat());
                     intent.putExtra("lng", historyAddress.getLng());
-                    intent.putExtra("RESULTS", parkingList);
+                    intent.putExtra("RESULTS", searchList);
                     startActivity(intent);
                 }
                 else if(hasQuerried){
@@ -204,7 +202,7 @@ public class SearchListingActivity extends AppCompatActivity {
                     intent.putExtra("isHistory", false);
                     if(querriedAddress != null){
                         intent.putExtra("ADDRESS", querriedAddress);
-                        intent.putExtra("RESULTS", parkingList);
+                        intent.putExtra("RESULTS", searchList);
                         startActivity(intent);
                     }
                 }
@@ -213,41 +211,12 @@ public class SearchListingActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        parkingList = new ArrayList<ParkingSpot>();
-        foundAddress = "";
-        /*
-        ParkingDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot parkingSnapshot : dataSnapshot.getChildren()) {
-
-                    ParkingSpot spot = parkingSnapshot.getValue(ParkingSpot.class);
-                    if(!spot.getOwnerEmail().equals("waddup@gmail.com")) {
-                        parkingList.add(spot);
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        */
     }
-    /*
-    private void check(){
-        for(ParkingSpot p : parkingList){
-            double distance = haversine(querriedAddress.getLatitude(), querriedAddress.getLongitude(), p.getLat(), p.getLng());
-            if(distance < 15){ //less than 15km
-                //searchList.add();
-            }
-        }
+    public boolean withinProx(double qLat, double qLng, double cLat, double cLng){
+        double distance = haversine(qLat, qLng, cLat, cLng);
+        return distance < 15;
     }
-    */
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -263,8 +232,38 @@ public class SearchListingActivity extends AppCompatActivity {
                     Listing listing = listingSnapshot.getValue(Listing.class);
                     //get available listings, not own listings, not own booked listings
                     if(listing.getListingStatus().equals("available") && (!listing.getOwnerId().equals(user.getEmail()) && !listing.getOwnerId().equals(user.getUid()))) {
-                        //get listings that contain keywords in name, address, description
-                        if(listing.getListingName().contains(searchKeyword) || listing.getListingAddress().contains(searchKeyword) || listing.getListingDescription().contains(searchKeyword)) {
+                        ParkingSpot currentSpot = listing.getParkingSpot();
+                        double spotLat = currentSpot.getLat();
+                        double spotLng = currentSpot.getLng();
+                        //get all listings that are close by
+                        if(hasQuerried){
+                            boolean withinRange = withinProx(querriedAddress.getLatitude(), querriedAddress.getLongitude(), spotLat, spotLng);
+                            if(withinRange && (listing.getListingName().contains(searchKeyword) || listing.getListingAddress().contains(searchKeyword) || listing.getListingDescription().contains(searchKeyword))) {
+                                //get listings within the time/date range
+                                if(isRangeSet) {
+                                    TimeDetails checkWithinRange = listing.getTimeDetails();
+                                    if(searchRange.withinRange(checkWithinRange)) {
+                                        searchList.add(listing);
+                                    }
+                                }
+                                else searchList.add(listing);
+                            }
+                        }
+                        else if(fromHistory){
+                            boolean withinRange = withinProx(historyAddress.getLat(), historyAddress.getLng(), spotLat, spotLng);
+                            if(withinRange && (listing.getListingName().contains(searchKeyword) || listing.getListingAddress().contains(searchKeyword) || listing.getListingDescription().contains(searchKeyword))) {
+                                //get listings within the time/date range
+                                if(isRangeSet) {
+                                    TimeDetails checkWithinRange = listing.getTimeDetails();
+                                    if(searchRange.withinRange(checkWithinRange)) {
+                                        searchList.add(listing);
+                                    }
+                                }
+                                else searchList.add(listing);
+                            }
+                        }
+                        //get listings that contain keywords in name, address, description of ALL LISTINGS NO MATTER ADDRESS
+                        else if(listing.getListingName().contains(searchKeyword) || listing.getListingAddress().contains(searchKeyword) || listing.getListingDescription().contains(searchKeyword)){
                             //get listings within the time/date range
                             if(isRangeSet) {
                                 TimeDetails checkWithinRange = listing.getTimeDetails();
@@ -277,7 +276,7 @@ public class SearchListingActivity extends AppCompatActivity {
                     }
                 }
                 //call function to sort listings to display by the value specified in the spinner
-                searchList = sortBySpinner(searchList, spinnerSort.getSelectedItem().toString());
+                searchList = (ArrayList<Listing>) sortBySpinner(searchList, spinnerSort.getSelectedItem().toString());
 
                 SearchList adapter = new SearchList(SearchListingActivity.this, searchList);
                 listSearchListings.setAdapter(adapter);
@@ -371,9 +370,14 @@ public class SearchListingActivity extends AppCompatActivity {
         HistoryDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                recentHistory = dataSnapshot.child(user.getUid()).getValue(History.class);
-                HistoryList adapter = new HistoryList(SearchListingActivity.this, recentHistory.getRecentHistory());
-                listViewHistoryDialog.setAdapter(adapter);
+                for(DataSnapshot historySnapshot : dataSnapshot.getChildren()) {
+                    History currentHistory = historySnapshot.getValue(History.class);
+                    if(currentHistory.getUserID().equals(user.getUid())){
+                        recentHistory = currentHistory;
+                        HistoryList adapter = new HistoryList(SearchListingActivity.this, recentHistory.getRecentHistory());
+                        listViewHistoryDialog.setAdapter(adapter);
+                    }
+                }
             }
 
             @Override
@@ -453,10 +457,23 @@ public class SearchListingActivity extends AppCompatActivity {
         HistoryDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                History h = dataSnapshot.child(user.getUid()).getValue(History.class);
+                boolean found = false;
+                for(DataSnapshot historySnapshot : dataSnapshot.getChildren()) {
+                    History currentHistory = historySnapshot.getValue(History.class);
+                    if(currentHistory.getUserID().equals(user.getUid())){
+                        found = true;
+                        History h = dataSnapshot.child(user.getUid()).getValue(History.class);
+                        h.addAddress(foundAddress, querriedAddress.getLatitude(), querriedAddress.getLongitude());
+                        HistoryDatabase.child(user.getUid()).setValue(h);
+                    }
+                }
 
-                h.addAddress(foundAddress, querriedAddress.getLatitude(), querriedAddress.getLongitude());
-                HistoryDatabase.child(user.getUid()).setValue(h);
+                //first time
+                if(!found){
+                    History h = new History(user.getUid(), user.getUid(), foundAddress, querriedAddress.getLatitude(), querriedAddress.getLongitude());
+                    HistoryDatabase.child(user.getUid()).setValue(h);
+                }
+
             }
 
             @Override
@@ -465,11 +482,22 @@ public class SearchListingActivity extends AppCompatActivity {
             }
         });
         //end
+        updateSearch();
+        SearchList adapter = new SearchList(SearchListingActivity.this, searchList);
+        listSearchListings.setAdapter(adapter);
     }
     public void updateWithHistoryAddress(){
         fromHistory = true;
         foundAddress = historyAddress.getAddress();
-        textViewAddress.setText(foundAddress.substring(0, 50));
+        if(foundAddress.length() < 50){
+            textViewAddress.setText(foundAddress);
+        }
+        else{
+            textViewAddress.setText(foundAddress.substring(0, 50));
+        }
+        updateSearch();
+        SearchList adapter = new SearchList(SearchListingActivity.this, searchList);
+        listSearchListings.setAdapter(adapter);
     }
 
     public String checkBookingDate(String dateStarting, String dateEnding){

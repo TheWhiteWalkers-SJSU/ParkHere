@@ -26,7 +26,7 @@ public class UpdateParkingSpotActivity extends AppCompatActivity {
     private Button buttonBackToParkingSpot;
 
     private ParkingSpot currentParkingSpot;
-    final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("ParkingSpots");
+    final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -52,10 +52,6 @@ public class HomepageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        //firebaseAuth.getCurrentUser().delete();
-        //ListingDatabase.removeValue();
-
-
         userEmail = findViewById(R.id.userEmail);
         userEmail.setText("Welcome to ParkHere "+ user.getEmail());
 
@@ -198,6 +194,8 @@ public class HomepageActivity extends AppCompatActivity {
                 ListingList bookingsAdapter = new ListingList(HomepageActivity.this, bookingList);
                 listViewListings.setAdapter(listingsAdapter);
                 listViewBookings.setAdapter(bookingsAdapter);
+
+
             }
 
             @Override
