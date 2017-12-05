@@ -16,8 +16,9 @@
 
             <TextView
                 android:id="@+id/textViewParkingSpotAddress"
+                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:text="TextView1"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title" />

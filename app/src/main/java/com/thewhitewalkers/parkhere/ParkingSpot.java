@@ -77,7 +77,7 @@ public class ParkingSpot implements Serializable {
     public void setOwnerEmail(String ownerEmail) {
         this.ownerEmail = ownerEmail;
     }
-
+  
     public int getPriorBookings() {
         return priorBookings;
     }
