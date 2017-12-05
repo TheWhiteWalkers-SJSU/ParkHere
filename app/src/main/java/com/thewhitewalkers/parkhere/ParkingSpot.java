@@ -12,7 +12,6 @@ public class ParkingSpot implements Serializable {
     String ownerId;
     String ownerEmail;
     int parkingSpotRating;
-    Integer priorBookings;
     int priorBookings;
     double lat;
     double lng;
@@ -28,7 +27,6 @@ public class ParkingSpot implements Serializable {
         this.description = description;
         this.ownerId = ownerId;
         this.ownerEmail = ownerEmail;
-        this.listingRating = "";
         this.priorBookings = 0;
     }
 
@@ -78,10 +76,6 @@ public class ParkingSpot implements Serializable {
 
     public void setOwnerEmail(String ownerEmail) {
         this.ownerEmail = ownerEmail;
-    }
-
-    public String getListingRating() {
-        return listingRating;
     }
 
     public int getPriorBookings() {
