@@ -1,6 +1,5 @@
 package com.thewhitewalkers.parkhere;
 
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -10,8 +9,6 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -51,99 +48,100 @@ public class ViewListingActivity extends AppCompatActivity {
 
         Intent listingIntent = getIntent();
         final Listing thisListing = (Listing) listingIntent.getSerializableExtra("listing");
+        if(thisListing != null) {
+            String listingName = thisListing.getListingName();
+            String listingOwner = thisListing.getOwnerEmail();
 
-        String listingName = thisListing.getListingName();
-        String listingOwner = thisListing.getOwnerEmail();
+            //listingOwner should show email, but listings made early on did not fill in email field
+            if (listingOwner == null) listingOwner = thisListing.getOwnerId();
+            String listingAddress = thisListing.getListingAddress();
+            String listingDescription = thisListing.getListingDescription();
+            String listingStart = thisListing.getStartTime();
+            String listingEnd = thisListing.getEndTime();
 
-        //listingOwner should show email, but listings made early on did not fill in email field
-        if(listingOwner == null) listingOwner = thisListing.getOwnerId();
-        String listingAddress = thisListing.getListingAddress();
-        String listingDescription = thisListing.getListingDescription();
-        String listingStart = thisListing.getStartTime();
-        String listingEnd = thisListing.getEndTime();
+            listingRatingBar = findViewById(R.id.ratingBarListing);
+            listingNameText = findViewById(R.id.listingNameText);
+            listingOwnerText = findViewById(R.id.listingOwnerText);
+            listingAddressText = findViewById(R.id.listingAddressText);
+            listingDescriptionText = findViewById(R.id.listingDescriptionText);
+            listingStartText = findViewById(R.id.listingStart);
+            listingEndText = findViewById(R.id.listingEnd);
 
-        listingRatingBar = findViewById(R.id.ratingBarListing);
-        listingNameText = findViewById(R.id.listingNameText);
-        listingOwnerText = findViewById(R.id.listingOwnerText);
-        listingAddressText = findViewById(R.id.listingAddressText);
-        listingDescriptionText = findViewById(R.id.listingDescriptionText);
-        listingStartText = findViewById(R.id.listingStart);
-        listingEndText = findViewById(R.id.listingEnd);
+            listingNameText.setText(listingName);
+            listingOwnerText.setText(listingOwner);
+            listingAddressText.setText(listingAddress);
+            listingDescriptionText.setText(listingDescription);
 
-        listingNameText.setText(listingName);
-        listingOwnerText.setText(listingOwner);
-        listingAddressText.setText(listingAddress);
-        listingDescriptionText.setText(listingDescription);
-
-        String AM1 = "AM";
-        String AM2 = "AM";
-        if(!thisListing.getTimeDetails().isStartingIsAM()){
-            AM1 = "PM";
-        }
-        if(!thisListing.getTimeDetails().isEndingIsAM()){
-            AM2 = "PM";
-        }
-        listingStartText.setText("Start Time: "+ listingStart + AM1);
-        listingEndText.setText("End Time: "+ listingEnd + AM2);
-
-        backToHomeButton = findViewById(R.id.buttonGoHome);
-        viewRatingsButton = findViewById(R.id.buttonViewRatings);
-        requestButton = findViewById(R.id.requestButton);
-        ratingButton = findViewById(R.id.ratingButton);
-        deleteButton = findViewById(R.id.deleteButton);
-        updateButton = findViewById(R.id.updateButton);
-
-        if(thisListing.getOwnerId() != null) {
-            if(!thisListing.getOwnerEmail().equals(user.getEmail())) {
-                updateButton.setVisibility(View.GONE);
+            String AM1 = "AM";
+            String AM2 = "AM";
+            if (!thisListing.getTimeDetails().isStartingIsAM()) {
+                AM1 = "PM";
             }
-        }
+            if (!thisListing.getTimeDetails().isEndingIsAM()) {
+                AM2 = "PM";
+            }
+            listingStartText.setText("Start Time: " + listingStart + AM1);
+            listingEndText.setText("End Time: " + listingEnd + AM2);
 
-        final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
-        ParkingSpotDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ParkingSpot ps = dataSnapshot.child(thisListing.getParkingSpot().getParkingSpotId()).getValue(ParkingSpot.class);
-                listingRatingBar.setRating((float)ps.getAvgRating());
-                if(ps.ratingsList.size() > 0) {
-                    if(ps.ratingsList.get(0).getRating() != 100.0) {
-                        viewRatingsButton.setText("Click to View " + ps.ratingsList.size() + " Ratings");
-                    }
+            backToHomeButton = findViewById(R.id.buttonGoHome);
+            viewRatingsButton = findViewById(R.id.buttonViewRatings);
+            requestButton = findViewById(R.id.requestButton);
+            ratingButton = findViewById(R.id.ratingButton);
+            deleteButton = findViewById(R.id.deleteButton);
+            updateButton = findViewById(R.id.updateButton);
+
+            if (thisListing.getOwnerId() != null) {
+                if (!thisListing.getOwnerEmail().equals(user.getEmail())) {
+                    updateButton.setVisibility(View.GONE);
                 }
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {}
-        });
+            final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+            ParkingSpotDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ParkingSpot ps = dataSnapshot.child(thisListing.getParkingSpot().getParkingSpotId()).getValue(ParkingSpot.class);
+                    listingRatingBar.setRating((float) ps.getAvgRating());
+                    if (ps.ratingsList.size() > 0) {
+                        if (ps.ratingsList.get(0).getRating() != 100.0) {
+                            viewRatingsButton.setText("Click to View " + ps.ratingsList.size() + " Ratings");
+                        }
+                    }
+                }
 
-        if(thisListing.getOwnerId() != null) {
-            if(thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
-                deleteButton.setVisibility(View.VISIBLE);
-                updateButton.setVisibility(View.VISIBLE);
-                ratingButton.setVisibility(View.GONE);
-                requestButton.setVisibility(View.GONE);
-            } else {
-                deleteButton.setVisibility(View.GONE);
-                updateButton.setVisibility(View.GONE);
-                ratingButton.setVisibility(View.VISIBLE);
-                requestButton.setVisibility(View.VISIBLE);
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                }
+            });
+
+            if (thisListing.getOwnerId() != null) {
+                if (thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
+                    deleteButton.setVisibility(View.VISIBLE);
+                    updateButton.setVisibility(View.VISIBLE);
+                    ratingButton.setVisibility(View.GONE);
+                    requestButton.setVisibility(View.GONE);
+                } else {
+                    deleteButton.setVisibility(View.GONE);
+                    updateButton.setVisibility(View.GONE);
+                    ratingButton.setVisibility(View.VISIBLE);
+                    requestButton.setVisibility(View.VISIBLE);
+                }
             }
-        }
 
-        if(thisListing.getOwnerId() != null) {
-            if(thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
-                requestButton.setVisibility(View.GONE);
+            if (thisListing.getOwnerId() != null) {
+                if (thisListing.getOwnerId().equals(user.getEmail()) || thisListing.getOwnerId().equals(user.getUid())) {
+                    requestButton.setVisibility(View.GONE);
+                }
             }
-        }
 
-        if(thisListing.getRenterId() != null) {
-            if(thisListing.getRenterId().equals(user.getEmail()) || thisListing.getRenterId().equals(user.getUid())) {
-                requestButton.setVisibility(View.GONE);
+            if (thisListing.getRenterId() != null) {
+                if (thisListing.getRenterId().equals(user.getEmail()) || thisListing.getRenterId().equals(user.getUid())) {
+                    requestButton.setVisibility(View.GONE);
+                }
             }
-        }
 
 
-        viewRatingsButton.setOnClickListener(new View.OnClickListener() {
+            viewRatingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent ratingIntent = new Intent(getApplicationContext(), ViewRatingsActivity.class);
@@ -153,57 +151,61 @@ public class ViewListingActivity extends AppCompatActivity {
             });
 
 
-        requestButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent createRequestIntent = new Intent(getApplicationContext(), CreateRequestActivity.class);
-                        createRequestIntent.putExtra("listing", thisListing);
-                        startActivity(createRequestIntent);
-            }
-        });
+            requestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent createRequestIntent = new Intent(getApplicationContext(), CreateRequestActivity.class);
+                    createRequestIntent.putExtra("listing", thisListing);
+                    startActivity(createRequestIntent);
+                }
+            });
 
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent updateListingIntent = new Intent(getApplicationContext(), UpdateListingActivity.class);
-                updateListingIntent.putExtra("listing", thisListing);
-                startActivity(updateListingIntent);
-            }
-        });
+            updateButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent updateListingIntent = new Intent(getApplicationContext(), UpdateListingActivity.class);
+                    updateListingIntent.putExtra("listing", thisListing);
+                    startActivity(updateListingIntent);
+                }
+            });
 
-        ratingButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent createRatingIntent = new Intent(getApplicationContext(), RatingActivity.class);
-                createRatingIntent.putExtra("listing", thisListing);
-                createRatingIntent.putExtra("SPOT", thisListing.getParkingSpot());
-                startActivity(createRatingIntent);
-            }
-        });
+            ratingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent createRatingIntent = new Intent(getApplicationContext(), RatingActivity.class);
+                    createRatingIntent.putExtra("listing", thisListing);
+                    createRatingIntent.putExtra("SPOT", thisListing.getParkingSpot());
+                    startActivity(createRatingIntent);
+                }
+            });
 
 
-        backToHomeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-            }
-        });
+            backToHomeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+                }
+            });
 
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-                Toast.makeText(ViewListingActivity.this, "Deleted listing...", Toast.LENGTH_SHORT).show();
-                listingDatabase.child(thisListing.getListingId()).removeValue();
-            }
-        });
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+                    Toast.makeText(ViewListingActivity.this, "Deleted listing...", Toast.LENGTH_SHORT).show();
+                    listingDatabase.child(thisListing.getListingId()).removeValue();
+                }
+            });
 
-        backToHomeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-            }
-        });
+            backToHomeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+                }
+            });
+        }
+        else{
+            startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+        }
     }
 
 

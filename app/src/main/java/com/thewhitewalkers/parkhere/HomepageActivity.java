@@ -133,7 +133,7 @@ public class HomepageActivity extends AppCompatActivity {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Toast.makeText(getApplicationContext(), "Opening listing...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Opening listing...", Toast.LENGTH_SHORT).show();
                         Intent viewMessageIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
 
                         Listing listing = dataSnapshot.child(clickedListing.getListingId()).getValue(Listing.class);
@@ -159,7 +159,7 @@ public class HomepageActivity extends AppCompatActivity {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Toast.makeText(getApplicationContext(), "Opening booking...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Opening booking...", Toast.LENGTH_SHORT).show();
                         Intent viewMessageIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
 
                         Listing listing = dataSnapshot.child(clickedListing.getListingId()).getValue(Listing.class);
