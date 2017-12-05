@@ -1,5 +1,4 @@
-package com.thewhitewalkers.parkhere;
-
+package com.thewhitewalkers.parkhere;;
 
 import java.io.Serializable;
 
@@ -82,8 +81,8 @@ public class ParkingSpot implements Serializable {
         return priorBookings;
     }
 
-    public void setPriorBookings(int priorBookings) {
-        this.priorBookings = priorBookings;
+    public void setPriorBookings(int num) {
+        priorBookings = num;
     }
 
     public void setLatLng(double lat, double lng){

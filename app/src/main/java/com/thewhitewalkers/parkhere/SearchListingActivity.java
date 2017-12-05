@@ -52,6 +52,7 @@ public class SearchListingActivity extends AppCompatActivity {
     private Button buttonMap;
     private ListView listSearchListings;
     private ArrayList<Listing> searchList = new ArrayList<>();
+    private ArrayList<ParkingSpot> parkingList = new ArrayList<>();
     private TextView textViewAddress;
     private TextView searchRangeSet;
     private String textRangeSetFalse;
@@ -195,6 +196,7 @@ public class SearchListingActivity extends AppCompatActivity {
                     intent.putExtra("lat", historyAddress.getLat());
                     intent.putExtra("lng", historyAddress.getLng());
                     intent.putExtra("RESULTS", searchList);
+                    intent.putExtra("SPOTS", parkingList);
                     startActivity(intent);
                 }
                 else if(hasQuerried){
@@ -203,6 +205,7 @@ public class SearchListingActivity extends AppCompatActivity {
                     if(querriedAddress != null){
                         intent.putExtra("ADDRESS", querriedAddress);
                         intent.putExtra("RESULTS", searchList);
+                        intent.putExtra("SPOTS", parkingList);
                         startActivity(intent);
                     }
                 }
@@ -280,6 +283,31 @@ public class SearchListingActivity extends AppCompatActivity {
 
                 SearchList adapter = new SearchList(SearchListingActivity.this, searchList);
                 listSearchListings.setAdapter(adapter);
+                //populate the spots
+                parkingList.clear();
+                final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+                ParkingSpotDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(Listing ele: searchList){
+                            for(DataSnapshot parkingSnapshot : dataSnapshot.getChildren()) {
+                                ParkingSpot spot = parkingSnapshot.getValue(ParkingSpot.class);
+
+                                    String eleID = ele.getParkingSpot().getParkingSpotId();
+                                    String currentSpot = spot.getParkingSpotId();
+                                    if(eleID.contains(currentSpot)){
+                                        parkingList.add(spot);
+                                    }
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override

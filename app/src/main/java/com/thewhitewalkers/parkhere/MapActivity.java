@@ -38,11 +38,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private double historyLat;
     private double historyLng;
     private ArrayList<Listing> searchResults;
+    private ArrayList<ParkingSpot> spots;
     private ArrayList<Polygon> squares;
 
     private TextView textViewTitleDialog;
     private Button buttonViewListingDialog;
 
+    private PolygonOptions rectOptions;
     private double lat;
     private double lng;
     private ParkingSpot currentSpot;
@@ -61,20 +63,19 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         lng = 0.0;
 
         Intent mapIntent = getIntent();
-        boolean isHistory = mapIntent.getBooleanExtra("isHistory" ,false);
+        boolean isHistory = mapIntent.getBooleanExtra("isHistory", false);
 
-        if(isHistory){
+        if (isHistory) {
             lat = mapIntent.getDoubleExtra("lat", 0.0);
             lng = mapIntent.getDoubleExtra("lng", 0.0);
-        }
-        else{
+        } else {
             querriedAddress = (Address) mapIntent.getParcelableExtra("ADDRESS");
             lat = querriedAddress.getLatitude();
             lng = querriedAddress.getLongitude();
         }
 
         searchResults = (ArrayList<Listing>) mapIntent.getSerializableExtra("RESULTS");
-
+        spots = (ArrayList<ParkingSpot>) mapIntent.getSerializableExtra("SPOTS");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
@@ -82,14 +83,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
-        try{
+        try {
             // Style Json in Raw folder
-            boolean success = googleMap.setMapStyle( MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
+            boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
 
-            if(!success) {
+            if (!success) {
                 Log.e(TAG, "Style parsing failed.");
             }
-        } catch(Resources.NotFoundException e) {
+        } catch (Resources.NotFoundException e) {
             Log.e(TAG, "Can't find style. Error: ", e);
         }
 
@@ -102,54 +103,36 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         double p_lat = 0;
         double p_lng = 0;
 
-        for(int i = 0; i < searchResults.size(); i++){
+        for (int i = 0; i < searchResults.size(); i++) {
             Listing currentListing = searchResults.get(i);
-            currentSpot = currentListing.getParkingSpot();
+            currentSpot = spots.get(i);
             p_lat = currentSpot.getLat();
             p_lng = currentSpot.getLng();
+            final int count = i;
 
-            PolygonOptions rectOptions = new PolygonOptions()
+            rectOptions = new PolygonOptions()
                     .add(new LatLng(p_lat, p_lng),
                             new LatLng(p_lat + edge, p_lng),
-                            new LatLng(p_lat + edge, p_lng+ edge),
+                            new LatLng(p_lat + edge, p_lng + edge),
                             new LatLng(p_lat, p_lng + edge),
                             new LatLng(p_lat, p_lng));
-            final DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
-            ParkingSpotDatabase.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot parkingSnapshot : dataSnapshot.getChildren()) {
-                        ParkingSpot spot = parkingSnapshot.getValue(ParkingSpot.class);
-                        if(spot.getParkingSpotId().equals(currentSpot.getParkingSpotId())) {
-                            System.out.println("hello??");
-                            currentSpot.setPriorBookings(spot.getPriorBookings());
-                        }
-                    }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
             // Frequency Overlay
             int color = TWENTY;
             int freq = currentSpot.getPriorBookings();
-            System.out.println("meow" + freq);
-            if(freq >= 1 && freq <= 3){ // 1-3
+            if (freq >= 1 && freq <= 3) { // 1-3
                 color = FOURTY;
-            }
-            else if(freq >= 4 && freq <= 7){ //4-7
+            } else if (freq >= 4 && freq <= 7) { //4-7
                 color = SIXTY;
-            }
-            else if(freq >= 8){ //8 =<
+            } else if (freq >= 8) { //8 =<
                 color = EIGHTY;
             }
 
             rectOptions.fillColor(color);
             rectOptions.strokeColor(color);
             Polygon polygon = map.addPolygon(rectOptions);
-            int tag = i;
+            int tag = count;
             polygon.setTag(tag);
             polygon.setClickable(true);
             squares.add(polygon);
@@ -163,6 +146,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
     }
+
     public void showListingDialog(Listing currentListing) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = this.getLayoutInflater();
@@ -180,6 +164,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), ViewListingActivity.class);
                 intent.putExtra("listing", listingToAdd);
+                startActivity(intent);
             }
         });
 

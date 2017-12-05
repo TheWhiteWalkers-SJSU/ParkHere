@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button buttonRegister;
     private Button buttonLogin;
+    static boolean calledAlready = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //set database to save for offline data viewing
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        if(!calledAlready){ //must have static boolean because well cause crashing when going back to homepage...
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            calledAlready = true;
+        }
+
 
         buttonRegister = findViewById(R.id.buttonRegister);
         buttonRegister.setOnClickListener(new View.OnClickListener() {
