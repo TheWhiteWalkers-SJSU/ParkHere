@@ -20,7 +20,6 @@ import java.util.Map;
 public class UpdateParkingSpotActivity extends AppCompatActivity {
 
     private EditText editTextParkingSpotName;
-    private EditText editTextParkingSpotAddress;
     private EditText editTextParkingSpotDescription;
     private Button buttonUpdateParkingSpot;
     private Button buttonBackToParkingSpot;
@@ -36,7 +35,6 @@ public class UpdateParkingSpotActivity extends AppCompatActivity {
         currentParkingSpot = (ParkingSpot) getIntent().getSerializableExtra("ParkingSpot");
 
         editTextParkingSpotName = findViewById(R.id.editTextParkingSpotName);
-        editTextParkingSpotAddress = findViewById(R.id.editTextParkingSpotAddress);
         editTextParkingSpotDescription = findViewById(R.id.editTextParkingSpotDescription);
 
         buttonUpdateParkingSpot = findViewById(R.id.buttonUpdateParkingSpot);
@@ -63,15 +61,11 @@ public class UpdateParkingSpotActivity extends AppCompatActivity {
 
         // Fetch the text entered by the user and set it to a String
         String newParkingSpotName = editTextParkingSpotName.getText().toString().trim();
-        String newParkingSpotAddress = editTextParkingSpotAddress.getText().toString().trim();
         String newParkingSpotDescription = editTextParkingSpotDescription.getText().toString().trim();
 
         // if the value is not empty add it to the update hashmap
         if(!newParkingSpotName.isEmpty()) {
             ParkingSpotUpdate.put("name", newParkingSpotName);
-        }
-        if(!newParkingSpotAddress.isEmpty()) {
-            ParkingSpotUpdate.put("address", newParkingSpotAddress);
         }
         if(!newParkingSpotDescription.isEmpty()) {
             ParkingSpotUpdate.put("description", newParkingSpotDescription);
