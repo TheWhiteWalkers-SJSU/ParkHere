@@ -325,15 +325,7 @@ public class ViewRequestActivity extends AppCompatActivity {
     }
 
     private void denyRequest(){
-        Map<String, Object> requestUpdate = new HashMap<>();
-        requestUpdate.put("requestType", 3);
-        RequestDatabase.child(currentRequest.getRequestID()).updateChildren(requestUpdate)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
-                    }
-                });
+        cancelRequest();
     }
 
     private void viewListing(){
@@ -352,7 +344,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        startActivity(new Intent(getApplicationContext(), InboxActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
                     }
                 });
     }
