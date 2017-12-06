@@ -145,7 +145,7 @@ public class CreateRequestActivity extends AppCompatActivity {
                         Toast.makeText(CreateRequestActivity.this, "Time/date unavailable for listing", Toast.LENGTH_SHORT).show();
                     } else {
                         createRequest();
-                        Toast.makeText(CreateRequestActivity.this, "Sent Request", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(CreateRequestActivity.this, "Sent Request", Toast.LENGTH_SHORT).show();
                     }
                 }
                 //when validInputs is false, it prints the correct error message in its method

@@ -126,7 +126,7 @@ public class AcceptedRequests extends Fragment {
 
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Toast.makeText(getActivity(), "Opening message...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "Opening message...", Toast.LENGTH_SHORT).show();
                         Intent viewMessageIntent = new Intent(getActivity(), ViewRequestActivity.class);
 
                         Listing listing = dataSnapshot.child(clickedRequest.getListingID()).getValue(Listing.class);

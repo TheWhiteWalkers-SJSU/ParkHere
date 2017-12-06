@@ -132,7 +132,7 @@ public class ViewRequestActivity extends AppCompatActivity {
                 else {
                     acceptRequest();
                     incrementNumBookings();
-                    Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
 
                     //if chat does not exist already, create one between owner and renter
                     if(!chatExists(listingEmail, requestEmail)) {
@@ -331,8 +331,6 @@ public class ViewRequestActivity extends AppCompatActivity {
 
     private void viewListing(){
         //redirect to listing
-        Toast.makeText(getApplicationContext(),
-                "Redirect to Listing...", Toast.LENGTH_SHORT).show();
         Intent viewListingIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
         viewListingIntent.putExtra("listing", currentListing);
         try {

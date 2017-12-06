@@ -20,7 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RatingActivity extends AppCompatActivity {
@@ -122,8 +121,7 @@ public class RatingActivity extends AppCompatActivity {
     }
     private void viewListing(){
         // redirect to listing
-        Toast.makeText(getApplicationContext(),
-                "Redirect to Listing...", Toast.LENGTH_SHORT).show();
+
         Intent viewListingIntent = new Intent(getApplicationContext(), ViewListingActivity.class);
         viewListingIntent.putExtra("listing", currentListing);
         try {

@@ -129,7 +129,6 @@ public class CreateListingActivity extends AppCompatActivity {
                 listingStatus.put("status", "available");
                 userDatabase.child(user.getUid()).child("listings").child(_id).setValue(listingStatus);
 
-                Toast.makeText(CreateListingActivity.this, "Created Listing", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(CreateListingActivity.this, HomepageActivity.class));
             }
 

@@ -111,7 +111,7 @@ public class CreateParkingSpotActivity extends AppCompatActivity {
 
                 parkingSpotDatabase.child(_id).setValue(newParkingSpot);
 
-                Toast.makeText(CreateParkingSpotActivity.this, "Created Parking Spot", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(CreateParkingSpotActivity.this, "Created Parking Spot", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(CreateParkingSpotActivity.this, HomepageActivity.class));
             }
         }

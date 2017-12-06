@@ -81,7 +81,7 @@ public class UpdateParkingSpotActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(UpdateParkingSpotActivity.this, "Updated Parking Spot...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(UpdateParkingSpotActivity.this, "Updated Parking Spot...", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), ViewMyParkingSpotsActivity.class));
                     }
                 });

@@ -89,7 +89,7 @@ public class UpdateListingActivity extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(UpdateListingActivity.this, "Updated listing...", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(UpdateListingActivity.this, "Updated listing...", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
                     }
                 });
