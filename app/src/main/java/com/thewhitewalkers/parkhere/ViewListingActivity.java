@@ -198,7 +198,7 @@ public class ViewListingActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-                    //Toast.makeText(ViewListingActivity.this, "Deleted listing...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ViewListingActivity.this, "Deleted listing...", Toast.LENGTH_SHORT).show();
 
                     requestDatabase.addValueEventListener(new ValueEventListener() {
                         @Override

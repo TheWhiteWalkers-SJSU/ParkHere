@@ -17,9 +17,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class ViewParkingSpotActivity extends AppCompatActivity {
 
     DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
+    DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
     DatabaseReference requestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     FirebaseAuth firebaseAuth;
 
@@ -32,6 +35,8 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
     private Button homeButton;
     private RatingBar listingRatingBar;
     private Button viewRatingsButton;
+    private ArrayList<Listing> listingsToDelete = new ArrayList();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,9 +129,32 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(ViewParkingSpotActivity.this, HomepageActivity.class);
-                    //intent.putExtra("DELETE", thisParkingSpot.getParkingSpotId());
-                    startActivity(intent);
+                    startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+                    Toast.makeText(ViewParkingSpotActivity.this, "Deleted parking spot...", Toast.LENGTH_SHORT).show();
+
+                    // Delete corresponding listings for parking spot to delete
+                    ListingDatabase.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot listingSnapshot : dataSnapshot.getChildren()) {
+                                Listing listing = listingSnapshot.getValue(Listing.class);
+                                if(listing != null) {
+                                    if(listing.getParkingSpot().getParkingSpotId().equals(thisParkingSpot.getParkingSpotId())) {
+                                        listingsToDelete.add(listing);
+                                    }
+                                }
+                            }
+
+                            for(Listing listing : listingsToDelete) {
+                                ListingDatabase.child(listing.getListingId()).removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                     ParkingSpotDatabase.child(thisParkingSpot.getParkingSpotId()).removeValue();
                 }
             });
