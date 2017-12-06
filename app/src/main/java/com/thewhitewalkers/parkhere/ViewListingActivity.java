@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 public class ViewListingActivity extends AppCompatActivity {
 
     DatabaseReference listingDatabase = FirebaseDatabase.getInstance().getReference("listings");
@@ -38,6 +40,7 @@ public class ViewListingActivity extends AppCompatActivity {
     private Button updateButton;
     private Button ratingButton;
     private Button deleteButton;
+    private ArrayList<Request> requestsToDelete = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +199,29 @@ public class ViewListingActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
                     //Toast.makeText(ViewListingActivity.this, "Deleted listing...", Toast.LENGTH_SHORT).show();
+
+                    requestDatabase.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
+                                Request request = requestSnapshot.getValue(Request.class);
+                                if(request != null) {
+                                    if(request.getListingID().equals(thisListing.getListingId())) {
+                                        requestsToDelete.add(request);
+                                    }
+                                }
+                            }
+
+                            for(Request request : requestsToDelete) {
+                                requestDatabase.child(request.getRequestID()).removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                     listingDatabase.child(thisListing.getListingId()).removeValue();
                 }
             });
