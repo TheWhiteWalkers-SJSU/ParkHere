@@ -23,7 +23,7 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
 
     DatabaseReference ParkingSpotDatabase = FirebaseDatabase.getInstance().getReference("parkingSpots");
     DatabaseReference ListingDatabase = FirebaseDatabase.getInstance().getReference("listings");
-    DatabaseReference requestDatabase = FirebaseDatabase.getInstance().getReference("requests");
+    DatabaseReference RequestDatabase = FirebaseDatabase.getInstance().getReference("requests");
     FirebaseAuth firebaseAuth;
 
     private TextView ParkingSpotNameText;
@@ -36,6 +36,7 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
     private RatingBar listingRatingBar;
     private Button viewRatingsButton;
     private ArrayList<Listing> listingsToDelete = new ArrayList();
+    private ArrayList<Request> requestsToDelete = new ArrayList();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +131,6 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
-                    Toast.makeText(ViewParkingSpotActivity.this, "Deleted parking spot...", Toast.LENGTH_SHORT).show();
 
                     // Delete corresponding listings for parking spot to delete
                     ListingDatabase.addValueEventListener(new ValueEventListener() {
@@ -145,7 +145,29 @@ public class ViewParkingSpotActivity extends AppCompatActivity {
                                 }
                             }
 
-                            for(Listing listing : listingsToDelete) {
+                            for(final Listing listing : listingsToDelete) {
+                                RequestDatabase.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        for(DataSnapshot requestSnapshot : dataSnapshot.getChildren()) {
+                                            Request request = requestSnapshot.getValue(Request.class);
+                                            if(request != null) {
+                                                if(request.getListingID().equals(listing.getListingId())) {
+                                                    requestsToDelete.add(request);
+                                                }
+                                            }
+                                        }
+
+                                        for(Request request : requestsToDelete) {
+                                            RequestDatabase.child(request.getRequestID()).removeValue();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                                 ListingDatabase.child(listing.getListingId()).removeValue();
                             }
                         }
