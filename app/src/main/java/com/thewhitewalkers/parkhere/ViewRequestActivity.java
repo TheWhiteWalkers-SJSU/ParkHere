@@ -63,83 +63,102 @@ public class ViewRequestActivity extends AppCompatActivity {
         currentRequest = (Request) getIntent().getSerializableExtra("request");
         currentListing = (Listing) getIntent().getSerializableExtra("listing");
 
-        listingEmail = currentListing.getOwnerEmail();
-        requestEmail = currentRequest.getSenderEmail();
-        currentChatId = "";
+        if(currentRequest != null && currentListing != null) {
 
-        requestsConflict = false;
-        updateRequestSnapshot();
-        updateChatSnapshot();
+            listingEmail = currentListing.getOwnerEmail();
+            requestEmail = currentRequest.getSenderEmail();
+            currentChatId = "";
 
-        backToInboxButton = findViewById(R.id.backToInbox);
-        subjectLine = findViewById(R.id.subjectLine);
-        senderLine = findViewById(R.id.senderLine);
-        messageText = findViewById(R.id.message);
-        listingAddress = findViewById(R.id.listingAddress);
-        listingDate = findViewById(R.id.listingDate);
-        listingTime = findViewById(R.id.listingTime);
-        listingPrice = findViewById(R.id.listingPrice);
-        viewListingButton = findViewById(R.id.viewListing);
+            requestsConflict = false;
+            updateRequestSnapshot();
+            updateChatSnapshot();
 
-        subjectLine.setText(currentRequest.getSubject());
-        senderLine.setText("From: " + currentRequest.getSenderEmail());
-        messageText.setText(currentRequest.getMessage());
-        listingAddress.setText(currentListing.getListingAddress());
-        listingDate.setText("Starting on " + currentRequest.getTimeDetails().getStartingDate() + " to " + currentRequest.getTimeDetails().getEndingDate());
-        String AM1 = "AM";
-        String AM2 = "AM";
-        if(!currentRequest.getTimeDetails().isStartingIsAM()){
-            AM1 = "PM";
-        }
-        if(!currentRequest.getTimeDetails().isEndingIsAM()){
-            AM2 = "PM";
-        }
-        listingTime.setText("From " + currentRequest.getTimeDetails().getStartingTime() + AM1 + " to " + currentRequest.getTimeDetails().getEndingTime() + AM2);
-        String totalPrice = currentRequest.getTimeDetails().setPrice(currentListing.getListingPrice());
-        listingPrice.setText("Price: " + totalPrice + " ($" +currentListing.getListingPrice() + "/hour)");
+            backToInboxButton = findViewById(R.id.backToInbox);
+            subjectLine = findViewById(R.id.subjectLine);
+            senderLine = findViewById(R.id.senderLine);
+            messageText = findViewById(R.id.message);
+            listingAddress = findViewById(R.id.listingAddress);
+            listingDate = findViewById(R.id.listingDate);
+            listingTime = findViewById(R.id.listingTime);
+            listingPrice = findViewById(R.id.listingPrice);
+            viewListingButton = findViewById(R.id.viewListing);
+
+            subjectLine.setText(currentRequest.getSubject());
+            senderLine.setText("From: " + currentRequest.getSenderEmail());
+            messageText.setText(currentRequest.getMessage());
+            listingAddress.setText(currentListing.getListingAddress());
+            listingDate.setText("Starting on " + currentRequest.getTimeDetails().getStartingDate() + " to " + currentRequest.getTimeDetails().getEndingDate());
+            String AM1 = "AM";
+            String AM2 = "AM";
+            if(!currentRequest.getTimeDetails().isStartingIsAM()){
+                AM1 = "PM";
+            }
+            if(!currentRequest.getTimeDetails().isEndingIsAM()){
+                AM2 = "PM";
+            }
+            listingTime.setText("From " + currentRequest.getTimeDetails().getStartingTime() + AM1 + " to " + currentRequest.getTimeDetails().getEndingTime() + AM2);
+            String totalPrice = currentRequest.getTimeDetails().setPrice(currentListing.getListingPrice());
+            listingPrice.setText("Price: " + totalPrice + " ($" +currentListing.getListingPrice() + "/hour)");
 
 
-        acceptRequestButton = findViewById(R.id.acceptRequest);
-        denyRequestButton = findViewById(R.id.denyRequest);
-        cancelRequestButton = findViewById(R.id.cancelRequest);
+            acceptRequestButton = findViewById(R.id.acceptRequest);
+            denyRequestButton = findViewById(R.id.denyRequest);
+            cancelRequestButton = findViewById(R.id.cancelRequest);
 
-        //for sent requests
-        if(currentRequest.getSenderID().equals(currentUser.getUid())) {
-            //disable accept, deny req
-            acceptRequestButton.setVisibility(View.GONE);
-            denyRequestButton.setVisibility(View.GONE);
-        }
-        //for pending requests
-        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentRequest.getRequestType() == 0) {
-            //disable cancel req
-            cancelRequestButton.setVisibility(View.GONE);
-        }
-        //for accepted requests
-        if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentRequest.getRequestType() == 2) {
-            //disable accept, deny, cancel req
-            acceptRequestButton.setVisibility(View.GONE);
-            denyRequestButton.setVisibility(View.GONE);
-            cancelRequestButton.setVisibility(View.GONE);
-        }
+            //for sent requests
+            if(currentRequest.getSenderID().equals(currentUser.getUid())) {
+                //disable accept, deny req
+                acceptRequestButton.setVisibility(View.GONE);
+                denyRequestButton.setVisibility(View.GONE);
+            }
+            //for pending requests
+            if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentRequest.getRequestType() == 0) {
+                //disable cancel req
+                cancelRequestButton.setVisibility(View.GONE);
+            }
+            //for accepted requests
+            if(currentListing.getOwnerId().equals(currentUser.getUid()) && currentRequest.getRequestType() == 2) {
+                //disable accept, deny, cancel req
+                acceptRequestButton.setVisibility(View.GONE);
+                denyRequestButton.setVisibility(View.GONE);
+                cancelRequestButton.setVisibility(View.GONE);
+            }
 
-        acceptRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //check if it has conflicts with existing booked requests before allowing it to be accepted
-                if(hasRequestsConflict()) {
-                    Toast.makeText(ViewRequestActivity.this, "Time/date unavailable for listing", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    acceptRequest();
-                    incrementNumBookings();
-                    // Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
-
-                    //if chat does not exist already, create one between owner and renter
-                    if(!chatExists(listingEmail, requestEmail)) {
-                        createChat(listingEmail, requestEmail);
+            acceptRequestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //check if it has conflicts with existing booked requests before allowing it to be accepted
+                    if(hasRequestsConflict()) {
+                        Toast.makeText(ViewRequestActivity.this, "Time/date unavailable for listing", Toast.LENGTH_SHORT).show();
                     }
+                    else {
+                        acceptRequest();
+                        incrementNumBookings();
+                        // Toast.makeText(ViewRequestActivity.this, "Request accepted", Toast.LENGTH_SHORT).show();
+
+                        //if chat does not exist already, create one between owner and renter
+                        if(!chatExists(listingEmail, requestEmail)) {
+                            createChat(listingEmail, requestEmail);
+                        }
+                        //add message for system notification, create chat if needed
+                        String message = "Your request for listing \"" + currentListing.getListingName() + "\" was accepted!";
+                        if(!chatExists("ParkHere", requestEmail)) {
+                            createChatWithMessage("ParkHere", requestEmail, message);
+                        }
+                        else {
+                            addMessage(currentChatId, "ParkHere", message);
+                        }
+                    }
+                }
+            });
+
+
+            denyRequestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    denyRequest();
                     //add message for system notification, create chat if needed
-                    String message = "Your request for listing \"" + currentListing.getListingName() + "\" was accepted!";
+                    String message = "Your request for listing \"" + currentListing.getListingName() + "\" was denied.";
                     if(!chatExists("ParkHere", requestEmail)) {
                         createChatWithMessage("ParkHere", requestEmail, message);
                     }
@@ -147,43 +166,31 @@ public class ViewRequestActivity extends AppCompatActivity {
                         addMessage(currentChatId, "ParkHere", message);
                     }
                 }
-            }
-        });
+            });
 
-
-        denyRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                denyRequest();
-                //add message for system notification, create chat if needed
-                String message = "Your request for listing \"" + currentListing.getListingName() + "\" was denied.";
-                if(!chatExists("ParkHere", requestEmail)) {
-                    createChatWithMessage("ParkHere", requestEmail, message);
+            cancelRequestButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cancelRequest();
                 }
-                else {
-                    addMessage(currentChatId, "ParkHere", message);
+            });
+
+            viewListingButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    viewListing();
                 }
-            }
-        });
+            });
 
-        cancelRequestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cancelRequest();
-            }
-        });
+            backToInboxButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
+                }
+            });
 
-        viewListingButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                viewListing();
-            }
-        });
+        } else {
+            startActivity(new Intent(getApplicationContext(), HomepageActivity.class));
+        }
 
-        backToInboxButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), TabbedInboxActivity.class));
-            }
-        });
     }
 
     private boolean chatExists(String check1, String check2) {
